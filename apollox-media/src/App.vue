@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <template>
+    
   <v-container bg fill-height grid-list-md text-xs-left>
            <img src="@/assets/astronautlogo.jpg" height="250">
           <img src="@/assets/apolloLetters.jpg" height="250">
@@ -8,9 +9,7 @@
 
  <v-toolbar class = "primary">
    
-   <v-toolbar-side-icon
-   @click.native.stop="sideNav = !sideNav"
-   class="hidden-sm-and-up"></v-toolbar-side-icon>
+   
    <v-toolbar-items class="hidden-xs-only">
      <v-btn color="cyan" flat v-for="item in menuItems"
       :key="item.title"
