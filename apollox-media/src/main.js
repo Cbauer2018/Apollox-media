@@ -12,9 +12,7 @@ new Vue({
   router,
   render: h => h(App),
   created() {
-    firebase.initializeApp({
-   
-    })
+    firebase.initializeApp(config)
     
   },
 }).$mount('#app')
