@@ -18,6 +18,14 @@
        <v-icon left dark>{{item.icon}}</v-icon>
        {{item.title}}
      </v-btn>
+     <v-btn
+     v-if="userIsAuthenticated"
+     flat
+     @click="onLogout"
+     router
+     :to="'/'">
+     <v-icon left dark>exit_to_app</v-icon>
+     </v-btn>
    </v-toolbar-items>
  </v-toolbar>
   <main>
@@ -58,7 +66,6 @@ export default {
           {icon:'store', title:'  Store', Link:'/Store'},
           {icon:'account_box', title:'Profile', Link:'/Profile'},
           {icon:'add_box', title:'Post', Link:'/Post'},
-          {icon:'input', title:'Logout', Link:'/'},
          
         ]
         }
@@ -67,9 +74,14 @@ export default {
     userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       }
-  
-  }
- 
+
+    },
+
+    methods:{
+      onLogout(){
+        this.$store.dispatch('logout')
+      }
+    }
 }
 
 </script>
