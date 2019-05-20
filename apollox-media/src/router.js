@@ -6,6 +6,8 @@ import addPost from './components/addPost.vue'
 import Recent from './components/Recent.vue'
 import Store from './components/Store.vue'
 import Profile from './components/Profile.vue'
+import Signup from './components/Signup.vue'
+import Login from './components/Login.vue'
 
 Vue.use(Router)
 
@@ -43,6 +45,16 @@ export default new Router({
       name: 'Profile',
       component: Profile
     },
+    {
+      path: '/Signup',
+      name: 'Signup',
+      component: Signup
+    },
+    {
+      path: '/Login',
+      name: 'Login',
+      component: Login
+    }
   ],
   
 })
