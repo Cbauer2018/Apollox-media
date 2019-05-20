@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Promoted from './components/Promoted.vue'
 import Following from './components/Following.vue'
-import addPost from './components/addPost.vue'
+import Post from './components/Post.vue'
 import Recent from './components/Recent.vue'
 import Store from './components/Store.vue'
 import Profile from './components/Profile.vue'
@@ -27,8 +27,8 @@ export default new Router({
     },
     {
       path: '/Post',
-      name: 'addPost',
-      component: addPost
+      name: 'Post',
+      component: Post
     },
     {
       path: '/Recent',
