@@ -40,6 +40,8 @@ export default {
           {icon:'store', title:'  Store', Link:'/Store'},
           {icon:'account_box', title:'Profile', Link:'/Profile'},
           {icon:'add_box', title:'Post', Link:'/Post'},
+          {icon:'input', title:'Login', Link:'/Login'},
+          {icon:'play_for_work', title:'Signup', Link:'/Signup'},
         ]
       }
     }
