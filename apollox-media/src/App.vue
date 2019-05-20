@@ -33,7 +33,13 @@
 export default {
   data () {
       return {
-        menuItems:[
+        
+      }
+    },
+
+  computed:{
+    menuItems(){
+      let menuItems =[
           {icon:'stars', title:'Promoted', Link:'/'},
           {icon:'done_outline', title:'Following',Link:'/Following'},
           {icon:'assessment', title:'Recent', Link:'/Recent'},
@@ -43,8 +49,27 @@ export default {
           {icon:'input', title:'Login', Link:'/Login'},
           {icon:'play_for_work', title:'Signup', Link:'/Signup'},
         ]
+        if(this.userIsAuthenticated){
+          menuItems =
+          [
+          {icon:'stars', title:'Promoted', Link:'/'},
+          {icon:'done_outline', title:'Following',Link:'/Following'},
+          {icon:'assessment', title:'Recent', Link:'/Recent'},
+          {icon:'store', title:'  Store', Link:'/Store'},
+          {icon:'account_box', title:'Profile', Link:'/Profile'},
+          {icon:'add_box', title:'Post', Link:'/Post'},
+          {icon:'input', title:'Logout', Link:'/'},
+         
+        ]
+        }
+        return menuItems
+    },
+    userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       }
-    }
+  
+  }
  
 }
+
 </script>
