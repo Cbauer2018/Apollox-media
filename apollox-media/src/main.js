@@ -13,13 +13,7 @@ new Vue({
   render: h => h(App),
   created() {
     firebase.initializeApp({
-      apiKey: "AIzaSyAB0W19cf5MVHZcpGhvWH-_AJAMeJad3Hc",
-      authDomain: "apollox-media.firebaseapp.com",
-      databaseURL: "https://apollox-media.firebaseio.com",
-      projectId: "apollox-media",
-      storageBucket: "apollox-media.appspot.com",
-      messagingSenderId: "1080630559415",
-      appId: "1:1080630559415:web:29d4ecb17fcf38a3"
+   
     })
     
   },
