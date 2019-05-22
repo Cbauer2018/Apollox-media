@@ -31,15 +31,23 @@ export const store = new Vuex.Store({
       signUserUp ({commit}, payload) {
         commit('setLoading', true)
         commit('clearError')
+        
         firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
           .then(
             user => {
               commit('setLoading', false)
               const newUser = {
                 id: user.user.uid,
+                username: payload.username,
+                email: payload.email,
+                dateCreated:  new Date().getDate(),
+                yearCreated: new Date().getFullYear()
+                
                 
               }
+              console.log(new Date().getDate())
               console.log(user.user.uid)
+              firebase.database().ref('Users').child(newUser.id).set(newUser)
               commit('setUser', newUser)
             }
           )
@@ -83,7 +91,8 @@ export const store = new Vuex.Store({
 
       clearError ({commit}) {
         commit('clearError')
-      }
+      },
+      
     },
     getters: {
       

@@ -33,6 +33,7 @@
                       id="username"
                       v-model="username"
                       type="username"
+                    
                       required></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -59,7 +60,7 @@
                   </v-flex>
                 </v-layout>
                 <v-layout justify-end xs12>
-                    <v-btn outline color="cyan lighten-1" type="submit" :disabled="loading" :loading="loading">
+                    <v-btn  outline color="cyan lighten-1" type="submit" :disabled="loading" :loading="loading">
                       Sign up
                        <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>
@@ -115,7 +116,8 @@
       },
       onDismissed () {
         this.$store.dispatch('clearError')
-      }
+      },
+
     }
   }
 </script>
