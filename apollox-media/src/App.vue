@@ -7,8 +7,8 @@
           <img src="@/assets/apolloLetters.jpg" height="250">
       </v-container>
 
- <v-toolbar class = "primary">
-   
+ <v-toolbar 
+ class = "primary">
    
    <v-toolbar-items class="hidden-xs-only">
      <v-btn color="cyan" flat v-for="item in menuItems"
