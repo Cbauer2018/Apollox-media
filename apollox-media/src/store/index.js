@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
      
+      loadedProfile: [{}],
       user: null,
       loading: false,
       error: null
@@ -27,10 +28,21 @@ export const store = new Vuex.Store({
       }
     },
     actions: {
-     
+      
+      loadProfile ({commit}) {
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .once('value').then((data) => {
+          const obj = data.val()
+          profile.push({
+            
+          })
+        })
+      },
+
       signUserUp ({commit}, payload) {
         commit('setLoading', true)
-        commit('clearError')
+        commit('clearError'),
+
         
         firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
           .then(

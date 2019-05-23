@@ -56,14 +56,24 @@
         </v-flex>
         </v-flex>
         <v-layout align-end justify-start column>
-        <v-flex xs2 my-2>
+        <v-flex mr-3 xs2 my-2>
         <h2 class = "font-weight-thin">Followers: 0</h2>
         </v-flex>
         
         
-        <v-flex my-2>
+        <v-flex mr-3 my-2>
         <h2 class = "font-weight-thin">Following: 0</h2>
         </v-flex>
+        <v-layout>
+          <v-btn @click="changeBtn"
+          outline color="cyan lighten-2">
+            {{followArray[this.numberI].word}}
+            <v-icon>
+              {{followIconArray[this.numberI].icon}}
+            </v-icon>
+            
+          </v-btn>
+        </v-layout>
         </v-layout>
         </v-layout>
           
@@ -104,17 +114,39 @@
 </template>
 
 <script>
+import Popup from './profilePopup'
+
 export default{
+  component: { Popup },
   data(){
     return{
 
-      rating: 4
+      rating: 4,
+      followArray: [{word: "Follow"}, {word: "Following"}],
+      followIconArray: [{icon: "add"}, {icon: ""}],
+      popUpUnfollow: [],
+      numberI: 0
+
     }
   },
+
    computed: {
     userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       }
+    },
+
+    methods:{
+      changeBtn () {
+         if (this.numberI==0){
+          this.numberI=1
+        }
+        else{
+          this.numberI=0
+        }
+      }
     }
+
+      
 }
 </script>
