@@ -59,7 +59,7 @@
                     <v-text-field
                       name="name"
                       label="Name of Person/Organization You are Fact Checking "
-                      id="Link"
+                      id="personName"
                       v-model="text"
                       type="Link"
                       maxlength="30"
@@ -71,7 +71,7 @@
                     <v-text-field
                       name="Link"
                       label="Link to Article/Video You Are Reviewing "
-                      id="Link"
+                      id="articleLink"
                       v-model="text"
                       type="Link"
                       single-line="true"
@@ -105,6 +105,7 @@
         v-model="title"
         counter
         maxlength="1500"
+        id="reviewText"
         full-width
         single-line
         outline
@@ -140,7 +141,7 @@
                      :key="i.number"
                       name="Wrong List"
                       label="*"
-                      id="wrongList"
+                      :id="i.number + i.list"
                       v-model="text"
                       type="text"
                       counter="100"
@@ -180,7 +181,7 @@
                      :key="j.number"
                       name="Right List"
                       label="*"
-                      id="rightList"
+                      :id="j.number + j.list"
                       v-model="text"
                       type="text"
                       counter="100"
@@ -219,9 +220,9 @@
                     <v-text-field
                      v-for="j in this.notIncludedCount"
                      :key="j.number"
-                      name="Right List"
+                      name="notIncludedList"
                       label="*"
-                      id="rightList"
+                      :id="j.number + j.list"
                       v-model="text"
                       type="text"
                       counter="100"
@@ -261,9 +262,9 @@ export default {
       return {
         rules: [v => v.length <= 50 || 'Max 50 characters'],
         newForm:true,
-         wrongCount:[{number:1}],
-         rightCount:[{number:1}],
-         notIncludedCount:[{number:1}],
+         wrongCount:[{number:1, list:wrong}],
+         rightCount:[{number:1 , list:right}],
+         notIncludedCount:[{number:1, list:notIncluded}],
 
       }
     },
@@ -282,7 +283,7 @@ export default {
         
         if(this.wrongCount.length < 10){
           var n = this.wrongCount.length + 1;
-         this.wrongCount.push({number:n})
+         this.wrongCount.push({number:n, list:wrong})
         }
         return this.wrongCount
       },
@@ -298,7 +299,7 @@ export default {
       addRightBullet(){
         if(this.rightCount.length < 10){
           var n = this.rightCount.length + 1;
-         this.rightCount.push({number:n})
+         this.rightCount.push({number:n, list:right})
         }
         return this.rightCount
       },
@@ -311,7 +312,7 @@ export default {
        addNotIncludedBullet(){
         if(this.notIncludedCount.length < 10){
           var n = this.notIncludedCount.length + 1;
-         this.notIncludedCount.push({number:n})
+         this.notIncludedCount.push({number:n, list:notIncluded})
         }
         return this.notIncludedCount
       },
