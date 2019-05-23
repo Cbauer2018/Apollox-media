@@ -46,7 +46,7 @@
             <v-layout row>
       <v-flex xs6 ml-5>
       <h2 class = "display-1 font-weight-thin">
-          Username
+          
         </h2>
         
         <v-flex ml-4 my-3>
@@ -65,7 +65,8 @@
         <h2 class = "font-weight-thin">Following: 0</h2>
         </v-flex>
         <v-layout>
-          <v-btn @click="changeBtn"
+          <v-btn @click=" changeBtn"
+        
           outline color="cyan lighten-2">
             {{followArray[this.numberI].word}}
             <v-icon>
@@ -118,6 +119,7 @@ import Popup from './profilePopup'
 
 export default{
   component: { Popup },
+   props: ['id'],
   data(){
     return{
 
@@ -133,10 +135,14 @@ export default{
    computed: {
     userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
+      profile(){
+        return this.$store.getters.loadedProfile(this.id)
       }
     },
 
     methods:{
+    
       changeBtn () {
          if (this.numberI==0){
           this.numberI=1
@@ -147,6 +153,6 @@ export default{
       }
     }
 
-      
+
 }
 </script>

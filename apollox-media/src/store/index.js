@@ -13,7 +13,11 @@ export const store = new Vuex.Store({
       error: null
     },
     mutations: {
-     
+
+      setLoadedProfile (state, payload) {
+        state.loadedProfile = payload
+        
+      },
       setUser (state, payload) {
         state.user = payload
       },
@@ -32,10 +36,19 @@ export const store = new Vuex.Store({
       loadProfile ({commit}) {
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .once('value').then((data) => {
+          
           const obj = data.val()
+          console.log("data",obj)
+          const profile= []
           profile.push({
-            
+            dayCreated: obj.dayCreated,
+            id: obj.id,
+            monthCreated: obj.monthCreated,
+            username: obj.username,
+            yearCreated: obj.yearCreated,
           })
+            
+            commit('setLoadedProfile', profile)
         })
       },
 
@@ -52,7 +65,9 @@ export const store = new Vuex.Store({
                 id: user.user.uid,
                 username: payload.username,
                 email: payload.email,
-                dateCreated:  new Date().getDate(),
+
+                monthCreated: new Date().getMonth(),
+                dayCreated:  new Date().getDay(),
                 yearCreated: new Date().getFullYear()
                 
                 
@@ -107,7 +122,14 @@ export const store = new Vuex.Store({
       
     },
     getters: {
-      
+
+      loadedProfile (state) {
+        return (userId) => {
+          return state.loadedProfile.find((user) => {
+            return user.id === userId
+          })
+        }
+      },
       user (state) {
         return state.user
         console.log(state)
