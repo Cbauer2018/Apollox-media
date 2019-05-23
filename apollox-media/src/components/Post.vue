@@ -48,7 +48,7 @@
                       name="Title"
                       label="Title"
                       id="title"
-                      v-model="text"
+                     
                       type="text"
                       :rules="rules"
                       counter="50"
@@ -60,7 +60,7 @@
                       name="name"
                       label="Name of Person/Organization You are Fact Checking "
                       id="Link"
-                      v-model="text"
+                   
                       type="Link"
                       maxlength="30"
                       counter="30"
@@ -72,7 +72,7 @@
                       name="Link"
                       label="Link to Article/Video You Are Reviewing "
                       id="Link"
-                      v-model="text"
+                  
                       type="Link"
                       single-line="true"
                       ></v-text-field>
@@ -96,6 +96,30 @@
 
 
     <v-layout column
+    v-show="!newForm">
+ <v-flex>
+   <v-card>
+   <v-card-text>
+    <form xs12 sm6 offset-sm3>
+        <v-flex xs12>
+         <v-text-field
+                      name="reviewLink"
+                      label="Link to your review"
+                      id="title"
+
+                      type="text"
+    
+                       counter="150"
+                      required
+                      maxlength="150"></v-text-field>
+              </v-flex>
+     </form>
+     </v-card-text>
+     </v-card>
+ </v-flex>
+    </v-layout>
+
+     <v-layout column
     v-show="newForm">
 
     <span>
@@ -111,7 +135,10 @@
       ></v-textarea>
     </v-layout>
 
+    
+      <v-flex my-4>
       <span>In Summary:</span>
+      </v-flex>
       <v-layout column>
       <h2 my-1>What Facts were Incorrect: </h2>
       <v-flex my-3 outline>
@@ -141,7 +168,7 @@
                       name="Wrong List"
                       label="*"
                       id="wrongList"
-                      v-model="text"
+                      
                       type="text"
                       counter="100"
                       maxlength="100"></v-text-field>
@@ -181,7 +208,7 @@
                       name="Right List"
                       label="*"
                       id="rightList"
-                      v-model="text"
+                     
                       type="text"
                       counter="100"
                       maxlength="100"
@@ -219,10 +246,10 @@
                     <v-text-field
                      v-for="j in this.notIncludedCount"
                      :key="j.number"
-                      name="Right List"
+                      name="not Included List"
                       label="*"
                       id="rightList"
-                      v-model="text"
+                     
                       type="text"
                       counter="100"
                       maxlength="100"
