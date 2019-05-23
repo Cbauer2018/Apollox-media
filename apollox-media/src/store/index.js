@@ -40,7 +40,9 @@ export const store = new Vuex.Store({
                 id: user.user.uid,
                 username: payload.username,
                 email: payload.email,
-                dateCreated:  new Date().getDate(),
+
+                monthCreated: new Date().getMonth(),
+                dayCreated:  new Date().getDate(),
                 yearCreated: new Date().getFullYear()
                 
                 
@@ -59,6 +61,34 @@ export const store = new Vuex.Store({
             }
           )
       },
+      submitPost({commit}, payload){
+
+        const newPost ={
+          title: payload.title,
+          personName: payload.personName,
+          reviewLink: payload.reviewLink, 
+          newReview: payload.newReview,
+          yourReview: payload.yourReview
+        }
+
+       // if(payload.newForm){ 
+        //   newPost.yo
+        // }}else{
+        //    newPost ={
+        //     title: payload.title,
+        //     personName: payload.personName,
+        //     reviewLink: payload.reviewLink, 
+        //     newReview: payload.newReview,
+        //     yourReview: payload.yourReview
+        //   }
+        // }
+          
+        console.log("uid=",firebase.auth().currentUser.uid.toString())
+            firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost)
+
+            commit('submitPost',newPost)
+      },
+
       signUserIn ({commit}, payload) {
         commit('setLoading', true)
         commit('clearError')

@@ -118,6 +118,9 @@
         this.$store.dispatch('clearError')
       },
 
+      checkUsername(){
+       this.$store.dispatch('checkUsername', {username: this.username})
+      }
     }
   }
 </script>
