@@ -7,12 +7,17 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
      
+      loadedProfile: [{}],
       user: null,
       loading: false,
       error: null
     },
     mutations: {
-     
+
+      setLoadedProfile (state, payload) {
+        state.loadedProfile = payload
+        
+      },
       setUser (state, payload) {
         state.user = payload
       },
@@ -27,10 +32,30 @@ export const store = new Vuex.Store({
       }
     },
     actions: {
-     
+      
+      loadProfile ({commit}) {
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .once('value').then((data) => {
+          
+          const obj = data.val()
+          console.log("data",obj)
+          const profile= []
+          profile.push({
+            dayCreated: obj.dayCreated,
+            id: obj.id,
+            monthCreated: obj.monthCreated,
+            username: obj.username,
+            yearCreated: obj.yearCreated,
+          })
+            
+            commit('setLoadedProfile', profile)
+        })
+      },
+
       signUserUp ({commit}, payload) {
         commit('setLoading', true)
-        commit('clearError')
+        commit('clearError'),
+
         
         firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
           .then(
@@ -124,7 +149,12 @@ export const store = new Vuex.Store({
       
     },
     getters: {
-      
+
+      loadedProfile (state) {
+        return state.loadedProfile
+         
+        
+      },
       user (state) {
         return state.user
         console.log(state)
