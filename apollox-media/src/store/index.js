@@ -67,13 +67,12 @@ export const store = new Vuex.Store({
                 email: payload.email,
 
                 monthCreated: new Date().getMonth(),
-                dayCreated:  new Date().getDay(),
+                dayCreated:  new Date().getDate(),
                 yearCreated: new Date().getFullYear()
                 
                 
               }
-              console.log(new Date().getDate())
-              console.log(user.user.uid)
+    
               firebase.database().ref('Users').child(newUser.id).set(newUser)
               commit('setUser', newUser)
             }
@@ -86,6 +85,34 @@ export const store = new Vuex.Store({
             }
           )
       },
+      submitPost({commit}, payload){
+
+        const newPost ={
+          title: payload.title,
+          personName: payload.personName,
+          reviewLink: payload.reviewLink, 
+          newReview: payload.newReview,
+          yourReview: payload.yourReview
+        }
+
+       // if(payload.newForm){ 
+        //   newPost.yo
+        // }}else{
+        //    newPost ={
+        //     title: payload.title,
+        //     personName: payload.personName,
+        //     reviewLink: payload.reviewLink, 
+        //     newReview: payload.newReview,
+        //     yourReview: payload.yourReview
+        //   }
+        // }
+          
+        console.log("uid=",firebase.auth().currentUser.uid.toString())
+            firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost)
+
+            commit('submitPost',newPost)
+      },
+
       signUserIn ({commit}, payload) {
         commit('setLoading', true)
         commit('clearError')
@@ -124,11 +151,9 @@ export const store = new Vuex.Store({
     getters: {
 
       loadedProfile (state) {
-        return (userId) => {
-          return state.loadedProfile.find((user) => {
-            return user.id === userId
-          })
-        }
+        return state.loadedProfile
+         
+        
       },
       user (state) {
         return state.user
