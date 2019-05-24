@@ -44,9 +44,12 @@
         </v-avatar>
     </v-flex>
             <v-layout row>
-      <v-flex xs6 ml-5>
+      <v-flex xs6 ml-5 
+      v-for="profile in profile" 
+      :key="profile"
+      >
       <h2 class = "display-1 font-weight-thin">
-          {{ profile.username }}
+          {{  profile.username }}
         </h2>
         
         <v-flex ml-4 my-3>
@@ -138,7 +141,7 @@ export default{
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       },
       profile(){
-        return this.$store.getters.loadedProfile(this.id)
+        return this.$store.getters.loadedProfile;
       }
     },
 

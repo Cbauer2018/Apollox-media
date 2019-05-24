@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
      
-      loadedProfile: [{}],
+      loadedProfile: [],
       user: null,
       loading: false,
       error: null
@@ -39,7 +39,7 @@ export const store = new Vuex.Store({
           
           const obj = data.val()
           console.log("data",obj)
-          const profile= []
+          const profile = []
           profile.push({
             dayCreated: obj.dayCreated,
             id: obj.id,
