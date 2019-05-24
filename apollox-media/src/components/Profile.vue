@@ -46,7 +46,7 @@
             <v-layout row>
       <v-flex xs6 ml-5>
       <h2 class = "display-1 font-weight-thin">
-          
+          {{ profile.username }}
         </h2>
         
         <v-flex ml-4 my-3>
@@ -111,6 +111,7 @@
   </v-flex>
    
 </v-container>
+
 
 </template>
 
