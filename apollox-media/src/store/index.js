@@ -47,8 +47,7 @@ export const store = new Vuex.Store({
                 
                 
               }
-              console.log(new Date().getDate())
-              console.log(user.user.uid)
+    
               firebase.database().ref('Users').child(newUser.id).set(newUser)
               commit('setUser', newUser)
             }
