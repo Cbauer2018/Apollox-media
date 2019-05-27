@@ -6,7 +6,7 @@
             <v-container>
               <v-layout justify-center>
                   <h2 class="display-1 font-weight-thin">
-                     Login or Signup to View Profile
+                     Login or Signup to Post
                   </h2>
               </v-layout>
               <v-flex>
@@ -161,15 +161,14 @@
             </v-btn>
           </v-flex>   
           </v-layout>
-                  <v-flex xs12>
+                  <v-flex xs12 >
                     <v-text-field
-                     v-for="i in this.wrongCount"
-                     :key="i.number"
+                     v-for="i in wrongList"
+                     :key="i"
                       name="Wrong List"
                       label="*"
-                      :v-model="i.number + i.list"
-                      
-                      type="text"
+                      v-model="i.text"
+                      type="input"
                       counter="100"
                       maxlength="100"></v-text-field>
                     </v-flex>
@@ -203,12 +202,11 @@
           </v-layout>
                   <v-flex xs12>
                     <v-text-field
-                     v-for="j in this.rightCount"
-                     :key="j.number"
+                     v-for="j in this.rightList"
+                     :key="j"
                       name="Right List"
                       label="*"
-                      :v-model="j.number + j.list"
-                      type="text"
+                      v-model='j.text'
                       counter="100"
                       maxlength="100"
                       ></v-text-field>
@@ -243,11 +241,11 @@
           </v-layout>
                   <v-flex xs12>
                     <v-text-field
-                     v-for="j in this.notIncludedCount"
-                     :key="j.number"
+                     v-for="j in this.notIncludedList"
+                     :key="j"
                       name="not Included List"
                       label="*"
-                       :v-model="j.number + j.list"
+                      v-model='j.text'
                       type="text"
                       counter="100"
                       maxlength="100"
@@ -262,6 +260,8 @@
       <v-layout justify-center> 
     <v-btn color="cyan lighten-3"
     @click="submitPost"
+    type="submit" :disabled="loading" :loading="loading"
+    
     >Post</v-btn> 
     </v-layout>
 </v-flex>
@@ -287,27 +287,29 @@ export default {
     
       return {
         newForm:true,
-         wrongCount:[{number:1}],
-         rightCount:[{number:1}],
-         notIncludedCount:[{number:1}],
-
+         wrongList:[{text:''}],
+        rightList:[{text:''}],
+        notIncludedList:[{text:''}],
 
 
       }
     },
     methods:{
       submitPost(){
-        console.log(true)
+        console.log("wrongList",this.wrongList)
+        console.log("rightList", this.rightList)
         console.log("title=", this.title)
         if(this.newForm){
           console.log(true)
           this.yourReview= 'null'
-        this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview,yourReview:this.yourReview, newForm: this.newForm})
+        this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview,yourReview:this.yourReview, newForm: this.newForm, wrongList: this.wrongList, rightList:this.rightList, notIncludedList:this.notIncludedList})
         }else{
           console.log(false)
           this.newReview='null'
-            this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview, yourReview: this.yourReview, newForm: this.newForm})
+            this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview, yourReview: this.yourReview, newForm: this.newForm, wrongList: this.wrongList, rightList:this.rightList, notIncludedList:this.notIncludedList})
         }
+
+        this.$router.push('/Recent')
         
       },
       changeForm (form){
@@ -324,50 +326,54 @@ export default {
 
       addWrongBullet(){
         
-        if(this.wrongCount.length < 10){
-          var n = this.wrongCount.length + 1;
-         this.wrongCount.push({number:n})
+        if(this.wrongList.length < 10){
+         this.wrongList.push({text:' '})
         }
-        return this.wrongCount
+        
       },
 
       removeWrongBullet(){
-        if(this.wrongCount.length > 1){
-  
-          this.wrongCount.pop();
+        if(this.wrongList.length > 1){
+          this.wrongList.pop();
         }
       },
 
 
       addRightBullet(){
-        if(this.rightCount.length < 10){
-          var n = this.rightCount.length + 1;
-         this.rightCount.push({number:n})
+        if(this.rightList.length < 10){
+        
+         this.rightList.push({text:''})
         }
-        return this.rightCount
+       
       },
       removeRightBullet(){
-        if(this.rightCount.length > 1){
-          this.rightCount.pop();
+        if(this.rightList.length > 1){
+          this.rightList.pop();
         }
       },
 
        addNotIncludedBullet(){
-        if(this.notIncludedCount.length < 10){
-          var n = this.notIncludedCount.length + 1;
-         this.notIncludedCount.push({number:n})
+        if(this.notIncludedList.length < 10){
+          this.notIncludedList.push({text:''})
         }
-        return this.notIncludedCount
+        
       },
       removeNotIncludedBullet(){
-        if(this.notIncludedCount.length > 1){
-          this.notIncludedCount.pop();
+        if(this.notIncludedList.length > 1){
+          this.notIncludedList.pop();
         }
       },
     },
     computed: {
     userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
+
+      error () {
+        return this.$store.getters.error
+      },
+      loading () {
+        return this.$store.getters.loading
       }
     }
  

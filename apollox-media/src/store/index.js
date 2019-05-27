@@ -87,29 +87,28 @@ export const store = new Vuex.Store({
       },
       submitPost({commit}, payload){
 
+  
         const newPost ={
           title: payload.title,
           personName: payload.personName,
           reviewLink: payload.reviewLink, 
           newReview: payload.newReview,
-          yourReview: payload.yourReview
+          yourReview: payload.yourReview,
+          promoted: false,
+          timeStamp:new Date().getTime(),
+          wrongList: payload.wrongList,
+          rightList: payload.rightList,
+          notIncludedList: payload.notIncludedList
         }
 
-       // if(payload.newForm){ 
-        //   newPost.yo
-        // }}else{
-        //    newPost ={
-        //     title: payload.title,
-        //     personName: payload.personName,
-        //     reviewLink: payload.reviewLink, 
-        //     newReview: payload.newReview,
-        //     yourReview: payload.yourReview
-        //   }
-        // }
           
         console.log("uid=",firebase.auth().currentUser.uid.toString())
-            firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost)
-
+            firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost).catch(
+              error => {
+                commit('setLoading', false)
+                commit('setError', error)
+                
+              })
             commit('submitPost',newPost)
       },
 
