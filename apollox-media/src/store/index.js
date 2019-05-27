@@ -86,30 +86,44 @@ export const store = new Vuex.Store({
           )
       },
       submitPost({commit}, payload){
-
-  
-        const newPost ={
-          title: payload.title,
-          personName: payload.personName,
-          reviewLink: payload.reviewLink, 
-          newReview: payload.newReview,
-          yourReview: payload.yourReview,
-          promoted: false,
-          timeStamp:new Date().getTime(),
-          wrongList: payload.wrongList,
-          rightList: payload.rightList,
-          notIncludedList: payload.notIncludedList
-        }
-
+       
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .once('value').then((data) => {
           
-        console.log("uid=",firebase.auth().currentUser.uid.toString())
-            firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost).catch(
+          const obj = data.val()
+          const newPost ={
+            title: payload.title,
+            personName: payload.personName,
+            reviewLink: payload.reviewLink, 
+            newReview: payload.newReview,
+            yourReview: payload.yourReview,
+            promoted: false,
+            timeStamp:new Date().getTime(),
+            wrongList: payload.wrongList,
+            rightList: payload.rightList,
+            notIncludedList: payload.notIncludedList,
+            username: obj.username,
+            uid: obj.id
+          
+          }
+          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost).catch(
+            error => {
+              commit('setLoading', false)
+              commit('setError', error)
+              
+            })
+
+            firebase.database().ref('Posts').push(newPost).catch(
               error => {
                 commit('setLoading', false)
                 commit('setError', error)
                 
               })
-            commit('submitPost',newPost)
+
+          commit('submitPost',newPost)
+          
+        })
+        
       },
 
       signUserIn ({commit}, payload) {

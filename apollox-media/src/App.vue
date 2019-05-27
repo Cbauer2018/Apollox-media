@@ -86,7 +86,7 @@ export default {
         this.$store.dispatch('logout')
       },
       goToStore(){
-          window.location.href = "https://www.youtube.com/watch?v=iw1eajzWQAM"
+          window.location.href = "https://youtu.be/oHg5SJYRHA0"
       }
     }
 }
