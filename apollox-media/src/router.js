@@ -8,6 +8,7 @@ import Store from './components/Store.vue'
 import Profile from './components/Profile.vue'
 import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
+import ProfileEdit from './components/ProfileEdit.vue'
 
 Vue.use(Router)
 
@@ -54,6 +55,11 @@ export default new Router({
       path: '/Login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/Profile/Edit',
+      name: 'ProfileEdit',
+      component: ProfileEdit
     }
   ],
   

@@ -54,22 +54,25 @@
         
         <v-flex ml-4 my-3>
         <span>
-          Bio Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus consequuntur natus enim ipsum, voluptatibus adipisci, quisquam eveniet eligendi aut recusandae nesciunt? Eaque autem amet harum? Explicabo laboriosam iste amet cumque.
+          {{ profile.bio }}
         </span>
         </v-flex>
         </v-flex>
-        <v-layout align-end justify-start column>
-        <v-flex mr-3 xs2 my-2>
+        <v-spacer></v-spacer>
+
+        <v-flex xs2>
+        
+        <v-flex mr-3 my-2>
         <h2 class = "font-weight-thin">Followers: 0</h2>
         </v-flex>
         
-        
+              
         <v-flex mr-3 my-2>
         <h2 class = "font-weight-thin">Following: 0</h2>
         </v-flex>
-        <v-layout>
-          <v-btn @click=" changeBtn"
-        
+        <v-layout v-show="!userIdMatch">
+          <v-btn 
+          @click=" changeBtn"
           outline color="cyan lighten-2">
             {{followArray[this.numberI].word}}
             <v-icon>
@@ -78,7 +81,23 @@
             
           </v-btn>
         </v-layout>
-        </v-layout>
+
+        <v-layout
+        v-show="userIdMatch">
+        <v-flex mr-1>
+            <v-btn 
+            router
+            :to="'/Profile/Edit'"
+            fab small
+            outline color="cyan lighten-2">
+              <v-icon>
+                settings
+              </v-icon>
+            </v-btn>
+            </v-flex>
+          </v-layout>
+        
+        </v-flex>
         </v-layout>
           
             </v-layout>
@@ -137,6 +156,11 @@ export default{
   },
 
    computed: {
+
+    userIdMatch () {
+      return this.$store.getters.userId === this.$store.getters.loadedProfileId
+      
+    },
     userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       },

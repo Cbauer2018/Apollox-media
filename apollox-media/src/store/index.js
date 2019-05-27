@@ -46,6 +46,7 @@ export const store = new Vuex.Store({
             monthCreated: obj.monthCreated,
             username: obj.username,
             yearCreated: obj.yearCreated,
+            bio: obj.bio,
           })
             
             commit('setLoadedProfile', profile)
@@ -65,7 +66,7 @@ export const store = new Vuex.Store({
                 id: user.user.uid,
                 username: payload.username,
                 email: payload.email,
-
+                bio: "Welcome to ApolloX",
                 monthCreated: new Date().getMonth(),
                 dayCreated:  new Date().getDate(),
                 yearCreated: new Date().getFullYear()
@@ -93,6 +94,7 @@ export const store = new Vuex.Store({
           reviewLink: payload.reviewLink, 
           newReview: payload.newReview,
           yourReview: payload.yourReview
+          
         }
 
        // if(payload.newForm){ 
@@ -151,9 +153,7 @@ export const store = new Vuex.Store({
     getters: {
 
       loadedProfile (state) {
-        return state.loadedProfile
-         
-        
+        return state.loadedProfile  
       },
       user (state) {
         return state.user
@@ -164,6 +164,12 @@ export const store = new Vuex.Store({
       },
       error (state) {
         return state.error
+      },
+      userId (state) {
+        return state.user.id
+      },
+      loadedProfileId (state) {
+        return state.loadedProfile[0].id
       }
     }
   })
