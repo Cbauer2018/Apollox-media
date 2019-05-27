@@ -18,6 +18,11 @@
        <v-icon left dark>{{item.icon}}</v-icon>
        {{item.title}}
      </v-btn>
+    <v-btn color="cyan" flat @click="goToStore"
+      >
+       <v-icon left dark>store</v-icon>
+       Store
+     </v-btn>
      <v-btn
      v-if="userIsAuthenticated"
      flat
@@ -51,7 +56,7 @@ export default {
           {icon:'stars', title:'Promoted', Link:'/'},
           {icon:'done_outline', title:'Following',Link:'/Following'},
           {icon:'assessment', title:'Recent', Link:'/Recent'},
-          {icon:'store', title:'  Store', Link:'/Store'},
+        
           {icon:'account_box', title:'Profile', Link:'/Profile'},
           {icon:'add_box', title:'Post', Link:'/Post'},
           {icon:'input', title:'Login', Link:'/Login'},
@@ -63,7 +68,6 @@ export default {
           {icon:'stars', title:'Promoted', Link:'/'},
           {icon:'done_outline', title:'Following',Link:'/Following'},
           {icon:'assessment', title:'Recent', Link:'/Recent'},
-          {icon:'store', title:'  Store', Link:'/Store'},
           {icon:'account_box', title:'Profile', Link:'/Profile'},
           {icon:'add_box', title:'Post', Link:'/Post'},
          
@@ -80,6 +84,9 @@ export default {
     methods:{
       onLogout(){
         this.$store.dispatch('logout')
+      },
+      goToStore(){
+          window.location.href = "https://youtu.be/oHg5SJYRHA0"
       }
     }
 }

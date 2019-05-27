@@ -33,7 +33,8 @@
                       id="username"
                       v-model="username"
                       type="username"
-                    
+                      maxlength="25"
+                      counter
                       required></v-text-field>
                   </v-flex>
                 </v-layout>
