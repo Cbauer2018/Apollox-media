@@ -57,26 +57,41 @@ export const store = new Vuex.Store({
       },
 
       loadRecentPosts({commit}){
-          firebase.database().ref('Posts').orderByChild('timeStamp').once('value').then((data)=>{
+          firebase.database().ref('Users').once('value').then((data)=>{
               const Posts = []
               const obj = data.val()
-            
-             for (let key in obj){
-                  Posts.push({
-                    newReview: obj[key].newReview,
-                    notIncludedList: obj[key].notIncludedList,
-                    personName: obj[key].personName,
-                    promoted: obj[key].promoted,
-                    reviewLink: obj[key].reviewLink,
-                    rightList: obj[key].rightList,
-                    title: obj[key].title,
-                    uid: obj[key].uid,
-                    username: obj[key].username,
-                    wrongList: obj[key].wrongList,
-                    yourReview: obj[key].yourReview
+              for(let key in obj){
+                var uid = obj[key].id
+
+                if(obj[key].Posts != null){
+                  firebase.database().ref('Users').child(uid).child('Posts').once('value').then((data)=> {
+                    const obj = data.val()
+                    for (let key in obj){
+                      
+                      Posts.push({
+                        newReview: obj[key].newReview,
+                        notIncludedList: obj[key].notIncludedList,
+                        personName: obj[key].personName,
+                        promoted: obj[key].promoted,
+                        reviewLink: obj[key].reviewLink,
+                        rightList: obj[key].rightList,
+                        title: obj[key].title,
+                        uid: obj[key].uid,
+                        username: obj[key].username,
+                        wrongList: obj[key].wrongList,
+                        yourReview: obj[key].yourReview,
+                        timeStamp: obj[key].timeStamp
+                      })
+                    }
+                    Posts.sort(function(a,b){
+                      return a.timeStamp - b. timeStamp;
+                    });
+        
                   })
                 }
-                
+              }
+              
+              
                 commit('setLoadedRecentPosts', Posts)
           })
 
@@ -143,12 +158,6 @@ export const store = new Vuex.Store({
               
             })
 
-            firebase.database().ref('Posts').push(newPost).catch(
-              error => {
-                commit('setLoading', false)
-                commit('setError', error)
-                
-              })
 
           commit('submitPost',newPost)
           
