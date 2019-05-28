@@ -18,12 +18,19 @@
        <v-icon left dark>{{item.icon}}</v-icon>
        {{item.title}}
      </v-btn>
-    <v-btn color="cyan" flat @click="goToStore"
+    <v-btn  color="cyan" flat @click="goToStore"
       >
        <v-icon left dark>store</v-icon>
        Store
      </v-btn>
-     <v-btn
+     
+    
+     
+   </v-toolbar-items>
+   <v-spacer></v-spacer>
+   <v-icon color="black" >search</v-icon>
+   <input  type="search" placeholder="search...">
+    <v-btn
      v-if="userIsAuthenticated"
      flat
      @click="onLogout"
@@ -31,7 +38,7 @@
      :to="'/'">
      <v-icon left dark>exit_to_app</v-icon>
      </v-btn>
-   </v-toolbar-items>
+   
  </v-toolbar>
   <main>
     <router-view></router-view>

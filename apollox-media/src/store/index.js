@@ -8,12 +8,15 @@ export const store = new Vuex.Store({
     state: {
      
       loadedProfile: [],
+      loadedRecentPosts:[],
       user: null,
       loading: false,
       error: null
     },
     mutations: {
-
+      setLoadedRecentPosts(state, payload){
+        state.loadedRecentPosts = payload
+      },
       setLoadedProfile (state, payload) {
         state.loadedProfile = payload
         
@@ -46,10 +49,37 @@ export const store = new Vuex.Store({
             monthCreated: obj.monthCreated,
             username: obj.username,
             yearCreated: obj.yearCreated,
+            bio: obj.bio,
           })
             
             commit('setLoadedProfile', profile)
         })
+      },
+
+      loadRecentPosts({commit}){
+          firebase.database().ref('Posts').orderByChild('timeStamp').once('value').then((data)=>{
+              const Posts = []
+              const obj = data.val()
+            
+             for (let key in obj){
+                  Posts.push({
+                    newReview: obj[key].newReview,
+                    notIncludedList: obj[key].notIncludedList,
+                    personName: obj[key].personName,
+                    promoted: obj[key].promoted,
+                    reviewLink: obj[key].reviewLink,
+                    rightList: obj[key].rightList,
+                    title: obj[key].title,
+                    uid: obj[key].uid,
+                    username: obj[key].username,
+                    wrongList: obj[key].wrongList,
+                    yourReview: obj[key].yourReview
+                  })
+                }
+                
+                commit('setLoadedRecentPosts', Posts)
+          })
+
       },
 
       signUserUp ({commit}, payload) {
@@ -65,7 +95,7 @@ export const store = new Vuex.Store({
                 id: user.user.uid,
                 username: payload.username,
                 email: payload.email,
-
+                bio: "Welcome to ApolloX",
                 monthCreated: new Date().getMonth(),
                 dayCreated:  new Date().getDate(),
                 yearCreated: new Date().getFullYear()
@@ -98,7 +128,7 @@ export const store = new Vuex.Store({
             newReview: payload.newReview,
             yourReview: payload.yourReview,
             promoted: false,
-            timeStamp:new Date().getTime(),
+            timeStamp:-new Date().getTime(),
             wrongList: payload.wrongList,
             rightList: payload.rightList,
             notIncludedList: payload.notIncludedList,
@@ -163,10 +193,12 @@ export const store = new Vuex.Store({
     },
     getters: {
 
+      loadedRecentPosts(state){
+          console.log(state.loadedRecentPosts)
+          return state.loadedRecentPosts
+      },
       loadedProfile (state) {
-        return state.loadedProfile
-         
-        
+        return state.loadedProfile  
       },
       user (state) {
         return state.user
@@ -177,6 +209,12 @@ export const store = new Vuex.Store({
       },
       error (state) {
         return state.error
+      },
+      userId (state) {
+        return state.user.id
+      },
+      loadedProfileId (state) {
+        return state.loadedProfile[0].id
       }
     }
   })
