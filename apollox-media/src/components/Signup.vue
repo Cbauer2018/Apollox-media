@@ -30,6 +30,7 @@
                     <v-text-field
                       name="username"
                       label="Username"
+                      @change="checkUsername"
                       id="username"
                       v-model="username"
                       type="username"
@@ -46,6 +47,7 @@
                       id="password"
                       v-model="password"
                       type="password"
+                      
                       required></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -88,9 +90,7 @@
       }
     },
     computed: {
-      //compareUsername () {
-        //Implement
-      //},
+      
       comparePasswords () {
         return this.password !== this.confirmPassword ? 'Passwords do not match' : ''
       },
@@ -113,15 +113,48 @@
     },
     methods: {
       onSignup () {
-        this.$store.dispatch('signUserUp', {email: this.email, username: this.username, password: this.password})
+        var alphaExp=/^[0-9a-zA-Z]+$/;
+      if(!(this.username.match(alphaExp)))
+          {
+          alert("Username must contain only numbers and letters");
+          
+            }else{
+              console.log("loading", this.$store.state.loading)
+              
+                 
+                  if(this.$store.getters.isUsernameValid){
+                console.log("test2",this.$store.getters.isUsernameValid)
+            this.$store.dispatch('signUserUp', {email: this.email, username: this.username, password: this.password})
+             }else{
+               alert("This username is already taken")
+            console.log("Valid?",this.$store.getters.isUsernameValid)
+          
+          
+          }
+
+            
+              }
+            
+            
       },
+      
+        checkUsername(){
+
+          this.$store.dispatch('checkUsername', {username: this.username})
+        },
+
+      // this.$store.dispatch('signUserUp', {email: this.email, username: this.username, password: this.password})
       onDismissed () {
         this.$store.dispatch('clearError')
       },
 
-      checkUsername(){
-       this.$store.dispatch('checkUsername', {username: this.username})
-      }
+
+     
+      
+      
+      
+
+      
     }
   }
 </script>

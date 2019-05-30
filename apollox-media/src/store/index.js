@@ -9,13 +9,25 @@ export const store = new Vuex.Store({
      
       loadedProfile: [],
       loadedRecentPosts:[],
+      loadedPromotedPosts:[],
+      validUsername: false,
       user: null,
       loading: false,
       error: null
     },
     mutations: {
+      setValidUsername(state, payload){
+        
+          state.validUsername = payload
+          console.log("done")
+          
+
+      },
       setLoadedRecentPosts(state, payload){
         state.loadedRecentPosts = payload
+      },
+      setLoadedPromotedPosts(state, payload){
+        state.loadedPromotedPosts = payload
       },
       setLoadedProfile (state, payload) {
         state.loadedProfile = payload
@@ -36,6 +48,26 @@ export const store = new Vuex.Store({
     },
     actions: {
       
+      checkUsername({commit},payload){
+        commit('setLoading', true)
+        firebase.database().ref('Users').once('value').then((data)=>{
+            const obj = data.val()
+            var isValid = true
+            for(let key in obj){
+              if(obj[key].username == payload.username){
+                isValid = false
+                break;
+              }else{
+                isValid = true
+              }
+            
+            }
+            commit('setValidUsername', isValid)
+            
+            commit('setLoading', false)
+        })
+      },
+
       loadProfile ({commit}) {
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .once('value').then((data) => {
@@ -96,6 +128,49 @@ export const store = new Vuex.Store({
           })
 
       },
+
+      
+      loadPromotedPosts({commit}){
+        firebase.database().ref('Users').once('value').then((data)=>{
+            const Posts = []
+            const obj = data.val()
+            for(let key in obj){
+              var uid = obj[key].id
+
+              if(obj[key].Posts != null){
+                firebase.database().ref('Users').child(uid).child('Posts').once('value').then((data)=> {
+                  const obj = data.val()
+                  for (let key in obj){
+                    if(obj[key].promoted == true){
+                    Posts.push({
+                      newReview: obj[key].newReview,
+                      notIncludedList: obj[key].notIncludedList,
+                      personName: obj[key].personName,
+                      promoted: obj[key].promoted,
+                      reviewLink: obj[key].reviewLink,
+                      rightList: obj[key].rightList,
+                      title: obj[key].title,
+                      uid: obj[key].uid,
+                      username: obj[key].username,
+                      wrongList: obj[key].wrongList,
+                      yourReview: obj[key].yourReview,
+                      timeStamp: obj[key].timeStamp
+                    })
+                  }
+                  }
+                  Posts.sort(function(a,b){
+                    return a.timeStamp - b. timeStamp;
+                  });
+      
+                })
+              }
+            }
+            
+            
+              commit('setLoadedPromotedPosts', Posts)
+        })
+
+    },
 
       signUserUp ({commit}, payload) {
         commit('setLoading', true)
@@ -206,6 +281,19 @@ export const store = new Vuex.Store({
           console.log(state.loadedRecentPosts)
           return state.loadedRecentPosts
       },
+
+      isUsernameValid(state){
+                console.log("loading",state.loading)
+                return state.validUsername
+              
+              
+        
+      },
+
+      loadedPromotedPosts(state){
+        console.log(state.loadedPromotedPosts)
+        return state.loadedPromotedPosts
+    },
       loadedProfile (state) {
         return state.loadedProfile  
       },
