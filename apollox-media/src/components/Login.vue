@@ -18,10 +18,10 @@
                   <v-flex xs12>
                     <v-text-field
                       name="email"
-                      label="Email"
+                      label="Email or Username"
                       id="email"
-                      v-model="email"
-                      type="email"
+                      v-model="loginName"
+                      type="text"
                       required></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -57,11 +57,14 @@
   export default {
     data () {
       return {
-        email: '',
+        loginName: '',
         password: ''
       }
     },
     computed: {
+      clearError(){
+        return this.$store.dispatch('clearError')
+      },
       user () {
         return this.$store.getters.user
       },
@@ -81,7 +84,7 @@
     },
     methods: {
       onSignin () {
-        this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+        this.$store.dispatch('signUserIn', {loginName: this.loginName, password: this.password})
       },
       onDismissed () {
         this.$store.dispatch('clearError')

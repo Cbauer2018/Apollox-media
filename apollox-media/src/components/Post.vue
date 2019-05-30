@@ -29,9 +29,11 @@
             </v-container>
           </v-card-text>
         </v-card>
-      </v-flex>
-      </v-layout>
+  </v-flex>
+
+
   <v-flex v-if="userIsAuthenticated">
+    <form @submit.prevent="checkForm">
 <v-layout justify-center my-3 >
    <v-card  flat color="cyan lighten-3" class="rounded-card">
     <v-card-text>
@@ -44,7 +46,7 @@
         <v-card>
           <v-card-text>
             <v-container>
-              <form>
+              <form required>
                   <v-flex xs12>
                     <v-text-field
                       name="title"
@@ -52,7 +54,6 @@
                       v-model="title"
                       id="title"
                       type="text"
-                     
                       counter="50"
                       required
                       maxlength="50"></v-text-field>
@@ -257,15 +258,14 @@
               </v-container>
             </v-card-text>
           </v-card>
-    </v-flex>
-   
-      <v-layout justify-center> 
+           <v-layout justify-center> 
     <v-btn color="cyan lighten-3"
-    @click="submitPost"
-    type="submit" :disabled="loading" :loading="loading"
-    
+    type="submit" 
     >Post</v-btn> 
     </v-layout>
+    </v-flex>
+   
+     </form>
 </v-flex>
   
 
@@ -297,6 +297,87 @@ export default {
       }
     },
     methods:{
+      checkForm: function (e) {
+       if(this.newForm){
+      if (this.title && this.personName && this.reviewLink && this.rightList && this.wrongList && this.notIncludedList && this.newReview ) {
+        this.submitPost()
+        return true;
+      }
+       if (!this.title) {
+         
+        alert('Title is required.')
+      }
+      if (!this.personName) {
+        alert('Name of Person you are fact checking is required.');
+      }
+        if(!this.reviewLink){
+          alert('Link to Article/Video you are reviewing is required.');
+        }
+        if(!this.newReview){
+          alert('New Review Field is required');
+        }
+          var i = 0  
+         while( i < this.rightList.length){
+          console.log(this.rightList[i])
+          if(this.rightList[i].text == ""){
+          alert('Correct Bullet Point is required.');
+        }
+          i++;
+        }
+          var j = 0
+        while( j < this.wrongList.length){
+          console.log(this.wrongList[j])
+          if(this.wrongList[j].text == ""){
+          alert('Incorrect Bullet Point is required.');
+        }
+          j++;
+        }
+        
+      
+        
+      
+        }else{
+          
+        if (this.title && this.personName && this.reviewLink && this.rightList && this.wrongList && this.notIncludedList && this.yourReview) {
+          this.submitPost();
+        return true;
+
+      }
+
+      
+       if (!this.title) {
+        alert('Title is required.')
+      }
+      if (!this.personName) {
+        alert('Name of Person you are fact checking is required.');
+      }
+        if(!this.reviewLink){
+          alert('Link to Article/Video you are reviewing is required.');
+        }
+        if(!this.yourReview){
+          alert('Your Review Link is required');
+        }
+         var i = 0  
+         while( i < this.rightList.length){
+          console.log(this.rightList[i])
+          if(this.rightList[i].text == ""){
+          alert('Correct Bullet Point is required.');
+        }
+          i++;
+        }
+          var j = 0
+        while( j < this.wrongList.length){
+          console.log(this.wrongList[j])
+          if(this.wrongList[j].text == ""){
+          alert('Incorrect Bullet Point is required.');
+        }
+          j++;
+        }
+         
+        }
+
+      e.preventDefault();
+    },
       submitPost(){
         console.log("wrongList",this.wrongList)
         console.log("rightList", this.rightList)
@@ -312,6 +393,7 @@ export default {
         }
 
         this.$router.push('/Recent')
+        this.$store.dispatch('loadRecentPosts')
         
       },
       changeForm (form){
@@ -329,7 +411,7 @@ export default {
       addWrongBullet(){
         
         if(this.wrongList.length < 10){
-         this.wrongList.push({text:' '})
+         this.wrongList.push({text:''})
         }
         
       },
