@@ -32,6 +32,19 @@ export const store = new Vuex.Store({
       }
     },
     actions: {
+
+      changeProfile ({commit}, payload) {
+        const filename = payload.fileName
+        console.log(payload.blob)
+
+        const ext = filename.slice(filename.lastIndexOf('.'))
+        firebase.storage().ref('profiles/'+ firebase.auth().currentUser.uid.toString() + ext).put(payload.blob)
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .child('username').set(payload.username)
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .child('bio').set(payload.bio)
+
+      },
       
       loadProfile ({commit}) {
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())

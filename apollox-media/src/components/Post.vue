@@ -1,7 +1,8 @@
 <template>
 <v-container>
-  <v-flex xs12 sm6 offset-sm3  v-if="!userIsAuthenticated">
-  <v-card>
+  <v-layout justify-center>
+  <v-flex xs5  my-3 v-if="!userIsAuthenticated">
+        <v-card>
           <v-card-text>
             <v-container>
               <v-layout justify-center>
@@ -10,25 +11,26 @@
                   </h2>
               </v-layout>
               <v-flex>
-     <v-layout mt-5 justify-center>
-     <v-btn 
-     router
-     :to="'/Login'"
-     outline large round color="cyan lighten-2">
-        Login
-     </v-btn>
-     <v-btn
-     router
-     :to="'/Signup'" 
-     outline large round color="cyan lighten-2">
-        SignUp
-     </v-btn>
-   </v-layout>
-   </v-flex>
+            <v-layout mt-5 justify-center>
+              <v-btn 
+                  router
+                  :to="'/Login'"
+                  outline large round color="cyan lighten-2">
+                  Login
+              </v-btn>
+              <v-btn
+                  router
+                  :to="'/Signup'" 
+                  outline large round color="cyan lighten-2">
+                  SignUp
+              </v-btn>
+            </v-layout>
+              </v-flex>
             </v-container>
           </v-card-text>
         </v-card>
-  </v-flex>
+      </v-flex>
+      </v-layout>
   <v-flex v-if="userIsAuthenticated">
 <v-layout justify-center my-3 >
    <v-card  flat color="cyan lighten-3" class="rounded-card">
@@ -126,7 +128,7 @@
     </span>
        <v-textarea
         id="newReview"
-         v-model="newReview"
+        v-model="newReview"
         counter
         maxlength="1500"
         full-width
