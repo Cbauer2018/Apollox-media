@@ -243,9 +243,13 @@ export const store = new Vuex.Store({
       signUserIn ({commit}, payload) {
         commit('setLoading', true)
         commit('clearError')
-        firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+        var commited = false
+        if(payload.loginName.toString().indexOf('@') > -1){
+          commited = true
+          firebase.auth().signInWithEmailAndPassword(payload.loginName, payload.password)
           .then(
             user => {
+             
               commit('setLoading', false)
               const newUser = {
                 id: user.user.uid,
@@ -261,6 +265,54 @@ export const store = new Vuex.Store({
               
             }
           )
+        }else{
+          firebase.database().ref('Users').once('value').then((data)=>{
+            const obj = data.val()
+            for(let key in obj){
+              if(obj[key].username == payload.loginName){
+                commited = true
+                firebase.auth().signInWithEmailAndPassword(obj[key].email, payload.password)
+                .then(
+                  user => {
+                   
+                    commit('setLoading', false)
+                    const newUser = {
+                      id: user.user.uid,
+                     
+                    }
+                    
+                    commit('setUser', newUser)
+                    
+                  }
+                  
+                )
+                .catch(
+                  error => {
+                    
+                    commit('setLoading', false)
+                    commit('setError', error)
+                    
+                  }
+                  
+                )
+              }
+            }
+            if(!commited){
+              var error = {message: "Unkown/Incorrect Username"}
+              commit('setError', error)
+              commit('setLoading', false)
+            }
+
+          }).catch(
+            error => {
+              commit('setLoading', false)
+              commit('setError', error)
+              
+            }
+            
+          )
+        }
+        
       },
       autoSignIn({commit}, payload){
         commit('setUser', {id: payload.uid})

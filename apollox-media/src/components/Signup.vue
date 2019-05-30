@@ -90,7 +90,9 @@
       }
     },
     computed: {
-      
+      clearError(){
+       this.$store.dispatch('clearError')
+      },
       comparePasswords () {
         return this.password !== this.confirmPassword ? 'Passwords do not match' : ''
       },
