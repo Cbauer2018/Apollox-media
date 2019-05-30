@@ -29,7 +29,9 @@
             </v-container>
           </v-card-text>
         </v-card>
+        
   </v-flex>
+  </v-layout>
 
 
   <v-flex v-if="userIsAuthenticated">
