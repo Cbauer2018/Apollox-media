@@ -30,12 +30,12 @@
         </v-card>
       </v-flex>
         <v-flex v-if="userIsAuthenticated">
-      <v-layout my-5 row>
-        
+      <v-layout my-5 row wrap>
         <v-flex xs1>
-          <v-card flat></v-card>
+          <v-card></v-card>
         </v-flex>
-        <v-flex xs2>
+        
+        <v-flex sm6 md3>
           <v-card flat>
             <v-layout column>
               <v-flex ml-4 >
@@ -66,7 +66,9 @@
             </v-layout>
           </v-card>
         </v-flex>
-        <v-flex xs5>
+        
+        
+        <v-flex xs8 sm5>
           <v-card flat>
             <v-flex
                 v-for="profile in profile" 
@@ -81,17 +83,15 @@
           </v-flex>
           </v-card>
         </v-flex>
-        <v-flex xs1>
-          <v-card flat></v-card>
-        </v-flex>
-        <v-flex xs1>
+        
+        <v-flex xs6 sm3>
           <v-card flat>
-            <v-layout column>
+            <v-layout column wrap>
               <v-flex ml-3>
-                  <h2 class = "font-weight-thin">Followers: 0</h2>
+                  <h2 class = "font-weight-thin">Followers 0</h2>
               </v-flex>
               <v-flex ml-3 my-2>
-                  <h2 class = "font-weight-thin">Following: 0</h2>
+                  <h2 class = "font-weight-thin">Following 0</h2>
               </v-flex>
                   <v-layout v-show="!userIdMatch">
                     <v-flex ml-2>
@@ -160,40 +160,47 @@
           <v-card class = "pa-2">
               <v-layout row>
                     <v-flex my-2 xs1>
+                      <v-card>
                         <v-avatar
+                        
                             :size="75"
                             color="grey lighten-4">
                             <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
                         </v-avatar>
+                        </v-card>
                     </v-flex>
-                    <v-flex xs9
+                    <v-flex xs9>
+                    <v-card>
+                    <v-flex
                           v-for="profile in profile" 
                           :key="profile">
                           <h4 class = "font-weight-thin">
                           {{  profile.username }} </h4>
                     <v-flex my-2>
-                      <h2 class = "font-weight-thin">Why Hillary Clinton Should go to Prison</h2>
+                      <h2 class = "font-weight-thin">Why Hillary Clinton Should go to Prison and be locked up for 57 years to life for money laundering and being a GILF</h2>
                       <v-flex my-2>
                       <span>
                           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut natus repellat ullam nobis error impedit cum, quam quidem suscipit consectetur optio recusandae ut quibusdam quasi odio quae laboriosam aliquam doloremque!
                       </span>
                       </v-flex>
                     </v-flex>
-                    <v-layout column>
+                    <v-layout column wrap>
                       <v-flex xs1>
                       </v-flex>
-                      <v-flex xs4>
-                         <v-treeview :items="items" selected-color ="red"></v-treeview>
+                      <v-flex xs9>
+                         <v-treeview class="text-truncate" :items="items"></v-treeview>
                       </v-flex>
-                      <v-flex xs4>
-                         <v-treeview :items="items"></v-treeview>
+                      <v-flex xs9>
+                         <v-treeview class="text-truncate" :items="items"></v-treeview>
                       </v-flex>
-                      <v-flex xs4>
-                         <v-treeview :items="items"></v-treeview>
+                      <v-flex xs9>
+                         <v-treeview class="text-truncate" :items="items"></v-treeview>
                       </v-flex>
                     </v-layout>
                     </v-flex>
-                    <v-layout align-center>
+                    </v-card>
+                    </v-flex>
+                    <v-layout>
                         <v-flex my-2 xs2>
                           <div class= "title font-weight-thin">05/29/2019</div>
                         </v-flex>
@@ -216,7 +223,7 @@
                     <v-flex my-2 xs10>
                         
                     </v-flex>
-                    <v-layout align-center>
+                    <v-layout align-start>
                     <v-flex my-2 xs2>
                         <div class= "title font-weight-thin">05/29/2019</div>
                     </v-flex>
