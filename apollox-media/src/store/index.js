@@ -49,13 +49,25 @@ export const store = new Vuex.Store({
     actions: {
 
       changeProfile ({commit}, payload) {
-        const filename = payload.fileName
-        console.log(payload.blob)
 
+        if(payload.fileName != null){
+        const filename = payload.fileName.name
         const ext = filename.slice(filename.lastIndexOf('.'))
-        firebase.storage().ref('profiles/'+ firebase.auth().currentUser.uid.toString() + ext).put(payload.blob)
+       firebase.storage().ref('profiles/'+ firebase.auth().currentUser.uid.toString() + ext).put(payload.fileName)
+        .then((fileData) => {
+           
+           firebase.storage().ref().child('profiles/'+ firebase.auth().currentUser.uid.toString() + ext).getDownloadURL().then(url =>
+            {
+              console.log(url)
+              return firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('imageUrl').set(url)
+            }
+            )
+        })
+      }
+
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('username').set(payload.username)
+        
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('bio').set(payload.bio)
 
@@ -94,6 +106,7 @@ export const store = new Vuex.Store({
             monthCreated: obj.monthCreated,
             username: obj.username,
             yearCreated: obj.yearCreated,
+            imageUrl: obj.imageUrl,
             bio: obj.bio,
           })
             

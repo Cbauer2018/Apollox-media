@@ -4,7 +4,7 @@
         <v-card>
           <v-card-text>
             <v-container>
-              <form>
+              <form @submit.prevent="changeProfile">
                    <v-layout>
                             <v-btn
                             router
@@ -24,10 +24,14 @@
                     </v-layout>
                     <v-layout my-2 justify-center>
                         <v-avatar
+                            v-for="profile in profile"
+                            :key="profile"
                             :tile= "tile"
                             :size="120"
                             color="grey lighten-4">
-                            <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
+                            <img v-if="hasProfilePic" :src="imageUrl" alt="avatar">
+                            <img v-else :src="imageUrl" alt="avatar" >
+                           
                         </v-avatar>
                     </v-layout>
                     <v-layout my-2 justify-center>
@@ -40,33 +44,41 @@
                                 style = "display: none" 
                                 ref = "fileInput" 
                                 accept = "image/*"
-                                @change = "onFilePicked">
+                                @change = "onFilePicked"
+                                >
                         <v-flex my-3
-                                v-for="profile in profile" 
-                                :key = "profile">
+                        v-for="profile in profile" 
+                                :key = "profile"
+                                >
                                 <span class = "font-weight-thin">Username</span>
                         <v-text-field 
-                                v-model = "username"  
-                                :value = "profile.username"
-                                counter = 25
-                                maxlength = 25>
+                            :value="profile.username"
+                             @change="checkUsername"
+                            v-model="username"
+                             maxlength="25"
+                            counter
+                            required> 
+                            {{profile.username}}
                         </v-text-field>
+                        
                         </v-flex>
-                    <v-flex my-3>
-                            <span class = "font-weight-thin">Bio</span>
+                    <v-flex my-3 
+                     v-for="profile in profile" 
+                    :key = "profile"
+                        >
+                       <span class = "font-weight-thin">Bio</span>
                         <v-textarea 
-                            v-for="profile in profile" 
-                            :key = "profile"
                             v-model = "bio"  
-                            :value = "profile.bio"
+                            :value="profile"
                             counter = 300
                             maxlength = 300
                             outline
                             single-line>
+                             
                         </v-textarea>
                     </v-flex>
                     <v-layout justify-center>
-                <v-btn outline round color="cyan lighten-2" @click = "changeProfile">
+                <v-btn outline round type="submit" color="cyan lighten-2" >
                  Submit
              </v-btn>
              </v-layout>
@@ -83,40 +95,98 @@ export default {
 
 data() {
     return {
-        imageURl: '',
+        imageUrl:require('@/assets/astronautlogo.jpg'),
         image: null,
+        bio: '',
+        username: ''
+      
+        
     }
 },
 computed: {
     profile(){
         return this.$store.getters.loadedProfile
-      }
+      },
+
+       hasProfilePic(){
+       
+       let profile = this.profile
+       this.bio = profile[0].bio
+       this.username = profile[0].username
+         if(profile[0].imageUrl != null){
+          this.imageUrl = profile[0].imageUrl
+          return true
+         }else{
+
+         
+          return false
+         }
+       }
+      
+      
 },
 methods: {
     changeProfile() {
-        this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image.name, blob: this.blob})
+        
+
+         var alphaExp=/^[0-9a-zA-Z]+$/;
+      if(!(this.username.match(alphaExp)))
+          {
+          alert("Username must contain only numbers and letters");
+          
+            }else{
+                let profile = this.profile
+                console.log("username", profile[0].username)
+              if(this.username != profile[0].username){
+                  if(this.$store.getters.isUsernameValid){
+                      this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
+             this.$store.dispatch('loadProfile')
+         this.$router.push('/Profile')
+                      })
+                
+             }else{
+               alert("This username is already taken")
+           
+          }
+
+            
+              }else{
+                  this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
+             this.$store.dispatch('loadProfile')
+         this.$router.push('/Profile')
+                      })
+              }
+            }
+              
+        
     },
-    onPickFile() {
+     onPickFile () {
         this.$refs.fileInput.click()
-    },
-    onFilePicked (event) {
+        
+      },
+      onFilePicked (event) {
         const files = event.target.files
         let filename = files[0].name
         if (filename.lastIndexOf('.') <= 0) {
-            return alert('Please add a valid file!')
+          return alert('Please add a valid file!')
         }
         const fileReader = new FileReader()
         fileReader.addEventListener('load', () => {
-            this.imageURL = fileReader.result()
-             var blob = new Blob([fileReader.result()], {type:"image/*"})
-             console.log(blob)
+          this.imageUrl = fileReader.result
+          console.log(this.imageUrl)
         })
-        
         fileReader.readAsDataURL(files[0])
         this.image = files[0]
-        console.log(this.image)
-    },
+        
+        
+      },
+      checkUsername(){
 
-}
+          this.$store.dispatch('checkUsername', {username: this.username})
+        },
+        
+       
+
+    }
 }
 </script>

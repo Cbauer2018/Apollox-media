@@ -39,11 +39,15 @@
           <v-card flat>
             <v-layout column>
               <v-flex ml-4 >
-              <v-avatar
+              <v-avatar v-for="profile in profile"
+                :key="profile"
                 :tile="tile"
                 :size="140"
                 color="grey lighten-4">
-                <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
+                <img 
+                v-if="hasProfilePic" 
+                :src="profile.imageUrl" alt="avatar">
+                <img v-else src="@/assets/astronautlogo.jpg">
               </v-avatar>
               </v-flex>
               <v-flex>
@@ -273,8 +277,24 @@ export default{
       },
       profile(){
         return this.$store.getters.loadedProfile;
-      }
+      },
+      hasProfilePic(){
+       
+      
+      let profile = this.profile
+      console.log(profile[0].imageUrl)
+
+
+         if(profile[0].imageUrl!= null){
+           
+           return true
+         }else{
+           return false
+         }
+       }
+      
     },
+    
 
     methods:{
     
@@ -285,7 +305,8 @@ export default{
         else{
           this.numberI=0
         }
-      }
+      },
+       
     }
 
 
