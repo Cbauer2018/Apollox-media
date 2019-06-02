@@ -298,9 +298,13 @@ export default{
          }else{
            return false
          }
-       }
+       },
+        loadProfilePosts(){
+      
+    }
       
     },
+   
     
 
     methods:{

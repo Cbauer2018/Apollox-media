@@ -67,7 +67,7 @@ export const store = new Vuex.Store({
 
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('username').set(payload.username)
-        
+
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('bio').set(payload.bio)
 
@@ -154,6 +154,47 @@ export const store = new Vuex.Store({
           })
 
       },
+
+
+      loadProfilePosts({commit}){
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).once('value').then((data)=>{
+            const Posts = []
+            const obj = data.val()
+
+              
+
+              if(obj.Posts != null){
+                
+                  for (let key in obj.Posts){
+                    
+                    Posts.push({
+                      newReview: obj[key].newReview,
+                      notIncludedList: obj[key].notIncludedList,
+                      personName: obj[key].personName,
+                      promoted: obj[key].promoted,
+                      reviewLink: obj[key].reviewLink,
+                      rightList: obj[key].rightList,
+                      title: obj[key].title,
+                      uid: obj[key].uid,
+                      username: obj[key].username,
+                      wrongList: obj[key].wrongList,
+                      yourReview: obj[key].yourReview,
+                      timeStamp: obj[key].timeStamp
+                    })
+                  }
+                  Posts.sort(function(a,b){
+                    return a.timeStamp - b. timeStamp;
+                  });
+      
+               
+              }
+            
+            
+            
+              commit('setLoadedProfilePosts', Posts)
+        })
+
+    },
 
       
       loadPromotedPosts({commit}){
