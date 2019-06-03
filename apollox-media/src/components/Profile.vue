@@ -176,23 +176,88 @@
                     <v-flex xs9>
                     <v-card>
                     <v-flex
-                          v-for="profile in loadProfilePosts" 
-                          :key="profile">
+                          v-for="post in loadProfilePosts" 
+                          :key="post">
                           <h4 class = "font-weight-thin">
-                          {{ profile.username}} </h4>
+                          {{ post.username}} </h4>
                     <v-flex my-2>
-                      <h2 class = "font-weight-thin">Why Hillary Clinton Should go to Prison and be locked up for 57 years to life for money laundering and being a GILF</h2>
+                      <h2 class = "font-weight-thin">{{post.title}}</h2>
                       <v-flex my-2>
                       <span>
-                          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut natus repellat ullam nobis error impedit cum, quam quidem suscipit consectetur optio recusandae ut quibusdam quasi odio quae laboriosam aliquam doloremque!
+                          {{post.newReview}}
                       </span>
                       </v-flex>
                     </v-flex>
                     <v-layout column wrap>
                       <v-flex xs1>
                       </v-flex>
-                      <v-flex   xs9>
-                          <v-treeview :item="items"></v-treeview>
+                      <v-flex xs9>
+                           <v-list>
+          <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>What is Correct</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            >
+              <v-list-tile-content
+              v-for="text in post.rightList"
+              :key="text.text">
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+
+
+           <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>What is Incorrect</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            >
+              <v-list-tile-content
+              v-for="text in post.wrongList"
+              :key="text.text">
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+
+  <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            >
+              <v-list-tile-content
+              v-for="text in post.notIncludedList"
+              :key="text.text">
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+          
+        </v-list>
                       </v-flex>
                     </v-layout>
                     </v-flex>
@@ -253,9 +318,7 @@ export default{
           id: 1,
           name: 'What Facts were Correct:',
           children: [
-            { id: 2, name: 'Calendar : app' },
-            { id: 3, name: 'Chrome :  f f f ff f  fs d e fe ers  ds f ds s f ds  fsd    f sd   fdsf s f sd fd f ss f fdsf sd f sd  f sd ffds  f sdf sdf d f dsf sd f sd   ds f s ff d f ds f sd s d sd s d' },
-            { id: 4, name: 'Webstorm : app' }
+           
           ]
         }
       ],
