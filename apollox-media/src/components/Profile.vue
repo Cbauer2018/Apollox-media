@@ -197,18 +197,19 @@
             no-action
           >
             <template v-slot:activator>
-              <v-list-tile>
-                <v-list-tile-content>
-                  <v-list-tile-title>What is Correct</v-list-tile-title>
+              <v-list-tile color="green">
+                <v-list-tile-content >
+                  <v-list-tile-title >What is Correct</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
-            <v-list-tile
-            >
+            <v-list-tile >
               <v-list-tile-content
               v-for="text in post.rightList"
-              :key="text.text">
+              :key="text.text"
+             
+              >
                 <v-list-tile-title>{{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -219,7 +220,7 @@
             no-action
           >
             <template v-slot:activator>
-              <v-list-tile>
+              <v-list-tile  color="red">
                 <v-list-tile-content>
                   <v-list-tile-title>What is Incorrect</v-list-tile-title>
                 </v-list-tile-content>
@@ -240,7 +241,7 @@
             no-action
           >
             <template v-slot:activator>
-              <v-list-tile>
+              <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
                 </v-list-tile-content>
