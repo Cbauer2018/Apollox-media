@@ -176,10 +176,10 @@
                     <v-flex xs9>
                     <v-card>
                     <v-flex
-                          v-for="profile in profile" 
+                          v-for="profile in loadProfilePosts" 
                           :key="profile">
                           <h4 class = "font-weight-thin">
-                          {{  profile.username }} </h4>
+                          {{ profile.username}} </h4>
                     <v-flex my-2>
                       <h2 class = "font-weight-thin">Why Hillary Clinton Should go to Prison and be locked up for 57 years to life for money laundering and being a GILF</h2>
                       <v-flex my-2>
@@ -191,14 +191,8 @@
                     <v-layout column wrap>
                       <v-flex xs1>
                       </v-flex>
-                      <v-flex xs9>
-                         <v-treeview class="text-truncate" :items="items"></v-treeview>
-                      </v-flex>
-                      <v-flex xs9>
-                         <v-treeview class="text-truncate" :items="items"></v-treeview>
-                      </v-flex>
-                      <v-flex xs9>
-                         <v-treeview class="text-truncate" :items="items"></v-treeview>
+                      <v-flex   xs9>
+                          <v-treeview :item="items"></v-treeview>
                       </v-flex>
                     </v-layout>
                     </v-flex>
@@ -265,6 +259,8 @@ export default{
           ]
         }
       ],
+     
+
       rating: 3.3,
       followArray: [{word: "Follow"}, {word: "Following"}],
       followIconArray: [{icon: "add"}, {icon: ""}],
@@ -299,9 +295,12 @@ export default{
            return false
          }
        },
+
         loadProfilePosts(){
+         return this.$store.getters.loadedProfilePosts
+    },
+
       
-    }
       
     },
    

@@ -141,7 +141,7 @@ methods: {
                   if(this.$store.getters.isUsernameValid){
                       this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
              this.$store.dispatch('loadProfile')
-         this.$router.push('/Profile')
+                this.$router.push('/Profile')
                       })
                 
              }else{

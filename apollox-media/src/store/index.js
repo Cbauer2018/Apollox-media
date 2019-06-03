@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
      
       loadedProfile: [],
       loadedRecentPosts:[],
+      loadedProfilePosts:[],
       loadedPromotedPosts:[],
       validUsername: false,
       user: null,
@@ -22,6 +23,9 @@ export const store = new Vuex.Store({
           console.log("done")
           
 
+      },
+      setLoadedProfilePosts(state, payload){
+        state.loadedProfilePosts = payload
       },
       setLoadedRecentPosts(state, payload){
         state.loadedRecentPosts = payload
@@ -125,8 +129,9 @@ export const store = new Vuex.Store({
                   firebase.database().ref('Users').child(uid).child('Posts').once('value').then((data)=> {
                     const obj = data.val()
                     for (let key in obj){
-                      
+                  
                       Posts.push({
+                        
                         newReview: obj[key].newReview,
                         notIncludedList: obj[key].notIncludedList,
                         personName: obj[key].personName,
@@ -160,27 +165,27 @@ export const store = new Vuex.Store({
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).once('value').then((data)=>{
             const Posts = []
             const obj = data.val()
-
-              
-
+            console.log("Profile Posts", obj.Posts)
+            const profilePosts = obj.Posts
+         
               if(obj.Posts != null){
-                
-                  for (let key in obj.Posts){
-                    
+                  for (let key in profilePosts){
+                      
                     Posts.push({
-                      newReview: obj[key].newReview,
-                      notIncludedList: obj[key].notIncludedList,
-                      personName: obj[key].personName,
-                      promoted: obj[key].promoted,
-                      reviewLink: obj[key].reviewLink,
-                      rightList: obj[key].rightList,
-                      title: obj[key].title,
-                      uid: obj[key].uid,
-                      username: obj[key].username,
-                      wrongList: obj[key].wrongList,
-                      yourReview: obj[key].yourReview,
-                      timeStamp: obj[key].timeStamp
+                      notIncludedList: profilePosts[key].notIncludedList,
+                      newReview:  profilePosts[key].newReview,
+                      personName: profilePosts[key].personName,
+                      promoted: profilePosts[key].promoted,
+                      reviewLink: profilePosts[key].reviewLink,
+                      rightList: profilePosts[key].rightList,
+                      title: profilePosts[key].title,
+                      uid: profilePosts[key].uid,
+                      username:profilePosts[key].username,
+                      wrongList: profilePosts[key].wrongList,
+                      yourReview: profilePosts[key].yourReview,
+                      timeStamp: profilePosts[key].timeStamp
                     })
+                    
                   }
                   Posts.sort(function(a,b){
                     return a.timeStamp - b. timeStamp;
@@ -400,6 +405,10 @@ export const store = new Vuex.Store({
           console.log(state.loadedRecentPosts)
           return state.loadedRecentPosts
       },
+      loadedProfilePosts(state){
+        console.log(state.loadedProfilePosts)
+        return state.loadedProfilePosts
+    },
 
       isUsernameValid(state){
                 console.log("loading",state.loading)
