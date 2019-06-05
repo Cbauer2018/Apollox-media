@@ -193,10 +193,12 @@ export const store = new Vuex.Store({
          
               if(obj.Posts != null){
                   for (let key in profilePosts){
+                    var newReviewSlice = profilePosts[key].newReview.slice(0,200)
                       
                     Posts.push({
                       notIncludedList: profilePosts[key].notIncludedList,
                       newReview:  profilePosts[key].newReview,
+                      newReviewSlice:newReviewSlice,
                       personName: profilePosts[key].personName,
                       promoted: profilePosts[key].promoted,
                       reviewLink: profilePosts[key].reviewLink,
@@ -206,7 +208,8 @@ export const store = new Vuex.Store({
                       username:profilePosts[key].username,
                       wrongList: profilePosts[key].wrongList,
                       yourReview: profilePosts[key].yourReview,
-                      timeStamp: profilePosts[key].timeStamp
+                      timeStamp: profilePosts[key].timeStamp,
+                      date: profilePosts[key].date
                     })
                     
                   }

@@ -166,26 +166,29 @@
                       <v-card
                           v-for="post in loadProfilePosts" 
                           :key="post">
-                          <v-flex xs12>
+                          <v-flex>
                             <v-card flat>
                           <v-layout row>
-                            <v-flex ma-2>
+                            <v-flex ma-2 xs1 mr-2>
                               <v-layout column>
                         <v-avatar
                             :size="75"
                             color="grey lighten-4">
                             <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
                         </v-avatar>
+                        <v-flex my-3>
                         <h4 class = "font-weight-thin">
                           {{post.username}} </h4>
+                          </v-flex>
                             </v-layout>
                         </v-flex>
                         <v-layout column>
                           <v-flex my-2 ml-5>
                           <h1 class = "font-weight-thin">{{post.title}}</h1>
-                            <span>
-                                {{post.newReview}}
-                            </span>                            
+                            <span v-show="post.newReviewSlice != 'null'">
+                                {{post.newReviewSlice}}
+                            </span>
+                            <span  v-show="post.newReviewSlice == 'null'" >{{post.yourReview}}</span>                            
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
@@ -194,7 +197,7 @@
           >
             <template v-slot:activator>
               <v-list-tile color="green">
-                <v-list-tile-content >
+                <v-list-tile-content>
                   <v-list-tile-title >What is Correct</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
@@ -228,7 +231,7 @@
               <v-list-tile-content
               v-for="text in post.wrongList"
               :key="text.text">
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>{{text.text}} </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -257,9 +260,14 @@
         </v-list>
                       </v-flex>
 
-                            <v-layout row>
-                              <v-flex xs6 my-3>
-                                <v-rating
+                            <v-layout row wrap>
+                              <v-flex sm12 md6 my-3>
+                                <v-rating v-show="!userIdMatch"
+                                hover
+                                color = "cyan lighten-1"
+                                background-color="cyan lighten-1"
+                                half-increments></v-rating>
+                                <v-rating v-show="userIdMatch"
                                 v-model="rating"
                                 hover
                                 color = "cyan lighten-1"
@@ -267,13 +275,17 @@
                                 readonly
                                 half-increments></v-rating>
                               </v-flex>
-                              <v-flex xs4>
+                              <v-flex xs8 md4>
                                 <V-text-field
+                                maxlength = "300"
                                 placeholder="Comment..."></V-text-field>
                                 </v-flex>
                                 <v-flex xs2>
-                                  <v-btn>
-                                    <v-icon>mail</v-icon>
+                                  <v-btn
+                                  flat
+                                  fab
+                                  color="cyan lighten-1">
+                                    <v-icon>forward</v-icon>
                                   </v-btn>
                                 </v-flex>
                             </v-layout>
@@ -282,8 +294,9 @@
                           </v-layout>
                           
                           <v-card flat>
-                          <v-flex my-2>
-                            <h2 class="font-weight-thin">11/15/2001</h2>
+                          <v-flex my-2
+                          >
+                            <h2 class="font-weight-thin">{{post.date}}</h2>
                           </v-flex>
                           </v-card>
                           
@@ -361,7 +374,7 @@ beforeCreate() {
 
     if(profile[0].followers != null){
       let followers = profile[0].followers
-      this.followers = le
+    
              }
 
 
