@@ -52,6 +52,12 @@ export const store = new Vuex.Store({
     },
     actions: {
 
+      followProfile({commit},payload){
+        console.log("profile UID", payload.profileUid)
+          firebase.database().ref().child('Users').child(payload.profileUid).child("followers").push(firebase.auth().currentUser.uid.toString()) 
+          firebase.database().ref().child('Users').child(firebase.auth().currentUser.uid.toString()).child("following").push(payload.profileUid)
+         },
+
       changeProfile ({commit}, payload) {
 
         if(payload.fileName != null){
@@ -112,8 +118,8 @@ export const store = new Vuex.Store({
         })
       },
 
-      loadProfile ({commit}) {
-        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+      loadProfile ({commit}, payload) {
+        firebase.database().ref('Users').child(payload.uid)
         .once('value').then((data) => {
           
           const obj = data.val()
@@ -127,6 +133,8 @@ export const store = new Vuex.Store({
             yearCreated: obj.yearCreated,
             imageUrl: obj.imageUrl,
             bio: obj.bio,
+            following: obj.following,
+            followers: obj.followers
           })
             
             commit('setLoadedProfile', profile)
@@ -176,8 +184,8 @@ export const store = new Vuex.Store({
       },
 
 
-      loadProfilePosts({commit}){
-        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).once('value').then((data)=>{
+      loadProfilePosts({commit}, payload){
+        firebase.database().ref('Users').child(payload.uid).once('value').then((data)=>{
             const Posts = []
             const obj = data.val()
             console.log("Profile Posts", obj.Posts)
@@ -268,14 +276,15 @@ export const store = new Vuex.Store({
           .then(
             user => {
               commit('setLoading', false)
+              const time = new Date()
+          var dateString = time.toLocaleDateString()
               const newUser = {
                 id: user.user.uid,
                 username: payload.username,
                 email: payload.email,
                 bio: "Welcome to ApolloX",
-                monthCreated: new Date().getMonth(),
-                dayCreated:  new Date().getDate(),
-                yearCreated: new Date().getFullYear()
+                date:dateString,
+                
                 
                 
               }
@@ -296,7 +305,8 @@ export const store = new Vuex.Store({
        
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .once('value').then((data) => {
-          
+          const time = new Date()
+          var dateString = time.toLocaleDateString()
           const obj = data.val()
           const newPost ={
             title: payload.title,
@@ -306,6 +316,7 @@ export const store = new Vuex.Store({
             yourReview: payload.yourReview,
             promoted: false,
             timeStamp:-new Date().getTime(),
+            date:dateString,
             wrongList: payload.wrongList,
             rightList: payload.rightList,
             notIncludedList: payload.notIncludedList,

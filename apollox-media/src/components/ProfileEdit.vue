@@ -7,8 +7,10 @@
               <form @submit.prevent="changeProfile">
                    <v-layout>
                             <v-btn
+                             v-for="profile in profile"
+                             :key="profile"
                             router
-                            :to="'/Profile'"
+                            :to="'/Profile/' + profile.id"
                             small 
                             flat
                             fab
@@ -95,10 +97,11 @@ export default {
 
 data() {
     return {
-        imageUrl:require('@/assets/astronautlogo.jpg'),
+        imageUrl:require('@/assets/RocketLogo.png'),
         image: null,
         bio: '',
-        username: ''
+        username: '',
+        uid:''
       
         
     }
@@ -112,6 +115,7 @@ computed: {
        
        let profile = this.profile
        this.bio = profile[0].bio
+       this.uid = profile[0].id
        this.username = profile[0].username
          if(profile[0].imageUrl != null){
           this.imageUrl = profile[0].imageUrl
@@ -140,8 +144,8 @@ methods: {
               if(this.username != profile[0].username){
                   if(this.$store.getters.isUsernameValid){
                       this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
-             this.$store.dispatch('loadProfile')
-                this.$router.push('/Profile')
+             this.$store.dispatch('loadProfile',{uid: this.uid})
+                this.$router.push('/Profile/'+ this.uid)
                       })
                 
              }else{
@@ -152,8 +156,8 @@ methods: {
             
               }else{
                   this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
-             this.$store.dispatch('loadProfile')
-         this.$router.push('/Profile')
+             this.$store.dispatch('loadProfile',{uid: this.uid})
+         this.$router.push('/Profile/'+ this.uid)
                       })
               }
             }

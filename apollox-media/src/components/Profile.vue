@@ -47,7 +47,7 @@
                 <img 
                 v-if="hasProfilePic" 
                 :src="profile.imageUrl" alt="avatar">
-                <img v-else src="@/assets/astronautlogo.jpg">
+                <img v-else src="@/assets/RocketLogo.png">
               </v-avatar>
               </v-flex>
               <v-flex>
@@ -92,15 +92,16 @@
           <v-card flat>
             <v-layout column wrap>
               <v-flex ml-3>
-                  <h2 class = "font-weight-thin">Followers 0</h2>
+                  <h2 class = "font-weight-thin">Followers {{followers}}</h2>
               </v-flex>
               <v-flex ml-3 my-2>
-                  <h2 class = "font-weight-thin">Following 0</h2>
+                  <h2 class = "font-weight-thin">Following {{following}}</h2>
               </v-flex>
                   <v-layout v-show="!userIdMatch">
                     <v-flex ml-2>
                     <v-btn 
                         @click=" changeBtn"
+                        v-on:click=" followProfile"
                         outline color="cyan lighten-2">
                         {{followArray[this.numberI].word}}
                 <v-icon>
@@ -116,7 +117,7 @@
         <v-flex ml-5>
             <v-btn 
                   router
-                  :to="'/Profile/Edit'"
+                  :to="'/Profiles/Edit'"
                   fab small
                   outline color="cyan lighten-2">
               <v-icon>
@@ -174,10 +175,10 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs9>
-                    <v-card>
-                    <v-flex
-                          v-for="post in loadProfilePosts" 
+                    <v-card v-for="post in loadProfilePosts" 
                           :key="post">
+                    <v-flex
+                         >
                           <h4 class = "font-weight-thin">
                           {{ post.username}} </h4>
                     <v-flex my-2>
@@ -329,13 +330,22 @@ export default{
       followArray: [{word: "Follow"}, {word: "Following"}],
       followIconArray: [{icon: "add"}, {icon: ""}],
       popUpUnfollow: [],
-      numberI: 0
+      numberI: 0,
+      followers: 0,
+      following:0
 
     }
   },
+beforeCreate() {
+     
+          this.$store.dispatch('loadProfile', {uid: this.$route.params.uid})
+          this.$store.dispatch('loadProfilePosts', {uid: this.$route.params.uid})
 
+    
+  },
    computed: {
-
+     
+    
     userIdMatch () {
       return this.$store.getters.userId === this.$store.getters.loadedProfileId
     },
@@ -346,10 +356,16 @@ export default{
         return this.$store.getters.loadedProfile;
       },
       hasProfilePic(){
-       
-      
+    
       let profile = this.profile
-      console.log(profile[0].imageUrl)
+    if(profile[0].following != null){
+             
+          }
+
+    if(profile[0].followers != null){
+      let followers = profile[0].followers
+      this.followers = le
+             }
 
 
          if(profile[0].imageUrl!= null){
@@ -363,7 +379,7 @@ export default{
         loadProfilePosts(){
          return this.$store.getters.loadedProfilePosts
     },
-
+    
       
       
     },
@@ -380,6 +396,13 @@ export default{
           this.numberI=0
         }
       },
+      followProfile(){
+ 
+      this.$store.dispatch('followProfile', {profileUid:this.profile[0].id})
+      console.log("follwers", this.profile[0].followers)
+      this.followers += 1
+    
+    }
        
     }
 

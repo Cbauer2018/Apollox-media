@@ -19,15 +19,16 @@ new Vue({
   router,
   store,
   render: h => h(App),
+  
+
   created() {
-    this.$store.dispatch('loadRecentPosts')
-    this.$store.dispatch('loadPromotedPosts')
+   
     firebase.auth().onAuthStateChanged((user) =>{
       if(user){
-        this.$store.dispatch('autoSignIn', user)
-        this.$store.dispatch('loadProfile')
-        this.$store.dispatch('loadProfilePosts')
+        this.$store.dispatch('autoSignIn', user)   
       }
     })
+    this.$store.dispatch('loadRecentPosts')
+    this.$store.dispatch('loadPromotedPosts')
   },
 }).$mount('#app')

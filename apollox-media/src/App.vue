@@ -11,13 +11,15 @@
  class = "primary">
    
    <v-toolbar-items class="hidden-xs-only">
-     <v-btn color="cyan" flat v-for="item in menuItems"
+     <v-btn  color="cyan" flat v-for="item in menuItems"
       :key="item.title"
       router
       :to="item.Link">
-       <v-icon left dark>{{item.icon}}</v-icon>
+       <v-icon left dark >{{item.icon}}</v-icon>
        {{item.title}}
      </v-btn>
+  
+     
     <v-btn  color="cyan" flat @click="goToStore"
       >
        <v-icon left dark>store</v-icon>
@@ -53,38 +55,46 @@
 export default {
   data () {
       return {
-        
+       
       }
     },
 
   computed:{
+    userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
+       profileId(){
+        return this.$store.getters.user
+      },
+      
+    
     menuItems(){
       let menuItems =[
           {icon:'stars', title:'Promoted', Link:'/'},
           {icon:'done_outline', title:'Following',Link:'/Following'},
-          {icon:'assessment', title:'Recent', Link:'/Recent'},
-        
-          {icon:'account_box', title:'Profile', Link:'/Profile'},
+          {icon:'assessment', title:'Recent', Link:'/Recent', },
+          {icon:'account_box', title:'Profile', Link:'/Profile/Login'},
           {icon:'add_box', title:'Post', Link:'/Post'},
           {icon:'input', title:'Login', Link:'/Login'},
-          {icon:'play_for_work', title:'Signup', Link:'/Signup'},
+          {icon:'play_for_work', title:'Signup', Link:'/Signup' },
         ]
-        if(this.userIsAuthenticated){
-          menuItems =
+      
+        if(this.userIsAuthenticated ){
+         menuItems =
           [
           {icon:'stars', title:'Promoted', Link:'/'},
           {icon:'done_outline', title:'Following',Link:'/Following'},
           {icon:'assessment', title:'Recent', Link:'/Recent'},
-          {icon:'account_box', title:'Profile', Link:'/Profile'},
+          {icon:'account_box', title:'Profile', Link:'/Profile/'+this.profileId.id},
           {icon:'add_box', title:'Post', Link:'/Post'},
          
         ]
         }
         return menuItems
     },
-    userIsAuthenticated () {
-        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
-      }
+    
+      
+       
 
     },
 
@@ -95,6 +105,10 @@ export default {
       goToStore(){
           window.location.href = "https://youtu.be/oHg5SJYRHA0"
       }
+      
+    },
+    watch:{
+
     }
 }
 

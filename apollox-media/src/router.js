@@ -42,7 +42,7 @@ export default new Router({
       component: Store
     },
     {
-      path: '/Profile',
+      path: '/Profile/:uid',
       name: 'Profile',
       component: Profile
     },
@@ -57,7 +57,7 @@ export default new Router({
       component: Login
     },
     {
-      path: '/Profile/Edit',
+      path: '/Profiles/Edit',
       name: 'ProfileEdit',
       component: ProfileEdit
     }
