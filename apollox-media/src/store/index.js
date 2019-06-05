@@ -72,6 +72,21 @@ export const store = new Vuex.Store({
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('username').set(payload.username)
 
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).once('value').then((data)=>{
+          const obj = data.val()
+          const profilePosts = obj.Posts
+          
+       
+            if(profilePosts != null){
+                for (let key in profilePosts){
+                  console.log("key", key)
+                  firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+                  .child('Posts').child(key).child('username').set(payload.username)
+                }
+              }
+            })
+        
+
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('bio').set(payload.bio)
 

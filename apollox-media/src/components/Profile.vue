@@ -133,8 +133,9 @@
       </v-layout>
       </v-flex>
       
+
+      
         <container>
-          <v-layout column>
           <v-layout row>
           <v-flex xs2>
             <v-card></v-card>
@@ -142,11 +143,11 @@
           <v-flex xs8>
           <v-card class = "pa-2">
               <v-layout row>
-                    <v-flex my-2 xs10>
+                    <v-flex my-2 xs11>
                         <div class= "title font-weight-thin">Posts</div>
                     </v-flex>
-                    <v-flex my-2 xs2>
-                        <div class= "title font-weight-thin">Date Created</div>
+                    <v-flex my-2 xs1>
+                        <div class= "title font-weight-thin">Date</div>
                     </v-flex>
               </v-layout>
           </v-card>
@@ -156,84 +157,146 @@
           </v-flex>
           </v-layout>
 
-          <v-layout row>
-          <v-flex xs2>
-            <v-card></v-card>
-          </v-flex>
-          <v-flex xs8>
-          <v-card class = "pa-2">
-              <v-layout row>
-                    <v-flex my-2 xs1>
-                      <v-card>
+        <v-layout row wrap>
+              <v-flex xs2>
+                <v-card></v-card>
+              </v-flex>
+                    <v-flex xs8>
+                      <v-card
+                          v-for="post in loadProfilePosts" 
+                          :key="post">
+                          <v-flex xs12>
+                            <v-card flat>
+                          <v-layout row>
+                            <v-flex ma-2>
+                              <v-layout column>
                         <v-avatar
-                        
                             :size="75"
                             color="grey lighten-4">
                             <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
                         </v-avatar>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs9>
-                    <v-card>
-                    <v-flex
-                          v-for="profile in loadProfilePosts" 
-                          :key="profile">
-                          <h4 class = "font-weight-thin">
-                          {{ profile.username}} </h4>
-                    <v-flex my-2>
-                      <h2 class = "font-weight-thin">Why Hillary Clinton Should go to Prison and be locked up for 57 years to life for money laundering and being a GILF</h2>
-                      <v-flex my-2>
-                      <span>
-                          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut natus repellat ullam nobis error impedit cum, quam quidem suscipit consectetur optio recusandae ut quibusdam quasi odio quae laboriosam aliquam doloremque!
-                      </span>
-                      </v-flex>
-                    </v-flex>
-                    <v-layout column wrap>
-                      <v-flex xs1>
-                      </v-flex>
-                      <v-flex   xs9>
-                          <v-treeview :item="items"></v-treeview>
-                      </v-flex>
-                    </v-layout>
-                    </v-flex>
-                    </v-card>
-                    </v-flex>
-                    <v-layout>
-                        <v-flex my-2 xs2>
-                          <div class= "title font-weight-thin">05/29/2019</div>
+                        <h4 class = "font-weight-thin">
+                          {{post.username}} </h4>
+                            </v-layout>
                         </v-flex>
-                    </v-layout>
-              </v-layout>
-          </v-card>
-          </v-flex>
-          <v-flex xs2>
-            <v-card></v-card>
-          </v-flex>
+                        <v-layout column>
+                          <v-flex my-2 ml-5>
+                          <h1 class = "font-weight-thin">{{post.title}}</h1>
+                            <span>
+                                {{post.newReview}}
+                            </span>                            
+                            <v-flex>
+                             <v-flex xs12>
+                           <v-list>
+          <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile color="green">
+                <v-list-tile-content >
+                  <v-list-tile-title >What is Correct</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile >
+              <v-list-tile-content
+              v-for="text in post.rightList"
+              :key="text.text"
+             
+              >
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+
+
+           <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile  color="red">
+                <v-list-tile-content>
+                  <v-list-tile-title>What is Incorrect</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            >
+              <v-list-tile-content
+              v-for="text in post.wrongList"
+              :key="text.text">
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+
+  <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile color="yellow darken-3">
+                <v-list-tile-content>
+                  <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            >
+              <v-list-tile-content
+              v-for="text in post.notIncludedList"
+              :key="text.text">
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+          
+        </v-list>
+                      </v-flex>
+
+                            <v-layout row>
+                              <v-flex xs6 my-3>
+                                <v-rating
+                                v-model="rating"
+                                hover
+                                color = "cyan lighten-1"
+                                background-color="cyan lighten-1"
+                                readonly
+                                half-increments></v-rating>
+                              </v-flex>
+                              <v-flex xs4>
+                                <V-text-field
+                                placeholder="Comment..."></V-text-field>
+                                </v-flex>
+                                <v-flex xs2>
+                                  <v-btn>
+                                    <v-icon>mail</v-icon>
+                                  </v-btn>
+                                </v-flex>
+                            </v-layout>
+                            </v-flex>
+                            </v-flex>
+                          </v-layout>
+                          
+                          <v-card flat>
+                          <v-flex my-2>
+                            <h2 class="font-weight-thin">11/15/2001</h2>
+                          </v-flex>
+                          </v-card>
+                          
+                        </v-layout>
+                        </v-card>
+                        </v-flex>
+                      </v-card>
+                      
+                    </v-flex>
+                    <v-flex xs2>
+                        <v-card></v-card>
+                      </v-flex>
           </v-layout>
 
-          <v-layout row>
-          <v-flex xs2>
-            <v-card></v-card>
-          </v-flex>
-          <v-flex xs8>
-          <v-card class = "pa-2">
-              <v-layout row>
-                    <v-flex my-2 xs10>
-                        
-                    </v-flex>
-                    <v-layout align-start>
-                    <v-flex my-2 xs2>
-                        <div class= "title font-weight-thin">05/29/2019</div>
-                    </v-flex>
-                    </v-layout>
-              </v-layout>
-          </v-card>
-          </v-flex>
-          <v-flex xs2>
-            <v-card></v-card>
-          </v-flex>
-          </v-layout>
-          </v-layout>
         </container>
     </container>
   </template>
@@ -253,9 +316,7 @@ export default{
           id: 1,
           name: 'What Facts were Correct:',
           children: [
-            { id: 2, name: 'Calendar : app' },
-            { id: 3, name: 'Chrome :  f f f ff f  fs d e fe ers  ds f ds s f ds  fsd    f sd   fdsf s f sd fd f ss f fdsf sd f sd  f sd ffds  f sdf sdf d f dsf sd f sd   ds f s ff d f ds f sd s d sd s d' },
-            { id: 4, name: 'Webstorm : app' }
+           
           ]
         }
       ],
@@ -315,6 +376,13 @@ export default{
         else{
           this.numberI=0
         }
+      },
+
+      changeDate (timeStamp) {
+        var time = -timeStamp
+        var d = new Date(time)
+        console.log(d)
+        return d
       },
        
     }
