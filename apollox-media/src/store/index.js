@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
       loadedRecentPosts:[],
       loadedProfilePosts:[],
       loadedPromotedPosts:[],
+      loadedFollowingPosts:[],
       validUsername: false,
       user: null,
       loading: false,
@@ -23,6 +24,9 @@ export const store = new Vuex.Store({
           console.log("done")
           
 
+      },
+      setLoadedFollowingPosts(state, payload){
+        state.loadedFollowingPosts = payload
       },
       setLoadedProfilePosts(state, payload){
         state.loadedProfilePosts = payload
@@ -54,9 +58,15 @@ export const store = new Vuex.Store({
 
       followProfile({commit},payload){
         console.log("profile UID", payload.profileUid)
-          firebase.database().ref().child('Users').child(payload.profileUid).child("followers").push(firebase.auth().currentUser.uid.toString()) 
-          firebase.database().ref().child('Users').child(firebase.auth().currentUser.uid.toString()).child("following").push(payload.profileUid)
+          firebase.database().ref().child('Users').child(payload.profileUid).child("followers").child(firebase.auth().currentUser.uid.toString()).set(firebase.auth().currentUser.uid.toString())
+          firebase.database().ref().child('Users').child(firebase.auth().currentUser.uid.toString()).child("following").child(payload.profileUid).set(payload.profileUid)
          },
+      
+      unFollowProfile({commit}, payload){
+      
+        firebase.database().ref().child('Users').child(payload.profileUid).child("followers").child(firebase.auth().currentUser.uid.toString()).remove()
+        firebase.database().ref().child('Users').child(firebase.auth().currentUser.uid.toString()).child("following").child(payload.profileUid).remove()
+      },
 
       changeProfile ({commit}, payload) {
 
@@ -121,8 +131,25 @@ export const store = new Vuex.Store({
       loadProfile ({commit}, payload) {
         firebase.database().ref('Users').child(payload.uid)
         .once('value').then((data) => {
-          
+          var followingCount = 0
+          var followerCount = 0
+
           const obj = data.val()
+         
+          if(obj.following != null){
+            
+          for(let keys in obj.following){
+                followingCount += 1
+          }
+        }
+
+        if(obj.followers != null){
+            
+          for(let keys in obj.followers){
+                followerCount += 1
+          }
+        }
+        
           console.log("data",obj)
           const profile = []
           profile.push({
@@ -134,6 +161,8 @@ export const store = new Vuex.Store({
             imageUrl: obj.imageUrl,
             bio: obj.bio,
             following: obj.following,
+            followingCount: followingCount,
+            followerCount: followerCount,
             followers: obj.followers
           })
             
@@ -267,6 +296,60 @@ export const store = new Vuex.Store({
 
     },
 
+        loadFollowingPosts({commit}){
+
+          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+          .once('value').then((data) => {
+            const Posts = []
+            const obj = data.val()
+            
+            if(obj.following != null){
+              
+              for(let key in obj.following){
+                firebase.database().ref('Users').child(key)
+                .once('value').then((data) => {
+                  const obj = data.val()
+                  if(obj.Posts != null){
+                    const profilePosts = obj.Posts
+                    for (let key in profilePosts){
+                      
+                      Posts.push({
+                        notIncludedList: profilePosts[key].notIncludedList,
+                        newReview:  profilePosts[key].newReview,
+                        personName: profilePosts[key].personName,
+                        promoted: profilePosts[key].promoted,
+                        reviewLink: profilePosts[key].reviewLink,
+                        rightList: profilePosts[key].rightList,
+                        title: profilePosts[key].title,
+                        uid: profilePosts[key].uid,
+                        username:profilePosts[key].username,
+                        wrongList: profilePosts[key].wrongList,
+                        yourReview: profilePosts[key].yourReview,
+                        timeStamp: profilePosts[key].timeStamp
+                      })
+                      
+                    }
+                    Posts.sort(function(a,b){
+                      return a.timeStamp - b. timeStamp;
+                    });
+        
+                 
+                }
+
+                })
+              }
+            }
+           
+                commit('setLoadedFollowingPosts', Posts)
+          })
+        },
+
+
+
+
+
+
+
       signUserUp ({commit}, payload) {
         commit('setLoading', true)
         commit('clearError'),
@@ -301,6 +384,11 @@ export const store = new Vuex.Store({
             }
           )
       },
+
+
+
+
+
       submitPost({commit}, payload){
        
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
@@ -431,6 +519,10 @@ export const store = new Vuex.Store({
           console.log(state.loadedRecentPosts)
           return state.loadedRecentPosts
       },
+      loadedFollowingPosts(state){
+        
+        return state.loadedFollowingPosts
+    },
       loadedProfilePosts(state){
         console.log(state.loadedProfilePosts)
         return state.loadedProfilePosts

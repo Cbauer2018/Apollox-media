@@ -97,15 +97,24 @@
               <v-flex ml-3 my-2>
                   <h2 class = "font-weight-thin">Following {{following}}</h2>
               </v-flex>
-                  <v-layout v-show="!userIdMatch">
+                  <v-layout >
                     <v-flex ml-2>
-                    <v-btn 
-                        @click=" changeBtn"
+                    <v-btn v-show="!userIdMatch && !isFollowing "
+                       
                         v-on:click=" followProfile"
                         outline color="cyan lighten-2">
-                        {{followArray[this.numberI].word}}
+                       Follow
                 <v-icon>
-                    {{followIconArray[this.numberI].icon}}
+                    add
+                </v-icon>
+              </v-btn>
+
+              <v-btn v-show="!userIdMatch && isFollowing "
+                       
+                        v-on:click=" unFollowProfile"
+                        outline color="cyan lighten-2">
+                       Following
+                <v-icon>
                 </v-icon>
               </v-btn>
             </v-flex>
@@ -329,7 +338,8 @@ export default{
       popUpUnfollow: [],
       numberI: 0,
       followers: 0,
-      following:0
+      following:0,
+      
 
     }
   },
@@ -355,13 +365,13 @@ beforeCreate() {
       hasProfilePic(){
     
       let profile = this.profile
-    if(profile[0].following != null){
-             
+    if(profile[0].followingCount != null){
+             this.following = profile[0].followingCount
           }
 
-    if(profile[0].followers != null){
-      let followers = profile[0].followers
-      this.followers = le
+    if(profile[0].followerCount != null){
+      this.followers = profile[0].followerCount
+      
              }
 
 
@@ -376,6 +386,19 @@ beforeCreate() {
         loadProfilePosts(){
          return this.$store.getters.loadedProfilePosts
     },
+
+        isFollowing(){
+            var isFollowing = false
+            var userId = this.$store.getters.user.id
+              for(let key in this.profile[0].followers){
+                if(this.profile[0].followers[key] == userId){
+              
+                   isFollowing = true
+                    break;
+                }
+              }
+              return isFollowing
+        }
     
       
       
@@ -385,20 +408,23 @@ beforeCreate() {
 
     methods:{
     
-      changeBtn () {
-         if (this.numberI==0){
-          this.numberI=1
-        }
-        else{
-          this.numberI=0
-        }
-      },
+     
       followProfile(){
  
-      this.$store.dispatch('followProfile', {profileUid:this.profile[0].id})
-      console.log("follwers", this.profile[0].followers)
+      this.$store.dispatch('followProfile', {profileUid:this.profile[0].id}).then(
+        this.$store.dispatch('loadProfile', {uid: this.$route.params.uid}),
+       this.$store.dispatch('loadFollowingPosts') 
+      )
       this.followers += 1
-    
+    },
+
+    unFollowProfile(){
+      this.$store.dispatch('unFollowProfile', {profileUid:this.profile[0].id}).then(
+        this.$store.dispatch('loadProfile', {uid: this.$route.params.uid}),
+        this.$store.dispatch('loadFollowingPosts') 
+        
+      )
+      this.followers --
     }
        
     }
