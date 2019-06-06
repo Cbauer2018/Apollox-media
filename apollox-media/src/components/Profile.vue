@@ -141,7 +141,7 @@
           <v-card flat></v-card>
         </v-flex>
       </v-layout>
-      </v-flex>
+      
       
 
       
@@ -321,6 +321,7 @@
           </v-layout>
 
         </container>
+        </v-flex>
     </container>
   </template>
 
