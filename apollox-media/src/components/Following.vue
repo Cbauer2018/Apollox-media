@@ -1,12 +1,12 @@
 <template>
     <v-container>
-        <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
+        <v-flex xs8 offset-xs2 my-5 v-if="!userIsAuthenticated">
         <v-card>
           <v-card-text>
             <v-container>
               <v-layout justify-center>
                   <h2 class="display-1 font-weight-thin">
-                     Login or Signup to View Profile
+                     Login or Signup to Start Following
                   </h2>
               </v-layout>
               <v-flex>

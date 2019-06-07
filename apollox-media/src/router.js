@@ -9,7 +9,7 @@ import Profile from './components/Profile.vue'
 import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
 import ProfileEdit from './components/ProfileEdit.vue'
-
+import viewPost from './components/viewPost.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -60,6 +60,11 @@ export default new Router({
       path: '/Profiles/Edit',
       name: 'ProfileEdit',
       component: ProfileEdit
+    },
+    {
+      path: '/viewPost/:uid/:post',
+      name: 'viewPost',
+      component: viewPost
     }
   ],
   

@@ -12,6 +12,7 @@ export const store = new Vuex.Store({
       loadedProfilePosts:[],
       loadedPromotedPosts:[],
       loadedFollowingPosts:[],
+      loadedPost:[],
       validUsername: false,
       user: null,
       loading: false,
@@ -52,11 +53,36 @@ export const store = new Vuex.Store({
       },
       clearError (state) {
         state.error = null
+      },
+      setLoadedPost (state, payload) {
+        state.loadedPost = payload
       }
     },
     actions: {
 
-      followProfile({commit},payload){
+      loadPost({commit}, payload){
+        firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).once('value').then((data)=>{
+          const obj = data.val()
+          const post = []
+          post.push({
+            newReview: obj.newReview,
+                        notIncludedList: obj.notIncludedList,
+                        personName: obj.personName,
+                        promoted: obj.promoted,
+                        reviewLink: obj.reviewLink,
+                        rightList: obj.rightList,
+                        title: obj.title,
+                        uid: obj.uid,
+                        username: obj.username,
+                        wrongList: obj.wrongList,
+                        yourReview: obj.yourReview,
+                        timeStamp: obj.timeStamp
+          })
+          commit('setLoadedPost', post)
+        })
+      },
+
+      followProfile({commit}, payload){
         console.log("profile UID", payload.profileUid)
           firebase.database().ref().child('Users').child(payload.profileUid).child("followers").child(firebase.auth().currentUser.uid.toString()).set(firebase.auth().currentUser.uid.toString())
           firebase.database().ref().child('Users').child(firebase.auth().currentUser.uid.toString()).child("following").child(payload.profileUid).set(payload.profileUid)
@@ -225,6 +251,7 @@ export const store = new Vuex.Store({
                     var newReviewSlice = profilePosts[key].newReview.slice(0,200)
                       
                     Posts.push({
+                      key: key,
                       notIncludedList: profilePosts[key].notIncludedList,
                       newReview:  profilePosts[key].newReview,
                       newReviewSlice:newReviewSlice,
@@ -517,6 +544,10 @@ export const store = new Vuex.Store({
       
     },
     getters: {
+
+      loadedPost(state) {
+        return state.loadedPost
+      },
 
       loadedRecentPosts(state){
           console.log(state.loadedRecentPosts)

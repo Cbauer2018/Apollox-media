@@ -193,7 +193,7 @@
                         </v-flex>
                         <v-layout column>
                           <v-flex my-2 ml-5>
-                          <h1 class = "font-weight-thin">{{post.title}}</h1>
+                          <h1 @click="viewPost(post)" class = "font-weight-thin">{{post.title}}</h1>
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
@@ -345,7 +345,7 @@ export default{
         }
       ],
      
-
+      
       rating: 3.3,
       followArray: [{word: "Follow"}, {word: "Following"}],
       followIconArray: [{icon: "add"}, {icon: ""}],
@@ -439,6 +439,12 @@ beforeCreate() {
         
       )
       this.followers --
+    },
+
+    viewPost(post) {
+        var profileUid = this.$route.params.uid
+        this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
+        this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
     }
        
     }
