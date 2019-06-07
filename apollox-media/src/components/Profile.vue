@@ -212,12 +212,10 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile >
-              <v-list-tile-content
-              v-for="text in post.rightList"
-              :key="text.text"
-             
-              >
+            <v-list-tile 
+            v-for="text in post.rightList"
+              :key="text.text">
+              <v-list-tile-content >
                 <v-list-tile-title>{{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -225,9 +223,9 @@
 
 
            <v-list-group
-            no-action
+            
           >
-            <template v-slot:activator>
+            <template active v-slot:activator>
               <v-list-tile  color="red">
                 <v-list-tile-content>
                   <v-list-tile-title>What is Incorrect</v-list-tile-title>
@@ -236,10 +234,11 @@
             </template>
 
             <v-list-tile
-            >
-              <v-list-tile-content
-              v-for="text in post.wrongList"
+            v-for="text in post.wrongList"
               :key="text.text">
+              <v-list-tile-content
+              
+                  >
                 <v-list-tile-title>{{text.text}} </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -257,10 +256,9 @@
             </template>
 
             <v-list-tile
-            >
-              <v-list-tile-content
-              v-for="text in post.notIncludedList"
+            v-for="text in post.notIncludedList"
               :key="text.text">
+              <v-list-tile-content>
                 <v-list-tile-title>{{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>

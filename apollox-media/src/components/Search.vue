@@ -17,6 +17,9 @@ export default {
 methods: {
    
 },
+beforeCreate() {
+    this.$store.dispatch('searchWord', {keyword: this.$route.params.keyword})
+},
 
 computed: {
     searchedPosts(){
