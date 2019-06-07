@@ -183,7 +183,7 @@
                         <v-avatar
                             :size="75"
                             color="grey lighten-4">
-                            <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
+                            <img :src="imageUrl" alt="avatar">
                         </v-avatar>
                         <v-flex my-3>
                         <h4 class = "font-weight-thin">
@@ -212,12 +212,10 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile >
-              <v-list-tile-content
-              v-for="text in post.rightList"
-              :key="text.text"
-             
-              >
+            <v-list-tile 
+            v-for="text in post.rightList"
+              :key="text.text">
+              <v-list-tile-content >
                 <v-list-tile-title>{{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -225,9 +223,9 @@
 
 
            <v-list-group
-            no-action
+            
           >
-            <template v-slot:activator>
+            <template active v-slot:activator>
               <v-list-tile  color="red">
                 <v-list-tile-content>
                   <v-list-tile-title>What is Incorrect</v-list-tile-title>
@@ -236,10 +234,11 @@
             </template>
 
             <v-list-tile
-            >
-              <v-list-tile-content
-              v-for="text in post.wrongList"
+            v-for="text in post.wrongList"
               :key="text.text">
+              <v-list-tile-content
+              
+                  >
                 <v-list-tile-title>{{text.text}} </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -257,10 +256,9 @@
             </template>
 
             <v-list-tile
-            >
-              <v-list-tile-content
-              v-for="text in post.notIncludedList"
+            v-for="text in post.notIncludedList"
               :key="text.text">
+              <v-list-tile-content>
                 <v-list-tile-title>{{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -344,8 +342,9 @@ export default{
           ]
         }
       ],
-     
       
+     
+      imageUrl:require('@/assets/RocketLogo.png'),
       rating: 3.3,
       followArray: [{word: "Follow"}, {word: "Following"}],
       followIconArray: [{icon: "add"}, {icon: ""}],
@@ -390,9 +389,10 @@ beforeCreate() {
 
 
          if(profile[0].imageUrl!= null){
-           
+           this.imageUrl = profile[0].imageUrl
            return true
          }else{
+           this.imageUrl = require('@/assets/RocketLogo.png')
            return false
          }
        },

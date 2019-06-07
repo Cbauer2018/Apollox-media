@@ -34,7 +34,7 @@
                     <v-flex
                           v-for="post in followPosts" 
                           :key="post">
-                          <h4 class = "font-weight-thin"
+                          <h4 class = "font-weight-thin myClickableThingy"
                           @click="goToProfile(post.uid)">
                           {{ post.username}} </h4>
                     <v-flex my-2>
@@ -167,3 +167,9 @@ computed: {
 
 
 </script>
+
+<style>
+.myClickableThingy {
+    cursor: pointer;
+}
+</style>
