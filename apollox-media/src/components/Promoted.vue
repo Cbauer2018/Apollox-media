@@ -5,7 +5,7 @@
                     <v-flex
                           v-for="post in promotedPosts" 
                           :key="post">
-                          <h4  @click="goToProfile(post.uid)" class = "font-weight-thin">
+                          <h4  @click="goToProfile(post.uid)" class = "font-weight-thin myClickableThingy">
                           {{ post.username}} </h4>
                     <v-flex my-2>
                       <h2 class = "font-weight-thin">{{post.title}}</h2>
@@ -129,3 +129,8 @@ computed: {
 
 </script>
 
+<style>
+.myClickableThingy {
+    cursor: pointer;
+}
+</style>

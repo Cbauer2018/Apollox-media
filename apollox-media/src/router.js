@@ -9,6 +9,8 @@ import Profile from './components/Profile.vue'
 import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
 import ProfileEdit from './components/ProfileEdit.vue'
+import Search from './components/Search.vue'
+
 
 Vue.use(Router)
 
@@ -20,6 +22,11 @@ export default new Router({
       path: '/',
       name: 'Promoted',
       component: Promoted
+    },
+    {
+      path: '/Search/:keyword',
+      name: 'Search',
+      component: Search
     },
     {
       path: '/Following',
@@ -46,6 +53,7 @@ export default new Router({
       name: 'Profile',
       component: Profile
     },
+   
     {
       path: '/Signup',
       name: 'Signup',

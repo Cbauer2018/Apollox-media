@@ -11,10 +11,18 @@
  class = "primary">
    
    <v-toolbar-items class="hidden-xs-only">
-     <v-btn  color="cyan" flat v-for="item in menuItems"
+     <v-btn v-if="item.title != 'Profile' " color="cyan" flat v-for="item in menuItems"
       :key="item.title"
       router
       :to="item.Link">
+       <v-icon left dark >{{item.icon}}</v-icon>
+       {{item.title}}
+     </v-btn>
+       <v-btn v-else-if="item.title == 'Profile'" color="cyan" flat 
+      :key="item.title"
+      router
+      :to="item.Link"
+      @click="loadProfile">
        <v-icon left dark >{{item.icon}}</v-icon>
        {{item.title}}
      </v-btn>
@@ -31,7 +39,7 @@
    </v-toolbar-items>
    <v-spacer></v-spacer>
    <v-icon color="black" >search</v-icon>
-   <input  type="search" placeholder="search...">
+   <input v-model="searching" v-on:keyup.enter="searchWord" type="search" placeholder="search...">
     <v-btn
      v-if="userIsAuthenticated"
      flat
@@ -39,6 +47,7 @@
      router
      :to="'/'">
      <v-icon left dark>exit_to_app</v-icon>
+     Logout
      </v-btn>
    
  </v-toolbar>
@@ -104,6 +113,15 @@ export default {
       },
       goToStore(){
           window.location.href = "https://youtu.be/oHg5SJYRHA0"
+      },
+      searchWord(){
+        this.$store.dispatch('searchWord', {keyword: this.searching})
+        this.$router.push("/Search/" + this.searching)
+        
+      },
+      loadProfile(){
+        this.$store.dispatch('loadProfile', {uid:this.profileId.id})
+         this.$store.dispatch('loadProfilePosts', {uid: this.profileId.id})
       }
       
     },
