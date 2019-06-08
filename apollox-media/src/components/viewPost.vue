@@ -8,7 +8,8 @@
                             <v-avatar
                                 :size="75"
                                 color="grey lighten-4">
-                                <img :src="imageUrl" alt="avatar">
+                               <img v-if="hasProfilePic" :src="imageUrl" alt="avatar">
+                            <img v-else :src="imageUrl" alt="avatar" >
                             </v-avatar>
                             <v-flex v-for="profile in profile" :key="profile">
                                 <span>{{profile.username}}</span>
@@ -56,8 +57,10 @@ export default{
             return this.$store.getters.loadedPost;
         },
          hasProfilePic(){
-            if(profile[0].imageUrl!= null){
+             let profile = this.profile
+            if(profile[0].imageUrl != null){
            this.imageUrl = profile[0].imageUrl
+           
            return true
          }else{
              this.imageUrl = require('@/assets/RocketLogo.png')
