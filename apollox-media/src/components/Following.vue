@@ -120,8 +120,9 @@
                     </v-layout>
                     </v-flex>
                     </v-card>
+                    
+<div id="adsgoeshere" alt="advertisement" border="0" width="300" height="600" v-html="adsenseContent"></div>
                     </v-flex>
-
 
     </v-container>
 
@@ -136,7 +137,7 @@
 export default {
   data () {
       return {
-        
+         adsenseContent: ''
       }
     },
 methods: {
@@ -147,6 +148,10 @@ methods: {
           this.$router.push('/Profile/'+ profileUid)
           console.log("Router", this.$route.params.uid)
 
+    },
+
+    mounted(){
+      this.adsenseContent = document.getElementById('divadsensedisplaynone').innerHTML
     }
 },
 
