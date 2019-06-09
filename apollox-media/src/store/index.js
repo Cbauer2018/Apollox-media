@@ -576,7 +576,10 @@ export const store = new Vuex.Store({
           for(let key in obj){
             var imageUrl = null
                   if(obj[key].imageUrl != null){
-                        imageUrl = obj.imageUrl
+                        imageUrl = obj[key].imageUrl
+                        console.log(imageUrl)
+                  }else{
+                    imageUrl = null
                   }
             var username = obj[key].username.toLowerCase()
             if(username.includes(keyword.toLowerCase())){
@@ -593,10 +596,12 @@ export const store = new Vuex.Store({
                     var title = profilePosts[key].title.toLowerCase()
                    
                     if(title.includes(keyword.toLowerCase())){
+                      var newReviewSlice = profilePosts[key].newReview.slice(0,200)
                         Posts.push({
                           newReview: profilePosts[key].newReview,
                           notIncludedList: profilePosts[key].notIncludedList,
                           personName:profilePosts[key].personName,
+                          newReviewSlice:newReviewSlice,
                           promoted: profilePosts[key].promoted,
                           reviewLink: profilePosts[key].reviewLink,
                           rightList: profilePosts[key].rightList,
@@ -623,6 +628,12 @@ export const store = new Vuex.Store({
           commit('setSearchedUsernames', Usernames)
         })
 
+      },
+
+
+
+      postComment({commit}, payload){
+        
       }
       
     },

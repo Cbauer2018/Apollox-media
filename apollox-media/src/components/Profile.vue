@@ -285,13 +285,16 @@
                               <v-flex xs8 md4>
                                 <V-text-field
                                 maxlength = "300"
+                                v-model="comment"
+                               
                                 placeholder="Comment..."></V-text-field>
                                 </v-flex>
                                 <v-flex xs2>
                                   <v-btn
                                   flat
                                   fab
-                                  color="cyan lighten-1">
+                                  color="cyan lighten-1"
+                                  @click="postComment(post)">
                                     <v-icon>forward</v-icon>
                                   </v-btn>
                                 </v-flex>
@@ -352,6 +355,7 @@ export default{
       numberI: 0,
       followers: 0,
       following:0,
+     
       
 
     }
@@ -445,6 +449,16 @@ beforeCreate() {
         var profileUid = this.$route.params.uid
         this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
         this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
+    },
+
+    postComment(post){
+      var profileUid = this.$route.params.uid
+      if(this.comment != '' && this.comment != null){
+         console.log("comment", this.comment)
+      this.$store.dispatch('postComment', {uid: profileUid, postKey: post.key, comment: this.comment})
+        this.comment = ''
+      }
+      
     }
        
     }

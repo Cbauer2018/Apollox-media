@@ -3,15 +3,17 @@
         <v-layout row>
             <v-flex xs2>
                 <v-card>
-                    <v-flex ma-4>
+                    <v-flex v-for="profile in profile" :key="profile" ma-4>
                         <v-layout column>
                             <v-avatar
                                 :size="75"
                                 color="grey lighten-4">
-                               <img v-if="hasProfilePic" :src="imageUrl" alt="avatar">
-                            <img v-else :src="imageUrl" alt="avatar" >
+                              <img 
+                v-if="hasProfilePic" 
+                :src="profile.imageUrl" alt="avatar">
+                <img v-else src="@/assets/RocketLogo.png">
                             </v-avatar>
-                            <v-flex v-for="profile in profile" :key="profile">
+                            <v-flex >
                                 <span>{{profile.username}}</span>
                             </v-flex>
                         </v-layout>
@@ -39,7 +41,6 @@ export default{
       return {
         
 
-        imageUrl: require('@/assets/RocketLogo.png')
       }
     },
 
@@ -56,17 +57,22 @@ export default{
         post(){
             return this.$store.getters.loadedPost;
         },
-         hasProfilePic(){
+         
+
+      
+    },
+     methods:{
+           hasProfilePic(){
              let profile = this.profile
-            if(profile[0].imageUrl != null){
-           this.imageUrl = profile[0].imageUrl
-           
+             
+            if(this.profile[0].imageUrl != null){
+        
            return true
          }else{
-             this.imageUrl = require('@/assets/RocketLogo.png')
+            
            return false
          }
        },
-    }
+       }
 }
 </script>
