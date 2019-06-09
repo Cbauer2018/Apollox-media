@@ -268,19 +268,17 @@
                       </v-flex>
 
                             <v-layout row wrap>
-                              <v-flex sm12 md6 my-3>
-                                <v-rating v-show="!userIdMatch"
-                                hover
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                half-increments></v-rating>
-                                <v-rating v-show="userIdMatch"
+                              <v-flex sm10 md4 my-3>
+                                <v-rating
                                 v-model="rating"
                                 hover
                                 color = "cyan lighten-1"
                                 background-color="cyan lighten-1"
                                 readonly
                                 half-increments></v-rating>
+                              </v-flex>
+                              <v-flex md2 my-4>
+                                  12
                               </v-flex>
                               <v-flex xs8 md4>
                                 <V-text-field
