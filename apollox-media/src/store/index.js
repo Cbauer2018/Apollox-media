@@ -222,7 +222,7 @@ export const store = new Vuex.Store({
                     for (let key in obj){
                   
                       Posts.push({
-                        
+                        key: key,
                         newReview: obj[key].newReview,
                         notIncludedList: obj[key].notIncludedList,
                         personName: obj[key].personName,
@@ -280,7 +280,8 @@ export const store = new Vuex.Store({
                       wrongList: profilePosts[key].wrongList,
                       yourReview: profilePosts[key].yourReview,
                       timeStamp: profilePosts[key].timeStamp,
-                      date: profilePosts[key].date
+                      date: profilePosts[key].date,
+                      comments: profilePosts[key].comments
                     })
                     
                   }
@@ -315,6 +316,7 @@ export const store = new Vuex.Store({
                   for (let key in obj){
                     if(obj[key].promoted == true){
                     Posts.push({
+                      key: key,
                       newReview: obj[key].newReview,
                       notIncludedList: obj[key].notIncludedList,
                       personName: obj[key].personName,
@@ -368,6 +370,7 @@ export const store = new Vuex.Store({
                     for (let key in profilePosts){
                       
                       Posts.push({
+                        key: key,
                         notIncludedList: profilePosts[key].notIncludedList,
                         newReview:  profilePosts[key].newReview,
                         personName: profilePosts[key].personName,
@@ -474,6 +477,13 @@ export const store = new Vuex.Store({
               commit('setError', error)
               
             })
+
+            firebase.database().ref('Posts').push(newPost).catch(
+              error => {
+                commit('setLoading', false)
+                commit('setError', error)
+                
+              })
 
 
           commit('submitPost',newPost)
@@ -598,6 +608,7 @@ export const store = new Vuex.Store({
                     if(title.includes(keyword.toLowerCase())){
                       var newReviewSlice = profilePosts[key].newReview.slice(0,200)
                         Posts.push({
+                          key: key,
                           newReview: profilePosts[key].newReview,
                           notIncludedList: profilePosts[key].notIncludedList,
                           personName:profilePosts[key].personName,
@@ -633,6 +644,36 @@ export const store = new Vuex.Store({
 
 
       postComment({commit}, payload){
+        var comment = {}
+        const time = new Date()
+        var dateString = time.toLocaleDateString()
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .once('value').then((data) => {
+          
+            var imageUrl = null
+            const obj = data.val()
+                  if(obj.imageUrl != null){
+                        imageUrl = obj.imageUrl
+                        
+                  }else{
+                    imageUrl = null
+                  }
+
+                  comment = {
+                    uid: firebase.auth().currentUser.uid.toString(),
+                    comment: payload.comment,
+                    timeStamp:-new Date().getTime(),
+                    date:dateString,
+                    upvotes: 0,
+                    imageUrl: imageUrl,
+                    username: obj.username
+    
+            }
+            
+            firebase.database().ref('Users').child(payload.uid).child('Posts').child(payload.postKey).child('comments').push(comment)
+
+        })
+        
         
       }
       

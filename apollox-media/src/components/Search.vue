@@ -84,7 +84,7 @@
                         </v-flex>
                         <v-layout column>
                           <v-flex my-2 ml-5>
-                          <h1 @click="viewPost(post)" class = "font-weight-thin">{{post.title}}</h1>
+                          <h1 @click="viewPost(post)" class = "font-weight-thin myClickableThingy">{{post.title}}</h1>
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
@@ -235,7 +235,12 @@ methods: {
            return false
          }
        },
-   
+   viewPost(post) {
+        var profileUid = post.uid
+        
+        this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
+        this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
+    },
 },
 beforeCreate() {
     this.$store.dispatch('searchWord', {keyword: this.$route.params.keyword})

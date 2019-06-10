@@ -245,9 +245,9 @@
           </v-list-group>
 
   <v-list-group
-            no-action
+           
           >
-            <template v-slot:activator>
+            <template active v-slot:activator>
               <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
@@ -296,6 +296,52 @@
                                     <v-icon>forward</v-icon>
                                   </v-btn>
                                 </v-flex>
+
+
+                                 <v-list-group >
+            <template active v-slot:activator>
+              <v-list-tile color="black">
+                <v-list-tile-content>
+                  <v-list-tile-title>Comments</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            v-for="text in post.comments"
+              :key="text.text">
+              <v-list-tile-content>
+                <v-card  justify-center wrap>
+                       <v-layout align-center row wrap>
+               <v-avatar
+                :tile="tile"
+                :size="45"
+                color="grey lighten-4">
+                <img 
+                v-if="userHasProfilePic(text.imageUrl)" 
+                :src="text.imageUrl" alt="avatar">
+                <img v-else src="@/assets/RocketLogo.png">
+              </v-avatar>
+              <v-layout align-center row wrap>
+                <v-flex>
+
+                  <v-card> <span >{{text.username}}: </span></v-card>
+                     <v-card> <span>  {{text.comment}}</span></v-card>
+                    <v-card> <span >{{text.date}}</span></v-card>
+                   <v-card><v-btn flat
+                              fab
+                        color="cyan lighten-1"><v-icon>keyboard_arrow_up</v-icon></v-btn>
+                    <span style="font-weight: bold;">{{text.upvotes}}</span></v-card>
+                </v-flex>
+                  
+                    
+                    </v-layout>
+              </v-layout>
+             
+                    </v-card>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
                             </v-layout>
                             </v-flex>
                             </v-flex>
@@ -451,13 +497,24 @@ beforeCreate() {
 
     postComment(post){
       var profileUid = this.$route.params.uid
+     
       if(this.comment != '' && this.comment != null){
-         console.log("comment", this.comment)
+    
       this.$store.dispatch('postComment', {uid: profileUid, postKey: post.key, comment: this.comment})
         this.comment = ''
       }
       
-    }
+    },
+     userHasProfilePic(imageUrl){
+            console.log(imageUrl)
+         if(imageUrl != null){
+        
+           return true
+         }else{
+           
+           return false
+         }
+       },
        
     }
 
