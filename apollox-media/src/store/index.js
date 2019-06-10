@@ -207,49 +207,85 @@ export const store = new Vuex.Store({
       },
 
       loadRecentPosts({commit}){
-          firebase.database().ref('Users').once('value').then((data)=>{
-              const Posts = []
-              const obj = data.val()
-              for(let key in obj){
-                var imageUrl = null
-                var uid = obj[key].id
-                if(obj[key].imageUrl != null){
-                  imageUrl = obj[key].imageUrl
+        firebase.database().ref().child("Posts").orderByChild("timestamp").on("value", function (snapshot) {
+          const Posts = []
+          snapshot.forEach(function(child) {
+            
+              console.log(child.key) 
+              const obj = child.val()
+              var imageUrl = null
+              firebase.database().ref().child("Users").child(obj.uid).child("imageUrl").once('value').then((data)=>{ 
+                if(data.val() != null){
+                  imageUrl = data.val()
+                 
+                }else{
+                  imageUrl = null
                 }
-                if(obj[key].Posts != null){
-                  firebase.database().ref('Users').child(uid).child('Posts').once('value').then((data)=> {
-                    const obj = data.val()
-                    for (let key in obj){
+                Posts.push({
+                  key: child.key,
+                  newReview: obj.newReview,
+                 notIncludedList: obj.notIncludedList,
+                 personName: obj.personName,
+                  promoted: obj.promoted,
+                  reviewLink: obj.reviewLink,
+                 rightList: obj.rightList,
+                 title: obj.title,
+                 uid: obj.uid,
+                 username: obj.username,
+                  wrongList: obj.wrongList,
+                 yourReview: obj.yourReview,
+                 timestamp: obj.timestamp,
+                 date: obj.date,
+                 imageUrl: imageUrl
+                           })
+              })
+             
+             
+
+          });
+          console.log(Posts)
+          commit('setLoadedRecentPosts', Posts)
+        })
+
+          // console.log(firebase.database().ref().child("Posts").orderByChild("timestamp").equalTo(-1560183937157))
+          // firebase.database().ref().child("Posts").orderByChild("timestamp").once('value').then((data)=>{
+          //   const Posts = []
+          //    const obj = data.val()
+
+
+
+
+          //    console.log(obj)
+          //    for(let key in obj){
+          //           var imageUrl = null
+          //           var uid = obj[key].uid
                   
-                      Posts.push({
-                        key: key,
-                        newReview: obj[key].newReview,
-                        notIncludedList: obj[key].notIncludedList,
-                        personName: obj[key].personName,
-                        promoted: obj[key].promoted,
-                        reviewLink: obj[key].reviewLink,
-                        rightList: obj[key].rightList,
-                        title: obj[key].title,
-                        uid: obj[key].uid,
-                        username: obj[key].username,
-                        wrongList: obj[key].wrongList,
-                        yourReview: obj[key].yourReview,
-                        timeStamp: obj[key].timeStamp,
-                        date: obj[key].date,
-                        imageUrl: imageUrl
-                      })
-                    }
-                    Posts.sort(function(a,b){
-                      return a.timeStamp - b. timeStamp;
-                    });
-        
-                  })
-                }
-              }
-              
-              
-                commit('setLoadedRecentPosts', Posts)
-          })
+          //           if(obj[key].imageUrl != null){
+          //             imageUrl = obj[key].imageUrl
+          //           }
+
+          //           Posts.push({
+          //                key: key,
+          //                newReview: obj[key].newReview,
+          //               notIncludedList: obj[key].notIncludedList,
+          //               personName: obj[key].personName,
+          //                promoted: obj[key].promoted,
+          //                reviewLink: obj[key].reviewLink,
+          //               rightList: obj[key].rightList,
+          //               title: obj[key].title,
+          //               uid: obj[key].uid,
+          //               username: obj[key].username,
+          //                wrongList: obj[key].wrongList,
+          //               yourReview: obj[key].yourReview,
+          //               timestamp: obj[key].timestamp,
+          //               date: obj[key].date,
+          //               imageUrl: imageUrl
+          //                         })
+
+          //         }
+          //         console.log(Posts)
+          //         commit('setLoadedRecentPosts', Posts)
+          // })
 
       },
 
@@ -449,7 +485,7 @@ export const store = new Vuex.Store({
 
 
       submitPost({commit}, payload){
-       
+      
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .once('value').then((data) => {
           const time = new Date()
@@ -462,7 +498,7 @@ export const store = new Vuex.Store({
             newReview: payload.newReview,
             yourReview: payload.yourReview,
             promoted: false,
-            timeStamp:-new Date().getTime(),
+            timestamp:-new Date().getTime(),
             date:dateString,
             wrongList: payload.wrongList,
             rightList: payload.rightList,
@@ -471,7 +507,7 @@ export const store = new Vuex.Store({
             uid: obj.id
           
           }
-          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost).catch(
+          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).push(newPost).catch(
             error => {
               commit('setLoading', false)
               commit('setError', error)
