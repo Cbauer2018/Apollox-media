@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
       loadedPost:[],
       searchedUsernames:[],
       searchedPosts:[],
+      recentPostCount: 0,
       validUsername: false,
       user: null,
       loading: false,
@@ -69,7 +70,7 @@ export const store = new Vuex.Store({
       }
     },
     actions: {
-
+        
       loadPost({commit}, payload){
         firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).once('value').then((data)=>{
           const obj = data.val()
@@ -206,87 +207,54 @@ export const store = new Vuex.Store({
         })
       },
 
-      loadRecentPosts({commit}){
-        firebase.database().ref().child("Posts").orderByChild("timestamp").on("value", function (snapshot) {
+      loadRecentPosts({commit},payload){
+        
+        firebase.database().ref().child("Posts").orderByChild("timestamp").limitToFirst(payload.index).on("value", function (snapshot) {
           const Posts = []
+          var imageUrl = null
           snapshot.forEach(function(child) {
             
-              console.log(child.key) 
+              console.log(child.val()) 
               const obj = child.val()
-              var imageUrl = null
+              
+              
+             
               firebase.database().ref().child("Users").child(obj.uid).child("imageUrl").once('value').then((data)=>{ 
                 if(data.val() != null){
                   imageUrl = data.val()
-                 
+                  console.log(imageUrl)
                 }else{
                   imageUrl = null
                 }
-                Posts.push({
-                  key: child.key,
-                  newReview: obj.newReview,
-                 notIncludedList: obj.notIncludedList,
-                 personName: obj.personName,
-                  promoted: obj.promoted,
-                  reviewLink: obj.reviewLink,
-                 rightList: obj.rightList,
-                 title: obj.title,
-                 uid: obj.uid,
-                 username: obj.username,
-                  wrongList: obj.wrongList,
-                 yourReview: obj.yourReview,
-                 timestamp: obj.timestamp,
-                 date: obj.date,
-                 imageUrl: imageUrl
-                           })
+                
               })
-             
+            
+            
+                
+
+              Posts.push({
+                key: child.key,
+                newReview: obj.newReview,
+               notIncludedList: obj.notIncludedList,
+               personName: obj.personName,
+                promoted: obj.promoted,
+                reviewLink: obj.reviewLink,
+               rightList: obj.rightList,
+               title: obj.title,
+               uid: obj.uid,
+               username: obj.username,
+                wrongList: obj.wrongList,
+               yourReview: obj.yourReview,
+               timestamp: obj.timestamp,
+               date: obj.date,
+               imageUrl: imageUrl
+                         })
              
 
           });
           console.log(Posts)
           commit('setLoadedRecentPosts', Posts)
         })
-
-          // console.log(firebase.database().ref().child("Posts").orderByChild("timestamp").equalTo(-1560183937157))
-          // firebase.database().ref().child("Posts").orderByChild("timestamp").once('value').then((data)=>{
-          //   const Posts = []
-          //    const obj = data.val()
-
-
-
-
-          //    console.log(obj)
-          //    for(let key in obj){
-          //           var imageUrl = null
-          //           var uid = obj[key].uid
-                  
-          //           if(obj[key].imageUrl != null){
-          //             imageUrl = obj[key].imageUrl
-          //           }
-
-          //           Posts.push({
-          //                key: key,
-          //                newReview: obj[key].newReview,
-          //               notIncludedList: obj[key].notIncludedList,
-          //               personName: obj[key].personName,
-          //                promoted: obj[key].promoted,
-          //                reviewLink: obj[key].reviewLink,
-          //               rightList: obj[key].rightList,
-          //               title: obj[key].title,
-          //               uid: obj[key].uid,
-          //               username: obj[key].username,
-          //                wrongList: obj[key].wrongList,
-          //               yourReview: obj[key].yourReview,
-          //               timestamp: obj[key].timestamp,
-          //               date: obj[key].date,
-          //               imageUrl: imageUrl
-          //                         })
-
-          //         }
-          //         console.log(Posts)
-          //         commit('setLoadedRecentPosts', Posts)
-          // })
-
       },
 
 

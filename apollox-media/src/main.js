@@ -12,6 +12,10 @@ Vue.config.productionTip = false
 Vue.component('app-alert', AlertCmp)
 const config = require('./config')
 firebase.initializeApp(config);
+var infiniteloading =  require('vue-infinite-loading');
+var infiniteScroll = require('vue-infinite-scroll')
+Vue.use(infiniteloading)
+Vue.use(infiniteScroll)
 
 
 
@@ -29,7 +33,7 @@ new Vue({
         this.$store.dispatch('loadFollowingPosts') 
       }
     })
-    this.$store.dispatch('loadRecentPosts')
+    this.$store.dispatch('loadRecentPosts',{index:2})
     this.$store.dispatch('loadPromotedPosts')
   },
 }).$mount('#app')

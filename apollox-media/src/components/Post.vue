@@ -395,7 +395,7 @@ export default {
         }
 
         this.$router.push('/Recent')
-        this.$store.dispatch('loadRecentPosts')
+        this.$store.dispatch('loadRecentPosts',{index:2})
         
       },
       changeForm (form){
