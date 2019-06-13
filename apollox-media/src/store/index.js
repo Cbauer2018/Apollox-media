@@ -89,6 +89,7 @@ export const store = new Vuex.Store({
                         yourReview: obj.yourReview,
                         timeStamp: obj.timeStamp,
                         date: obj.date,
+                        comments: obj.comments,
           })
           commit('setLoadedPost', post)
         })
@@ -220,15 +221,7 @@ export const store = new Vuex.Store({
               
               
              
-              firebase.database().ref().child("Users").child(obj.uid).child("imageUrl").once('value').then((data)=>{ 
-                if(data.val() != null){
-                  imageUrl = data.val()
-                  console.log(imageUrl)
-                }else{
-                  imageUrl = null
-                }
-                
-              })
+              
             
             
                 
