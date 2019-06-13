@@ -267,7 +267,6 @@
                       </v-flex>
 
                             <v-layout row wrap>
-<<<<<<< HEAD
                               <v-flex sm10 md6 my-3>
                                 <v-layout>
                                         <v-rating
@@ -291,48 +290,10 @@
               <v-list-tile>
                 <v-list-tile-content>
                   <v-list-tile-title >Comments</v-list-tile-title>
-=======
-                              <v-flex sm10 md4 my-3>
-                                <v-rating
-                                v-model="rating"
-                                hover
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                readonly
-                                half-increments></v-rating>
-                              </v-flex>
-                              <v-flex md2 my-4>
-                                  12
-                              </v-flex>
-                              <v-flex xs8 md4>
-                                <V-text-field
-                                maxlength = "300"
-                                v-model="comment"
-                               
-                                placeholder="Comment..."></V-text-field>
-                                </v-flex>
-                                <v-flex xs2>
-                                  <v-btn
-                                  flat
-                                  fab
-                                  color="cyan lighten-1"
-                                  @click="postComment(post)">
-                                    <v-icon>forward</v-icon>
-                                  </v-btn>
-                                </v-flex>
-
-
-                                 <v-list-group >
-            <template active v-slot:activator>
-              <v-list-tile color="black">
-                <v-list-tile-content>
-                  <v-list-tile-title>Comments</v-list-tile-title>
->>>>>>> f534011cb1073916e670f990dd2c493290c0db9d
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
-<<<<<<< HEAD
             <v-list-tile 
             v-for="text in post.rightList"
               :key="text.text">
@@ -343,43 +304,6 @@
           </v-list-group>
           </v-list>
                             </v-flex>
-=======
-            <v-list-tile
-            v-for="text in post.comments"
-              :key="text.text">
-              <v-list-tile-content>
-                <v-card  justify-center wrap>
-                       <v-layout align-center row wrap>
-               <v-avatar
-                :tile="tile"
-                :size="45"
-                color="grey lighten-4">
-                <img 
-                v-if="userHasProfilePic(text.imageUrl)" 
-                :src="text.imageUrl" alt="avatar">
-                <img v-else src="@/assets/RocketLogo.png">
-              </v-avatar>
-              <v-layout align-center row wrap>
-                <v-flex>
-
-                  <v-card> <span >{{text.username}}: </span></v-card>
-                     <v-card> <span>  {{text.comment}}</span></v-card>
-                    <v-card> <span >{{text.date}}</span></v-card>
-                   <v-card><v-btn flat
-                              fab
-                        color="cyan lighten-1"><v-icon>keyboard_arrow_up</v-icon></v-btn>
-                    <span style="font-weight: bold;">{{text.upvotes}}</span></v-card>
-                </v-flex>
-                  
-                    
-                    </v-layout>
-              </v-layout>
-             
-                    </v-card>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-group>
->>>>>>> f534011cb1073916e670f990dd2c493290c0db9d
                             </v-layout>
                             </v-flex>
                             </v-flex>

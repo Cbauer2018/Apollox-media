@@ -668,6 +668,7 @@ export const store = new Vuex.Store({
             }
             
             firebase.database().ref('Users').child(payload.uid).child('Posts').child(payload.postKey).child('comments').push(comment)
+            firebase.database().ref('Posts').child(payload.postKey).child('comments').push(comment)
 
         })
         
