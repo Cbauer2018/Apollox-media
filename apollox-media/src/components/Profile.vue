@@ -268,6 +268,7 @@
 
                             <v-layout row wrap>
 <<<<<<< HEAD
+<<<<<<< HEAD
                               <v-flex sm10 md4 my-3>
                                 <v-rating
                                 v-model="rating"
@@ -304,6 +305,8 @@
                 <v-list-tile-content>
                   <v-list-tile-title>Comments</v-list-tile-title>
 =======
+=======
+>>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
                               <v-flex sm10 md6 my-3>
                                 <v-layout>
                                         <v-rating
@@ -327,11 +330,15 @@
               <v-list-tile>
                 <v-list-tile-content>
                   <v-list-tile-title >Comments</v-list-tile-title>
+<<<<<<< HEAD
+>>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
+=======
 >>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             <v-list-tile
             v-for="text in post.comments"
@@ -369,6 +376,8 @@
             </v-list-tile>
           </v-list-group>
 =======
+=======
+>>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
             <v-list-tile 
             v-for="text in post.rightList"
               :key="text.text">
@@ -379,6 +388,9 @@
           </v-list-group>
           </v-list>
                             </v-flex>
+<<<<<<< HEAD
+>>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
+=======
 >>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
                             </v-layout>
                             </v-flex>
