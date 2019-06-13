@@ -145,7 +145,7 @@ methods: {
                   if(this.$store.getters.isUsernameValid){
                       this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
              this.$store.dispatch('loadProfile',{uid: this.uid})
-             this.$store.dispatch('loadProfilePosts', {uid: this.uid})
+             this.$store.dispatch('loadProfilePosts', {uid: this.uid, index: 2})
                 this.$router.push('/Profile/'+ this.uid)
                       })
                 
@@ -158,7 +158,7 @@ methods: {
               }else{
                   this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
              this.$store.dispatch('loadProfile',{uid: this.uid})
-              this.$store.dispatch('loadProfilePosts', {uid: this.uid})
+              this.$store.dispatch('loadProfilePosts', {uid: this.uid, index:2})
          this.$router.push('/Profile/'+ this.uid)
                       })
               }
