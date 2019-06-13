@@ -1,5 +1,8 @@
 <template>
     <v-container>
+   
+
+
     <v-flex xs9>
                     <v-card>
                     <v-flex
@@ -10,7 +13,7 @@
                           @click="goToProfile(post.uid)">
                           {{ post.username}} </h4>
                     <v-flex my-2>
-                      <h2 class = "font-weight-thin">{{post.title}}</h2>
+                      <h2 class = "font-weight-thin" @click="testingRecents">{{post.title}}</h2>
                       <v-flex my-2>
                       <span>
                           {{post.newReview}}
@@ -92,34 +95,59 @@
                     </v-layout>
                     </v-flex>
                     </v-card>
+                  
                     </v-flex>
-
+                   
+ <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
     </v-container>
 </template>
 
 <script>
-
-
+import InfiniteLoading from 'vue-infinite-loading';
 export default {
+  components:{
+    InfiniteLoading,
+  },
   data () {
       return {
-        
+        postCount: 2
       }
     },
+       
 methods: {
+  testingRecents(){
+    console.log(this.$store.getters.loadedRecentPosts)
+  },
     goToProfile(profileUid){
       console.log(profileUid)
           this.$store.dispatch('loadProfile', {uid: profileUid})
-          this.$store.dispatch('loadProfilePosts', {uid: profileUid})
+          this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
           this.$router.push('/Profile/'+ profileUid)
           console.log("Router", this.$route.params.uid)
 
-    }
+    },
+    
+    infiniteHandler($state){
+        
+        this.$store.dispatch('loadRecentPosts', {index: this.recentPosts.length + 2})
+        if(this.recentPosts.length == this.postCount){
+          setTimeout(() => {
+        $state.loaded()
+        this.postCount += 2
+        console.log(this.recentPosts.length + "vs" + this.postCount)
+      }, 1500);
+        }else{
+            console.log(this.recentPosts.length + "vs" + this.postCount)
+          $state.complete()
+        }
+    },
+
+   
 },
 
 computed: {
     recentPosts(){
-      
+     
         return this.$store.getters.loadedRecentPosts;
       
       },

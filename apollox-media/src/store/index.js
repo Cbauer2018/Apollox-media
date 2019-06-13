@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
       loadedPost:[],
       searchedUsernames:[],
       searchedPosts:[],
+      recentPostCount: 0,
       validUsername: false,
       user: null,
       loading: false,
@@ -69,7 +70,7 @@ export const store = new Vuex.Store({
       }
     },
     actions: {
-
+        
       loadPost({commit}, payload){
         firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).once('value').then((data)=>{
           const obj = data.val()
@@ -207,90 +208,86 @@ export const store = new Vuex.Store({
         })
       },
 
-      loadRecentPosts({commit}){
-          firebase.database().ref('Users').once('value').then((data)=>{
-              const Posts = []
-              const obj = data.val()
-              for(let key in obj){
-                var imageUrl = null
-                var uid = obj[key].id
-                if(obj[key].imageUrl != null){
-                  imageUrl = obj[key].imageUrl
-                }
-                if(obj[key].Posts != null){
-                  firebase.database().ref('Users').child(uid).child('Posts').once('value').then((data)=> {
-                    const obj = data.val()
-                    for (let key in obj){
-                  
-                      Posts.push({
-                        
-                        newReview: obj[key].newReview,
-                        notIncludedList: obj[key].notIncludedList,
-                        personName: obj[key].personName,
-                        promoted: obj[key].promoted,
-                        reviewLink: obj[key].reviewLink,
-                        rightList: obj[key].rightList,
-                        title: obj[key].title,
-                        uid: obj[key].uid,
-                        username: obj[key].username,
-                        wrongList: obj[key].wrongList,
-                        yourReview: obj[key].yourReview,
-                        timeStamp: obj[key].timeStamp,
-                        date: obj[key].date,
-                        imageUrl: imageUrl
-                      })
-                    }
-                    Posts.sort(function(a,b){
-                      return a.timeStamp - b. timeStamp;
-                    });
+      loadRecentPosts({commit},payload){
         
-                  })
+        firebase.database().ref().child("Posts").orderByChild("timestamp").limitToFirst(payload.index).on("value", function (snapshot) {
+          const Posts = []
+          var imageUrl = null
+          snapshot.forEach(function(child) {
+            
+              console.log(child.val()) 
+              const obj = child.val()
+              
+              
+             
+              firebase.database().ref().child("Users").child(obj.uid).child("imageUrl").once('value').then((data)=>{ 
+                if(data.val() != null){
+                  imageUrl = data.val()
+                  console.log(imageUrl)
+                }else{
+                  imageUrl = null
                 }
-              }
-              
-              
-                commit('setLoadedRecentPosts', Posts)
-          })
+                
+              })
+            
+            
+                
 
+              Posts.push({
+                key: child.key,
+                newReview: obj.newReview,
+               notIncludedList: obj.notIncludedList,
+               personName: obj.personName,
+                promoted: obj.promoted,
+                reviewLink: obj.reviewLink,
+               rightList: obj.rightList,
+               title: obj.title,
+               uid: obj.uid,
+               username: obj.username,
+                wrongList: obj.wrongList,
+               yourReview: obj.yourReview,
+               timestamp: obj.timestamp,
+               date: obj.date,
+               imageUrl: imageUrl
+                         })
+             
+
+          });
+          console.log(Posts)
+          commit('setLoadedRecentPosts', Posts)
+        })
       },
 
 
       loadProfilePosts({commit}, payload){
-        firebase.database().ref('Users').child(payload.uid).once('value').then((data)=>{
-            const Posts = []
-            const obj = data.val()
-            console.log("Profile Posts", obj.Posts)
-            const profilePosts = obj.Posts
-         
-              if(obj.Posts != null){
-                  for (let key in profilePosts){
-                    var newReviewSlice = profilePosts[key].newReview.slice(0,200)
+        firebase.database().ref('Users').child(payload.uid).child('Posts').orderByChild('timestamp').limitToFirst(payload.index).on("value", function (snapshot) {
+          const Posts = []
+          var imageUrl = null
+          snapshot.forEach(function(child) {
+            const obj = child.val()
+           
+                    var newReviewSlice = obj.newReview.slice(0,200)
                       
                     Posts.push({
-                      key: key,
-                      notIncludedList: profilePosts[key].notIncludedList,
-                      newReview:  profilePosts[key].newReview,
+                      key: child.key,
+                      notIncludedList: obj.notIncludedList,
+                      newReview:  obj.newReview,
                       newReviewSlice:newReviewSlice,
-                      personName: profilePosts[key].personName,
-                      promoted: profilePosts[key].promoted,
-                      reviewLink: profilePosts[key].reviewLink,
-                      rightList: profilePosts[key].rightList,
-                      title: profilePosts[key].title,
-                      uid: profilePosts[key].uid,
-                      username:profilePosts[key].username,
-                      wrongList: profilePosts[key].wrongList,
-                      yourReview: profilePosts[key].yourReview,
-                      timeStamp: profilePosts[key].timeStamp,
-                      date: profilePosts[key].date
+                      personName: obj.personName,
+                      promoted: obj.promoted,
+                      reviewLink: obj.reviewLink,
+                      rightList: obj.rightList,
+                      title: obj.title,
+                      uid: obj.uid,
+                      username:obj.username,
+                      wrongList: obj.wrongList,
+                      yourReview: obj.yourReview,
+                      timeStamp: obj.timeStamp,
+                      date: obj.date,
+                      comments: obj.comments
                     })
                     
-                  }
-                  Posts.sort(function(a,b){
-                    return a.timeStamp - b. timeStamp;
-                  });
-      
-               
-              }
+                  })
             
             
             
@@ -316,6 +313,7 @@ export const store = new Vuex.Store({
                   for (let key in obj){
                     if(obj[key].promoted == true){
                     Posts.push({
+                      key: key,
                       newReview: obj[key].newReview,
                       notIncludedList: obj[key].notIncludedList,
                       personName: obj[key].personName,
@@ -369,6 +367,7 @@ export const store = new Vuex.Store({
                     for (let key in profilePosts){
                       
                       Posts.push({
+                        key: key,
                         notIncludedList: profilePosts[key].notIncludedList,
                         newReview:  profilePosts[key].newReview,
                         personName: profilePosts[key].personName,
@@ -447,7 +446,7 @@ export const store = new Vuex.Store({
 
 
       submitPost({commit}, payload){
-       
+      
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .once('value').then((data) => {
           const time = new Date()
@@ -460,7 +459,7 @@ export const store = new Vuex.Store({
             newReview: payload.newReview,
             yourReview: payload.yourReview,
             promoted: false,
-            timeStamp:-new Date().getTime(),
+            timestamp:-new Date().getTime(),
             date:dateString,
             wrongList: payload.wrongList,
             rightList: payload.rightList,
@@ -475,6 +474,13 @@ export const store = new Vuex.Store({
               commit('setError', error)
               
             })
+
+            firebase.database().ref('Posts').push(newPost).catch(
+              error => {
+                commit('setLoading', false)
+                commit('setError', error)
+                
+              })
 
 
           commit('submitPost',newPost)
@@ -599,6 +605,7 @@ export const store = new Vuex.Store({
                     if(title.includes(keyword.toLowerCase())){
                       var newReviewSlice = profilePosts[key].newReview.slice(0,200)
                         Posts.push({
+                          key: key,
                           newReview: profilePosts[key].newReview,
                           notIncludedList: profilePosts[key].notIncludedList,
                           personName:profilePosts[key].personName,
@@ -634,6 +641,36 @@ export const store = new Vuex.Store({
 
 
       postComment({commit}, payload){
+        var comment = {}
+        const time = new Date()
+        var dateString = time.toLocaleDateString()
+        firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+        .once('value').then((data) => {
+          
+            var imageUrl = null
+            const obj = data.val()
+                  if(obj.imageUrl != null){
+                        imageUrl = obj.imageUrl
+                        
+                  }else{
+                    imageUrl = null
+                  }
+
+                  comment = {
+                    uid: firebase.auth().currentUser.uid.toString(),
+                    comment: payload.comment,
+                    timeStamp:-new Date().getTime(),
+                    date:dateString,
+                    upvotes: 0,
+                    imageUrl: imageUrl,
+                    username: obj.username
+    
+            }
+            
+            firebase.database().ref('Users').child(payload.uid).child('Posts').child(payload.postKey).child('comments').push(comment)
+
+        })
+        
         
       }
       
