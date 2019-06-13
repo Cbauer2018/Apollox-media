@@ -37,10 +37,10 @@
   <v-flex v-if="userIsAuthenticated">
     <form @submit.prevent="checkForm">
 <v-layout justify-center my-3 >
-   <v-card  flat color="cyan lighten-3" class="rounded-card">
+   <v-card flat>
     <v-card-text>
     <v-icon color="black" left>add_box</v-icon>
-    <span style="font-size:30px">Create New Post</span>
+    <span style="font-size:30px"><u>Create New Post</u></span>
     </v-card-text>
   </v-card>
   </v-layout>
@@ -56,9 +56,9 @@
                       v-model="title"
                       id="title"
                       type="text"
-                      counter="50"
+                      counter="100"
                       required
-                      maxlength="50"></v-text-field>
+                      maxlength="100"></v-text-field>
                     </v-flex>
                      <v-flex xs12>
                     <v-text-field
@@ -67,8 +67,8 @@
                       id="personName"
                       v-model="personName"
                       type="Link"
-                      maxlength="30"
-                      counter="30"
+                      maxlength="50"
+                      counter="50"
                       single-line="true"
                       ></v-text-field>
                     </v-flex>
@@ -133,7 +133,7 @@
         id="newReview"
         v-model="newReview"
         counter
-        maxlength="1500"
+        maxlength="4500"
         full-width
         single-line
         outline
@@ -174,8 +174,8 @@
                       label="*"
                       v-model="i.text"
                       type="input"
-                      counter="100"
-                      maxlength="100"></v-text-field>
+                      counter="200"
+                      maxlength="200"></v-text-field>
                     </v-flex>
                 </form>
               </v-container>
@@ -212,8 +212,8 @@
                       name="Right List"
                       label="*"
                       v-model='j.text'
-                      counter="100"
-                      maxlength="100"
+                      counter="200"
+                      maxlength="200"
                       ></v-text-field>
                     </v-flex>
                 </form>
@@ -252,8 +252,8 @@
                       label="*"
                       v-model='j.text'
                       type="text"
-                      counter="100"
-                      maxlength="100"
+                      counter="200"
+                      maxlength="200"
                       ></v-text-field>
                     </v-flex>
                 </form>

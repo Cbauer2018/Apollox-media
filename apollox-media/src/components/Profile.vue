@@ -197,13 +197,12 @@
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                            <span  v-show="post.newReviewSlice == 'null'" >{{post.yourReview}}</span>                            
+                            <span v-show="post.newReviewSlice == 'null'" class="indent">{{post.yourReview}}</span>                            
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
           <v-list-group
-            no-action
-          >
+            no-action>
             <template v-slot:activator>
               <v-list-tile color="green">
                 <v-list-tile-content>
@@ -223,7 +222,7 @@
 
 
            <v-list-group
-            
+            no-action
           >
             <template active v-slot:activator>
               <v-list-tile  color="red">
@@ -268,6 +267,31 @@
                       </v-flex>
 
                             <v-layout row wrap>
+<<<<<<< HEAD
+                              <v-flex sm10 md6 my-3>
+                                <v-layout>
+                                        <v-rating
+                                            v-model="rating"
+                                            hover
+                                            readonly
+                                            color = "cyan lighten-1"
+                                            background-color="cyan lighten-1"
+                                            half-increments></v-rating>
+                                        <v-flex my-3 ml-1>
+                                            12
+                                        </v-flex>
+                                    </v-layout>
+                                    </v-flex>
+                                    
+                               <v-flex xs10 md6>
+                                <v-list>
+          <v-list-group
+          >
+            <template v-slot:activator>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title >Comments</v-list-tile-title>
+=======
                               <v-flex sm10 md4 my-3>
                                 <v-rating
                                 v-model="rating"
@@ -303,10 +327,23 @@
               <v-list-tile color="black">
                 <v-list-tile-content>
                   <v-list-tile-title>Comments</v-list-tile-title>
+>>>>>>> f534011cb1073916e670f990dd2c493290c0db9d
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
+<<<<<<< HEAD
+            <v-list-tile 
+            v-for="text in post.rightList"
+              :key="text.text">
+              <v-list-tile-content >
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+          </v-list>
+                            </v-flex>
+=======
             <v-list-tile
             v-for="text in post.comments"
               :key="text.text">
@@ -342,14 +379,14 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
+>>>>>>> f534011cb1073916e670f990dd2c493290c0db9d
                             </v-layout>
                             </v-flex>
                             </v-flex>
                           </v-layout>
                           
                           <v-card flat>
-                          <v-flex my-2
-                          >
+                          <v-flex my-2 mr-2>
                             <h2 class="font-weight-thin">{{post.date}}</h2>
                           </v-flex>
                           </v-card>
@@ -489,8 +526,8 @@ beforeCreate() {
       followProfile(){
  
       this.$store.dispatch('followProfile', {profileUid:this.profile[0].id}).then(
-        this.$store.dispatch('loadProfile', {uid: this.$route.params.uid}),
-       this.$store.dispatch('loadFollowingPosts') 
+      this.$store.dispatch('loadProfile', {uid: this.$route.params.uid}),
+      this.$store.dispatch('loadFollowingPosts')
       )
       this.followers += 1
     },
@@ -539,3 +576,9 @@ beforeCreate() {
 
 }
 </script>
+
+<style type="text/css">
+  .indent {
+    margin-left: 30px;
+  }
+</style>
