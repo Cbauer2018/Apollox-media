@@ -267,6 +267,7 @@
                       </v-flex>
 
                             <v-layout row wrap>
+<<<<<<< HEAD
                               <v-flex sm10 md4 my-3>
                                 <v-rating
                                 v-model="rating"
@@ -302,10 +303,36 @@
               <v-list-tile color="black">
                 <v-list-tile-content>
                   <v-list-tile-title>Comments</v-list-tile-title>
+=======
+                              <v-flex sm10 md6 my-3>
+                                <v-layout>
+                                        <v-rating
+                                            v-model="rating"
+                                            hover
+                                            readonly
+                                            color = "cyan lighten-1"
+                                            background-color="cyan lighten-1"
+                                            half-increments></v-rating>
+                                        <v-flex my-3 ml-1>
+                                            12
+                                        </v-flex>
+                                    </v-layout>
+                                    </v-flex>
+                                    
+                               <v-flex xs10 md6>
+                                <v-list>
+          <v-list-group
+          >
+            <template v-slot:activator>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title >Comments</v-list-tile-title>
+>>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
+<<<<<<< HEAD
             <v-list-tile
             v-for="text in post.comments"
               :key="text.text">
@@ -341,6 +368,18 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
+=======
+            <v-list-tile 
+            v-for="text in post.rightList"
+              :key="text.text">
+              <v-list-tile-content >
+                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+          </v-list>
+                            </v-flex>
+>>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
                             </v-layout>
                             </v-flex>
                             </v-flex>

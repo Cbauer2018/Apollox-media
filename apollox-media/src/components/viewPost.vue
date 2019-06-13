@@ -152,10 +152,10 @@
             </template>
 
             <v-list-tile 
-            v-for="text in post.rightList"
+            v-for="text in post.comments"
               :key="text.text">
               <v-list-tile-content >
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>{{text.comment}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -200,7 +200,18 @@ export default{
       
     },
      methods:{
-
+            postComment(post){
+      var profileUid = this.$route.params.uid
+     console.log("uid", profileUid)
+     console.log("postKey", this.$route.params.post)
+     console.log("comment", this.comment)
+      if(this.comment != '' && this.comment != null){
+    
+      this.$store.dispatch('postComment', {uid: profileUid, postKey: this.$route.params.post, comment: this.comment})
+        this.comment = ''
+      }
+      
+    },
         ratePost(){
 
         },
