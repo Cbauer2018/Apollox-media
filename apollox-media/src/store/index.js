@@ -259,42 +259,34 @@ export const store = new Vuex.Store({
 
 
       loadProfilePosts({commit}, payload){
-        firebase.database().ref('Users').child(payload.uid).once('value').then((data)=>{
-            const Posts = []
-            const obj = data.val()
-            console.log("Profile Posts", obj.Posts)
-            const profilePosts = obj.Posts
-         
-              if(obj.Posts != null){
-                  for (let key in profilePosts){
-                    var newReviewSlice = profilePosts[key].newReview.slice(0,200)
+        firebase.database().ref('Users').child(payload.uid).child('Posts').orderByChild('timestamp').limitToFirst(payload.index).on("value", function (snapshot) {
+          const Posts = []
+          var imageUrl = null
+          snapshot.forEach(function(child) {
+            const obj = child.val()
+           
+                    var newReviewSlice = obj.newReview.slice(0,200)
                       
                     Posts.push({
-                      key: key,
-                      notIncludedList: profilePosts[key].notIncludedList,
-                      newReview:  profilePosts[key].newReview,
+                      key: child.key,
+                      notIncludedList: obj.notIncludedList,
+                      newReview:  obj.newReview,
                       newReviewSlice:newReviewSlice,
-                      personName: profilePosts[key].personName,
-                      promoted: profilePosts[key].promoted,
-                      reviewLink: profilePosts[key].reviewLink,
-                      rightList: profilePosts[key].rightList,
-                      title: profilePosts[key].title,
-                      uid: profilePosts[key].uid,
-                      username:profilePosts[key].username,
-                      wrongList: profilePosts[key].wrongList,
-                      yourReview: profilePosts[key].yourReview,
-                      timeStamp: profilePosts[key].timeStamp,
-                      date: profilePosts[key].date,
-                      comments: profilePosts[key].comments
+                      personName: obj.personName,
+                      promoted: obj.promoted,
+                      reviewLink: obj.reviewLink,
+                      rightList: obj.rightList,
+                      title: obj.title,
+                      uid: obj.uid,
+                      username:obj.username,
+                      wrongList: obj.wrongList,
+                      yourReview: obj.yourReview,
+                      timeStamp: obj.timeStamp,
+                      date: obj.date,
+                      comments: obj.comments
                     })
                     
-                  }
-                  Posts.sort(function(a,b){
-                    return a.timeStamp - b. timeStamp;
-                  });
-      
-               
-              }
+                  })
             
             
             
@@ -475,7 +467,7 @@ export const store = new Vuex.Store({
             uid: obj.id
           
           }
-          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).push(newPost).catch(
+          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('Posts').push(newPost).catch(
             error => {
               commit('setLoading', false)
               commit('setError', error)

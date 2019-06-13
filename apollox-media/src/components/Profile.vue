@@ -364,19 +364,19 @@
                         <v-card></v-card>
                       </v-flex>
           </v-layout>
-
         </container>
         </v-flex>
+        <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
     </container>
   </template>
 
 <script>
 import Popup from './profilePopup'
-
+import InfiniteLoading from 'vue-infinite-loading';
 export default{
-  component: { Popup },
+  components: {InfiniteLoading },
    props: ['id'],
-
+  InfiniteLoading,
   
   data(){
     return{
@@ -399,7 +399,7 @@ export default{
       numberI: 0,
       followers: 0,
       following:0,
-     
+     postCount: 2
       
 
     }
@@ -407,7 +407,7 @@ export default{
 beforeCreate() {
      
           this.$store.dispatch('loadProfile', {uid: this.$route.params.uid})
-          this.$store.dispatch('loadProfilePosts', {uid: this.$route.params.uid})
+          this.$store.dispatch('loadProfilePosts', {uid: this.$route.params.uid , index:2})
 
     
   },
@@ -470,6 +470,21 @@ beforeCreate() {
 
     methods:{
     
+       infiniteHandler($state){
+        var profileUid = this.$route.params.uid
+        console.log(this.loadProfilePosts.length + "vs" + this.postCount)
+        this.$store.dispatch('loadProfilePosts', {uid: profileUid ,index: this.loadProfilePosts.length + 2})
+        if(this.loadProfilePosts.length == this.postCount){
+          setTimeout(() => {
+        $state.loaded()
+        this.postCount += 2
+        console.log(this.loadProfilePosts.length + "vs" + this.postCount)
+      }, 1500);
+        }else{
+            console.log(this.loadProfilePosts.length + "vs" + this.postCount)
+          $state.complete()
+        }
+    },
      
       followProfile(){
  
@@ -516,7 +531,10 @@ beforeCreate() {
          }
        },
        
-    }
+
+    },
+
+    
 
 
 }

@@ -121,7 +121,7 @@ export default {
       },
       loadProfile(){
         this.$store.dispatch('loadProfile', {uid:this.profileId.id})
-         this.$store.dispatch('loadProfilePosts', {uid: this.profileId.id})
+         this.$store.dispatch('loadProfilePosts', {uid: this.profileId.id , index:2})
       }
       
     },

@@ -110,7 +110,7 @@ export default {
   },
   data () {
       return {
-        
+        postCount: 2
       }
     },
        
@@ -121,7 +121,7 @@ methods: {
     goToProfile(profileUid){
       console.log(profileUid)
           this.$store.dispatch('loadProfile', {uid: profileUid})
-          this.$store.dispatch('loadProfilePosts', {uid: profileUid})
+          this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
           this.$router.push('/Profile/'+ profileUid)
           console.log("Router", this.$route.params.uid)
 
@@ -130,11 +130,14 @@ methods: {
     infiniteHandler($state){
         
         this.$store.dispatch('loadRecentPosts', {index: this.recentPosts.length + 2})
-        if(this.recentPosts.length < 5){
+        if(this.recentPosts.length == this.postCount){
           setTimeout(() => {
         $state.loaded()
+        this.postCount += 2
+        console.log(this.recentPosts.length + "vs" + this.postCount)
       }, 1500);
         }else{
+            console.log(this.recentPosts.length + "vs" + this.postCount)
           $state.complete()
         }
     },
