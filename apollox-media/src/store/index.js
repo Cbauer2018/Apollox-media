@@ -224,7 +224,7 @@ export const store = new Vuex.Store({
               
             
             
-                
+          
 
               Posts.push({
                 key: child.key,
@@ -258,9 +258,12 @@ export const store = new Vuex.Store({
           var imageUrl = null
           snapshot.forEach(function(child) {
             const obj = child.val()
-           
+                    var rateVotes = 0
+
                     var newReviewSlice = obj.newReview.slice(0,200)
-                      
+                      if(obj.rateVotes != null){
+                              rateVotes = obj.rateVotes
+                      }
                     Posts.push({
                       key: child.key,
                       notIncludedList: obj.notIncludedList,
@@ -277,7 +280,9 @@ export const store = new Vuex.Store({
                       yourReview: obj.yourReview,
                       timeStamp: obj.timeStamp,
                       date: obj.date,
-                      comments: obj.comments
+                      comments: obj.comments,
+                      rateVotes : rateVotes,
+
                     })
                     
                   })
