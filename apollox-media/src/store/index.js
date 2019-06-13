@@ -472,14 +472,18 @@ export const store = new Vuex.Store({
               commit('setLoading', false)
               commit('setError', error)
               
-            })
+            }).then((snap) => {
+              const key = snap.key 
+              console.log("key", key)
+              firebase.database().ref('Posts').child(key).set(newPost).catch(
+                error => {
+                  commit('setLoading', false)
+                  commit('setError', error)
+                  
+                })
+           })
 
-            firebase.database().ref('Posts').push(newPost).catch(
-              error => {
-                commit('setLoading', false)
-                commit('setError', error)
-                
-              })
+           
 
 
           commit('submitPost',newPost)
