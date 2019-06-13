@@ -86,7 +86,8 @@ export const store = new Vuex.Store({
                         username: obj.username,
                         wrongList: obj.wrongList,
                         yourReview: obj.yourReview,
-                        timeStamp: obj.timeStamp
+                        timeStamp: obj.timeStamp,
+                        date: obj.date,
           })
           commit('setLoadedPost', post)
         })
