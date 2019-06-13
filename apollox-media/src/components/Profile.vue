@@ -330,16 +330,12 @@
               <v-list-tile>
                 <v-list-tile-content>
                   <v-list-tile-title >Comments</v-list-tile-title>
-<<<<<<< HEAD
->>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
-=======
->>>>>>> 95db485c9d13d6c71c07abe9ca601a828d3ae5b8
+
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
             <v-list-tile
             v-for="text in post.comments"
               :key="text.text">
