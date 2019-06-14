@@ -36,7 +36,7 @@
             <template v-slot:activator>
               <v-list-tile color="green">
                 <v-list-tile-content>
-                  <v-list-tile-title >What is Correct</v-list-tile-title>
+                  <v-list-tile-title>What is Correct</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
@@ -45,7 +45,7 @@
             v-for="text in post.rightList"
               :key="text.text">
               <v-list-tile-content >
-                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
+                <span>* {{text.text}}</span>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -66,7 +66,7 @@
             v-for="text in post.wrongList"
               :key="text.text">
               <v-list-tile-content>
-                <v-list-tile-title>* {{text.text}} </v-list-tile-title>
+                <span>* {{text.text}} </span>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -86,7 +86,7 @@
             v-for="text in post.notIncludedList"
               :key="text.text">
               <v-list-tile-content>
-                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
+                <span>* {{text.text}}</span>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>

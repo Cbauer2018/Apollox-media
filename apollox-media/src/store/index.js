@@ -104,7 +104,8 @@ export const store = new Vuex.Store({
                         date: obj.date,
                         rating:rating,
                         voters:voters,
-                        voterIds : obj.voters
+                        voterIds : obj.voters,
+                        comments: obj.comments,
           })
 
           commit('setLoadedPost', post)
