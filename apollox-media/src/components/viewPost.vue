@@ -2,7 +2,7 @@
     <container>
         <v-layout row wrap>
             <v-flex xs4 md2>
-                <v-card>
+                <v-card flat>
                     <v-flex v-for="profile in profile" :key="profile" ma-4>
                         <v-layout column>
                             <v-avatar
@@ -26,9 +26,11 @@
             <v-flex xs6 md8>
             <v-layout column>
                 <v-flex my-4>
-                    <v-card v-for="post in post" :key="post">
+                    <v-card v-for="post in post" :key="post" flat>
                         <h3 class="display-2 font-weight-thin">{{post.title}}</h3>
-                        <h2 class="font-weight-thin">{{post.newReview}}</h2>
+                        <v-flex my-4>
+                        <h2 class="font-weight-thin"><p class = "tab">{{post.newReview}}</p></h2>
+                        </v-flex>
                         <v-list>
           <v-list-group
             no-action
@@ -139,9 +141,10 @@
                                 
                             </v-flex>
                             <v-flex xs8>
+                                
                                 <v-list>
           <v-list-group
-            no-action
+            
           >
             <template v-slot:activator>
               <v-list-tile>
@@ -151,13 +154,24 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile 
+            <v-flex>
+            <v-list-tile
             v-for="text in post.comments"
               :key="text.text">
               <v-list-tile-content >
-                <span>{{text.comment}}</span>
+                  <v-layout row>
+                      
+                      <v-flex my-4 ml-2
+                       >
+                        <span>{{text.username}}</span>
+                        </v-flex>
+                    <v-flex my-4 ml-3>
+                        <span>{{text.comment}}</span>
+                    </v-flex>
+                </v-layout>
               </v-list-tile-content>
             </v-list-tile>
+            </v-flex>
           </v-list-group>
           </v-list>
                             </v-flex>
@@ -230,3 +244,7 @@ export default{
        }
 }
 </script>
+
+<style>
+  .tab { text-indent: 40px; }
+</style>
