@@ -52,7 +52,9 @@
    
  </v-toolbar>
   <main>
-    <router-view></router-view>
+    <transition name="fade" mode="out-in" @before-enter="beforeEnter" appear>
+  <router-view></router-view>
+</transition>
   </main>
 </template>
   </div>
@@ -122,7 +124,10 @@ export default {
       loadProfile(){
         this.$store.dispatch('loadProfile', {uid:this.profileId.id})
          this.$store.dispatch('loadProfilePosts', {uid: this.profileId.id , index:2})
-      }
+      },
+      beforeEnter() {
+        window.scrollTo(0,0);
+      },
       
     },
     watch:{

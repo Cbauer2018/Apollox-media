@@ -51,9 +51,10 @@
               </v-avatar>
               </v-flex>
               <v-flex>
-                <v-layout row>
+                <v-layout row v-for="profile in profile" 
+                :key="profile">
                 <v-rating 
-                  v-model="rating"
+                 :value="profile.profileRating"
                   hover
                   color = "cyan lighten-1"
                   background-color="cyan lighten-1"
@@ -62,7 +63,7 @@
                 </v-rating>
                 <v-flex my-3 ml-1>
                 <span>
-                  16.7k
+                  {{profile.totalVotes}}
                 </span>
                 </v-flex>
                 </v-layout>
@@ -269,15 +270,16 @@
                             <v-layout row wrap>
                               <v-flex sm10 md4 my-3>
                                 <v-rating
-                                v-model="rating"
+                                
                                 hover
+                                :value="post.rating"
                                 color = "cyan lighten-1"
                                 background-color="cyan lighten-1"
                                 readonly
                                 half-increments></v-rating>
                               </v-flex>
                               <v-flex md2 my-4>
-                                  12
+                                  {{post.voters}}
                               </v-flex>
                               <v-flex xs8 md4>
                                 <V-text-field
@@ -297,50 +299,7 @@
                                 </v-flex>
 
 
-                                 <v-list-group >
-            <template active v-slot:activator>
-              <v-list-tile color="black">
-                <v-list-tile-content>
-                  <v-list-tile-title>Comments</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </template>
-
-            <v-list-tile
-            v-for="text in post.comments"
-              :key="text.text">
-              <v-list-tile-content>
-                <v-card  justify-center wrap>
-                       <v-layout align-center row wrap>
-               <v-avatar
-                :tile="tile"
-                :size="45"
-                color="grey lighten-4">
-                <img 
-                v-if="userHasProfilePic(text.imageUrl)" 
-                :src="text.imageUrl" alt="avatar">
-                <img v-else src="@/assets/RocketLogo.png">
-              </v-avatar>
-              <v-layout align-center row wrap>
-                <v-flex>
-
-                  <v-card> <span >{{text.username}}: </span></v-card>
-                     <v-card> <span>  {{text.comment}}</span></v-card>
-                    <v-card> <span >{{text.date}}</span></v-card>
-                   <v-card><v-btn flat
-                              fab
-                        color="cyan lighten-1"><v-icon>keyboard_arrow_up</v-icon></v-btn>
-                    <span style="font-weight: bold;">{{text.upvotes}}</span></v-card>
-                </v-flex>
-                  
-                    
-                    </v-layout>
-              </v-layout>
-             
-                    </v-card>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-group>
+                               
                             </v-layout>
                             </v-flex>
                             </v-flex>
@@ -390,14 +349,14 @@ export default{
       
      
       imageUrl:require('@/assets/RocketLogo.png'),
-      rating: 3.3,
+     
       followArray: [{word: "Follow"}, {word: "Following"}],
       followIconArray: [{icon: "add"}, {icon: ""}],
       popUpUnfollow: [],
       numberI: 0,
       followers: 0,
       following:0,
-     postCount: 2
+     postCount: 0
       
 
     }

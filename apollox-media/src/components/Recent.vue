@@ -110,7 +110,7 @@ export default {
   },
   data () {
       return {
-        postCount: 2
+        postCount: 0
       }
     },
        
@@ -130,16 +130,19 @@ methods: {
     infiniteHandler($state){
         
         this.$store.dispatch('loadRecentPosts', {index: this.recentPosts.length + 2})
-        if(this.recentPosts.length == this.postCount){
+          
+        if(this.$store.getters.loadedRecentPosts.length == this.postCount){
           setTimeout(() => {
+           
         $state.loaded()
-        this.postCount += 2
-        console.log(this.recentPosts.length + "vs" + this.postCount)
+        
+        console.log(this.$store.getters.loadedRecentPosts.length + "vs" + this.postCount)
       }, 1500);
         }else{
-            console.log(this.recentPosts.length + "vs" + this.postCount)
+            console.log(this.$store.getters.loadedRecentPosts.length + "vs complete" + this.postCount)
           $state.complete()
         }
+        this.postCount = this.$store.getters.loadedRecentPosts.length + 2
     },
 
    
@@ -147,7 +150,7 @@ methods: {
 
 computed: {
     recentPosts(){
-     
+       this.postCount = 2
         return this.$store.getters.loadedRecentPosts;
       
       },

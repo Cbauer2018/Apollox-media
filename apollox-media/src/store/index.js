@@ -75,6 +75,19 @@ export const store = new Vuex.Store({
         firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).once('value').then((data)=>{
           const obj = data.val()
           const post = []
+          var voters = 0
+          var totalRating = 0
+          var rating = 0
+          if(obj.voters != null){
+           
+                for(let i in obj.voters){
+                  voters +=1
+                 
+                }
+                totalRating = obj.totalRating
+                rating = totalRating/voters
+          }
+          console.log("voters",obj.voters)
           post.push({
             newReview: obj.newReview,
                         notIncludedList: obj.notIncludedList,
@@ -89,7 +102,11 @@ export const store = new Vuex.Store({
                         yourReview: obj.yourReview,
                         timeStamp: obj.timeStamp,
                         date: obj.date,
+                        rating:rating,
+                        voters:voters,
+                        voterIds : obj.voters
           })
+
           commit('setLoadedPost', post)
         })
       },
@@ -171,7 +188,9 @@ export const store = new Vuex.Store({
         .once('value').then((data) => {
           var followingCount = 0
           var followerCount = 0
-
+          var totalVotes = 0
+          var totalRatings = 0
+          var profileRating = 0
           const obj = data.val()
          
           if(obj.following != null){
@@ -187,6 +206,20 @@ export const store = new Vuex.Store({
                 followerCount += 1
           }
         }
+
+        for(let keys in obj.Posts){
+          if(obj.Posts[keys].voters != null){
+           
+            for(let i in obj.Posts[keys].voters){
+              totalVotes +=1
+            }
+            totalRatings += obj.Posts[keys].totalRating
+            
+      }
+        }
+
+
+        profileRating = totalRatings/ totalVotes
         
           console.log("data",obj)
           const profile = []
@@ -201,7 +234,10 @@ export const store = new Vuex.Store({
             following: obj.following,
             followingCount: followingCount,
             followerCount: followerCount,
-            followers: obj.followers
+            followers: obj.followers,
+            profileRating: profileRating,
+            totalVotes: totalVotes
+
           })
             
             commit('setLoadedProfile', profile)
@@ -210,18 +246,14 @@ export const store = new Vuex.Store({
 
       loadRecentPosts({commit},payload){
         
-        firebase.database().ref().child("Posts").orderByChild("timestamp").limitToFirst(payload.index).on("value", function (snapshot) {
+        firebase.database().ref().child("Posts").orderByChild("timestamp").limitToFirst(payload.index).once("value", function (snapshot) {
           const Posts = []
           var imageUrl = null
           snapshot.forEach(function(child) {
             
               console.log(child.val()) 
               const obj = child.val()
-              
-              
-             
-              
-            
+
             
           
 
@@ -257,12 +289,22 @@ export const store = new Vuex.Store({
           var imageUrl = null
           snapshot.forEach(function(child) {
             const obj = child.val()
-                    var rateVotes = 0
+                
+                var voters = 0
+                  var totalRating = 0
+                  var rating = 0
+                 if(obj.voters != null){
+             
+                  for(let i in obj.voters){
+                    voters +=1
+                   
+                  }
+                  totalRating = obj.totalRating
+                  rating = totalRating/voters
+            }
 
                     var newReviewSlice = obj.newReview.slice(0,200)
-                      if(obj.rateVotes != null){
-                              rateVotes = obj.rateVotes
-                      }
+                    
                     Posts.push({
                       key: child.key,
                       notIncludedList: obj.notIncludedList,
@@ -280,8 +322,9 @@ export const store = new Vuex.Store({
                       timeStamp: obj.timeStamp,
                       date: obj.date,
                       comments: obj.comments,
-                      rateVotes : rateVotes,
-
+                      rating:rating,
+                        voters:voters,
+                        voterIds : obj.voters
                     })
                     
                   })
@@ -672,9 +715,28 @@ export const store = new Vuex.Store({
             firebase.database().ref('Posts').child(payload.postKey).child('comments').push(comment)
 
         })
-        
-        
-      }
+        },
+
+        ratePost({commit}, payload){
+          firebase.database().ref('Users').child(payload.postUid).child('Posts').child(payload.postKey).child('totalRating').once('value').then((data)=>{
+            var totalRating = data.val()
+
+            if(totalRating == null){
+              firebase.database().ref('Users').child(payload.postUid).child('Posts').child(payload.postKey).child('totalRating').set(payload.rating)
+              firebase.database().ref('Users').child(payload.postUid).child('Posts').child(payload.postKey).child('voters').push(payload.uid)
+              firebase.database().ref('Posts').child(payload.postKey).child('voters').push(payload.uid)
+              firebase.database().ref('Posts').child(payload.postKey).child('totalRating').set(payload.rating)
+
+            }else{
+              var newRating =totalRating + payload.rating
+              firebase.database().ref('Users').child(payload.postUid).child('Posts').child(payload.postKey).child('totalRating').set(newRating)
+              firebase.database().ref('Users').child(payload.postUid).child('Posts').child(payload.postKey).child('voters').push(payload.uid)
+              firebase.database().ref('Posts').child(payload.postKey).child('voters').push(payload.uid)
+              firebase.database().ref('Posts').child(payload.postKey).child('totalRating').set(newRating)
+            }
+          })
+          
+        }
       
     },
     getters: {

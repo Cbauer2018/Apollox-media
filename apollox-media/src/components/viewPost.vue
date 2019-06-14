@@ -98,22 +98,24 @@
                               <v-flex sm10 md6 my-3>
                                     <v-layout>
                                         <v-rating
-                                            v-on:click="ratePost"
+                                        v-show="canUserVote && canVote "
+                                            @input="ratePost"
                                             v-model="rating"
                                             hover
                                             color = "cyan lighten-1"
                                             background-color="cyan lighten-1"
                                             half-increments></v-rating>
                                         <v-rating 
-                                            v-on:click="ratePost"
-                                            v-model="rating"
+                                         v-show="!canUserVote"
+                                          
+                                            :value="post.rating"
                                             hover
                                             readonly
                                             color = "cyan lighten-1"
                                             background-color="cyan lighten-1"
                                             half-increments></v-rating>
-                                        <v-flex my-3 ml-1>
-                                            12
+                                        <v-flex my-3 ml-1  >
+                                            {{post.voters}}
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
@@ -155,7 +157,7 @@
             v-for="text in post.comments"
               :key="text.text">
               <v-list-tile-content >
-                <v-list-tile-title>{{text.comment}}</v-list-tile-title>
+                <span>{{text.comment}}</span>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -177,7 +179,8 @@
 export default{
     data () {
       return {
-        
+        rating: 0,
+        canUserVote : true
 
       }
     },
@@ -195,6 +198,22 @@ export default{
         post(){
             return this.$store.getters.loadedPost;
         },
+        canVote(){
+          var canVote = true
+          if(this.$store.getters.userId !== this.$route.params.uid){
+            for(let i in this.post[0].voterIds){
+              
+              if(this.post[0].voterIds[i] == this.$store.getters.userId){
+                canVote = false
+              }
+            }
+          }else{
+            canVote = false
+          }
+          console.log("can Vote", canVote)
+         this.canUserVote =  canVote
+         return canVote
+        }
          
 
       
@@ -209,11 +228,18 @@ export default{
     
       this.$store.dispatch('postComment', {uid: profileUid, postKey: this.$route.params.post, comment: this.comment})
         this.comment = ''
+        this.$store.dispatch('loadPost', {postKey: this.$route.params.post, uid: this.$route.params.uid})
       }
       
     },
         ratePost(){
-
+          console.log(this.rating)
+         var uid = this.$store.getters.userId
+            var profileUid = this.$route.params.uid
+             
+             this.$store.dispatch('ratePost', {uid: uid, postUid: profileUid, postKey: this.$route.params.post, rating: this.rating} )
+              this.$store.dispatch('loadPost', {postKey: this.$route.params.post, uid: this.$route.params.uid})
+              this.canUserVote = false
         },
 
            hasProfilePic(){
