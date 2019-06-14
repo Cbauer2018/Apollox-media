@@ -198,7 +198,7 @@
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                            <span v-show="post.newReviewSlice == 'null'" class="indent">{{post.yourReview}}</span>                            
+                            <span v-show="post.newReviewSlice == 'null'">{{post.yourReview}}</span>                            
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
@@ -427,7 +427,7 @@ beforeCreate() {
 
     methods:{
     
-       infiniteHandler($state){
+      infiniteHandler($state){
         var profileUid = this.$route.params.uid
         console.log(this.loadProfilePosts.length + "vs" + this.postCount)
         this.$store.dispatch('loadProfilePosts', {uid: profileUid ,index: this.loadProfilePosts.length + 2})
@@ -497,8 +497,3 @@ beforeCreate() {
 }
 </script>
 
-<style type="text/css">
-  .indent {
-    margin-left: 30px;
-  }
-</style>
