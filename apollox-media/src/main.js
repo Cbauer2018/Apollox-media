@@ -33,7 +33,7 @@ new Vue({
         this.$store.dispatch('loadFollowingPosts') 
       }
     })
-    this.$store.dispatch('loadRecentPosts',{index:2})
+    
     this.$store.dispatch('loadPromotedPosts')
   },
 }).$mount('#app')

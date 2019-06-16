@@ -254,7 +254,18 @@ export const store = new Vuex.Store({
             
               console.log(child.val()) 
               const obj = child.val()
-
+              var voters = 0
+                  var totalRating = 0
+                  var rating = 0
+                 if(obj.voters != null){
+             
+                  for(let i in obj.voters){
+                    voters +=1
+                   
+                  }
+                  totalRating = obj.totalRating
+                  rating = totalRating/voters
+            }
             
           
 
@@ -273,7 +284,10 @@ export const store = new Vuex.Store({
                yourReview: obj.yourReview,
                timestamp: obj.timestamp,
                date: obj.date,
-               imageUrl: imageUrl
+               imageUrl: imageUrl,
+               rating:rating,
+                 voters:voters,
+                        voterIds : obj.voters
                          })
              
 

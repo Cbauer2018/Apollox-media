@@ -356,7 +356,7 @@ export default{
       numberI: 0,
       followers: 0,
       following:0,
-     postCount: 0
+     postCount: 1
       
 
     }
@@ -429,18 +429,19 @@ beforeCreate() {
     
       infiniteHandler($state){
         var profileUid = this.$route.params.uid
-        console.log(this.loadProfilePosts.length + "vs" + this.postCount)
+       
         this.$store.dispatch('loadProfilePosts', {uid: profileUid ,index: this.loadProfilePosts.length + 2})
-        if(this.loadProfilePosts.length == this.postCount){
+        if(this.loadProfilePosts.length != this.postCount){
           setTimeout(() => {
         $state.loaded()
-        this.postCount += 2
+       
         console.log(this.loadProfilePosts.length + "vs" + this.postCount)
-      }, 1500);
+      }, 1000);
         }else{
             console.log(this.loadProfilePosts.length + "vs" + this.postCount)
           $state.complete()
         }
+        this.postCount = this.loadProfilePosts.length
     },
      
       followProfile(){
