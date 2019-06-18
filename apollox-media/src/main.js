@@ -30,10 +30,10 @@ new Vue({
     firebase.auth().onAuthStateChanged((user) =>{
       if(user){
         this.$store.dispatch('autoSignIn', user)  
-        this.$store.dispatch('loadFollowingPosts') 
+        this.$store.dispatch('loadFollowingPosts', {index:2}) 
       }
     })
     
-    this.$store.dispatch('loadPromotedPosts')
+    this.$store.dispatch('loadPromotedPosts', {index:2})
   },
 }).$mount('#app')
