@@ -286,7 +286,7 @@ export const store = new Vuex.Store({
                date: obj.date,
                imageUrl: imageUrl,
                rating:rating,
-                 voters:voters,
+                        voters:voters,
                         voterIds : obj.voters
                          })
              
@@ -352,106 +352,148 @@ export const store = new Vuex.Store({
     },
 
       
-      loadPromotedPosts({commit}){
-        firebase.database().ref('Users').once('value').then((data)=>{
-            const Posts = []
-            const obj = data.val()
-            for(let key in obj){
-              var imageUrl= null
-              var uid = obj[key].id
-                if(obj[key].imageUrl != null){
-                  imageUrl = obj[key].imageUrl
-                }
-              if(obj[key].Posts != null){
-                firebase.database().ref('Users').child(uid).child('Posts').once('value').then((data)=> {
-                  const obj = data.val()
-                  for (let key in obj){
-                    if(obj[key].promoted == true){
-                    Posts.push({
-                      key: key,
-                      newReview: obj[key].newReview,
-                      notIncludedList: obj[key].notIncludedList,
-                      personName: obj[key].personName,
-                      promoted: obj[key].promoted,
-                      reviewLink: obj[key].reviewLink,
-                      rightList: obj[key].rightList,
-                      title: obj[key].title,
-                      uid: obj[key].uid,
-                      username: obj[key].username,
-                      wrongList: obj[key].wrongList,
-                      yourReview: obj[key].yourReview,
-                      timeStamp: obj[key].timeStamp,
-                      imageUrl: imageUrl,
-                      date: obj[key].date
-                    })
+      loadPromotedPosts({commit}, payload){
+        firebase.database().ref().child("Posts").orderByChild("promoted").equalTo(true).limitToLast(payload.index).once("value", function (snapshot) {
+          var Posts = []
+          var imageUrl = null
+          
+          snapshot.forEach(function(child) {
+            
+              console.log("Pormtoed",child.val()) 
+              const obj = child.val()
+              var voters = 0
+                  var totalRating = 0
+                  var rating = 0
+                 if(obj.voters != null){
+             
+                  for(let i in obj.voters){
+                    voters +=1
+                   
                   }
-                  }
-                  Posts.sort(function(a,b){
-                    return a.timeStamp - b. timeStamp;
-                  });
-      
-                })
-              }
+                  totalRating = obj.totalRating
+                  rating = totalRating/voters
             }
             
-            
-              commit('setLoadedPromotedPosts', Posts)
+          
+
+              Posts.push({
+                key: child.key,
+                newReview: obj.newReview,
+               notIncludedList: obj.notIncludedList,
+               personName: obj.personName,
+                promoted: obj.promoted,
+                reviewLink: obj.reviewLink,
+               rightList: obj.rightList,
+               title: obj.title,
+               uid: obj.uid,
+               username: obj.username,
+                wrongList: obj.wrongList,
+               yourReview: obj.yourReview,
+               timestamp: obj.timestamp,
+               date: obj.date,
+               imageUrl: imageUrl,
+               rating:rating,
+                 voters:voters,
+                        voterIds : obj.voters
+                         })
+             
+
+          });
+
+          Posts.sort(function(a,b){
+            return a.timestamp - b.timestamp;
+          });
+          
+          commit('setLoadedPromotedPosts', Posts)
         })
 
     },
 
-        loadFollowingPosts({commit}){
+        loadFollowingPosts({commit}, payload){
 
-          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
+          firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('following')
           .once('value').then((data) => {
-            const Posts = []
+            var Posts = []
             const obj = data.val()
-            
-            if(obj.following != null){
+          
+           for(let key in obj){
+            firebase.database().ref().child("Posts").orderByChild('uid').equalTo(key).once("value", function (snapshot) {
               
-              for(let key in obj.following){
-                firebase.database().ref('Users').child(key)
-                .once('value').then((data) => {
-                  const obj = data.val()
-                  var imageUrl = null
-                  if(obj.imageUrl != null){
-                        imageUrl = obj.imageUrl
-                  }
-                  if(obj.Posts != null){
-                    const profilePosts = obj.Posts
-                    for (let key in profilePosts){
-                      
-                      Posts.push({
-                        key: key,
-                        notIncludedList: profilePosts[key].notIncludedList,
-                        newReview:  profilePosts[key].newReview,
-                        personName: profilePosts[key].personName,
-                        promoted: profilePosts[key].promoted,
-                        reviewLink: profilePosts[key].reviewLink,
-                        rightList: profilePosts[key].rightList,
-                        title: profilePosts[key].title,
-                        uid: profilePosts[key].uid,
-                        username:profilePosts[key].username,
-                        wrongList: profilePosts[key].wrongList,
-                        yourReview: profilePosts[key].yourReview,
-                        timeStamp: profilePosts[key].timeStamp,
-                        imageUrl : imageUrl,
-                        date: profilePosts[key].date
-                      })
-                      
-                    }
-                    Posts.sort(function(a,b){
-                      return a.timeStamp - b. timeStamp;
-                    });
-        
+              var imageUrl = null
+              
+              snapshot.forEach(function(child) {
+                
+                  const timestamp = child.child('timestamp').val()
                  
+                  if(Posts.length  <= payload.index -1 || timestamp < Posts[payload.index -1].timestamp){
+                   
+                    
+                   
+                    const obj = child.val()
+                    
+                  var voters = 0
+                      var totalRating = 0
+                      var rating = 0
+                     if(obj.voters != null){
+                 
+                      for(let i in obj.voters){
+                        voters +=1
+                       
+                      }
+                      totalRating = obj.totalRating
+                      rating = totalRating/voters
                 }
+                
+              
+                
+                  Posts.push({
+                    key: child.key,
+                    newReview: obj.newReview,
+                   notIncludedList: obj.notIncludedList,
+                   personName: obj.personName,
+                    promoted: obj.promoted,
+                    reviewLink: obj.reviewLink,
+                   rightList: obj.rightList,
+                   title: obj.title,
+                   uid: obj.uid,
+                   username: obj.username,
+                    wrongList: obj.wrongList,
+                   yourReview: obj.yourReview,
+                   timestamp: obj.timestamp,
+                   date: obj.date,
+                   imageUrl: imageUrl,
+                   rating:rating,
+                     voters:voters,
+                            voterIds : obj.voters
+                             })
+                 
+                             
+                        Posts.sort(function(a,b){
 
-                })
-              }
-            }
+                              return a.timestamp - b.timestamp;
+                            });
+                            
+                        
+                           
+                          }
+                       
+                          
+              });
+              console.log(Posts.slice(0, payload.index))
+              commit('setLoadedFollowingPosts', Posts.slice(0, payload.index))
+    
+              
+            })
+            
+            
+           }
            
-                commit('setLoadedFollowingPosts', Posts)
+           
+         
+            
+          
+          
+          
           })
         },
 
