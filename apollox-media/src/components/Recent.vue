@@ -1,14 +1,11 @@
 <template>
     <v-container>
-   
-
-
-   
+  
         <v-layout row wrap>
-              <v-flex xs2>
+              <v-flex>
                 <v-card></v-card>
               </v-flex>
-                    <v-flex xs8>
+                    <v-flex xs10 sm12>
                       <v-card
                           v-for="post in recentPosts" 
                           :key="post">
@@ -25,7 +22,7 @@
                             <img v-else :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
-                        <h4 class = "font-weight-thin" @click="goToProfile(post.uid)">
+                        <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
                           {{post.username}}
                            </h4>
                           </v-flex>
@@ -33,7 +30,7 @@
                         </v-flex>
                         <v-layout column>
                           <v-flex my-2 ml-5>
-                          <h1 @click="viewPost(post)" class = "font-weight-thin">{{post.title}}</h1>
+                          <h1 @click="viewPost(post)" class = "font-weight-thin myClickableThingy">{{post.title}}</h1>
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
@@ -55,7 +52,7 @@
             v-for="text in post.rightList"
               :key="text.text">
               <v-list-tile-content >
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -78,13 +75,13 @@
               <v-list-tile-content
               
                   >
-                <v-list-tile-title>{{text.text}} </v-list-tile-title>
+                <v-list-tile-title>* {{text.text}} </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
 
   <v-list-group
-           
+           no-action
           >
             <template active v-slot:activator>
               <v-list-tile color="yellow darken-3">
@@ -98,47 +95,31 @@
             v-for="text in post.notIncludedList"
               :key="text.text">
               <v-list-tile-content>
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
           
-        </v-list>
+              </v-list>
                       </v-flex>
 
                             <v-layout row wrap>
-                              <v-flex sm10 md4 my-3>
-                                <v-rating
-                                
-                                hover
-                                :value="post.rating"
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                readonly
-                                half-increments></v-rating>
-                              </v-flex>
-                              <v-flex md2 my-4>
+                              <v-flex sm10 md6 my-3>
+                                <v-layout row>
+                                <v-rating 
+                                  hover
+                                  :value="post.rating"
+                                  color = "cyan lighten-1"
+                                  background-color="cyan lighten-1"
+                                  readonly
+                                  half-increments></v-rating>
+                              
+                              <v-flex my-3 ml-2>
                                   {{post.voters}}
                               </v-flex>
-                              <v-flex xs8 md4>
-                                <V-text-field
-                                maxlength = "300"
-                                v-model="comment"
-                               
-                                placeholder="Comment..."></V-text-field>
-                                </v-flex>
-                                <v-flex xs2>
-                                  <v-btn
-                                  flat
-                                  fab
-                                  color="cyan lighten-1"
-                                  @click="postComment(post)">
-                                    <v-icon>forward</v-icon>
-                                  </v-btn>
-                                </v-flex>
-
-
-                               
+                              </v-layout>
+                              </v-flex>
+                 
                             </v-layout>
                             </v-flex>
                             </v-flex>
@@ -181,6 +162,13 @@ export default {
       this.$store.dispatch('loadRecentPosts',{index:2})
     },
 methods: {
+
+  viewPost(post) {
+        var profileUid = post.uid
+        this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
+        this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
+    },
+
   testingRecents(){
     console.log(this.$store.getters.loadedRecentPosts)
   },

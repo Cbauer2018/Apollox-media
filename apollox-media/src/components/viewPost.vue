@@ -10,8 +10,8 @@
                                 color="grey lighten-4">
                               <img 
                                     v-if="hasProfilePic" 
-                                    :src="profile.imageUrl" alt="avatar">
-                                    <img v-else src="@/assets/RocketLogo.png">
+                                    :src="imageUrl" alt="avatar">
+                                    <img v-else :src="imageUrl">
                             </v-avatar>
                             <v-flex my-2>
                                 <span>{{profile.username}}</span>
@@ -142,43 +142,55 @@
                             <v-flex xs2>
                                 
                             </v-flex>
-                            <v-flex xs8>
-                                
-                                <v-list>
-          <v-list-group
-            
-          >
-            <template v-slot:activator>
-              <v-list-tile>
-                <v-list-tile-content>
-                  <v-list-tile-title >Comments</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </template>
-
-            <v-flex>
-            <v-list-tile
-            v-for="text in post.comments"
-              :key="text.text">
-              <v-list-tile-content >
-                  <v-layout row>
-                      
-                      <v-flex my-4 ml-2
-                       >
-                        <span>{{text.username}}</span>
-                        </v-flex>
-                    <v-flex my-4 ml-3>
-                        <span>{{text.comment}}</span>
-                    </v-flex>
-                </v-layout>
-              </v-list-tile-content>
-            </v-list-tile>
-            </v-flex>
-          </v-list-group>
-          </v-list>
-                            </v-flex>
+                          
                             
                             </v-layout>
+
+                          <v-flex>
+                            <v-card flat>
+                              <v-layout row>
+                                  <h3 class="display-1 font-weight-thin">Comments</h3>
+                                  <v-flex xs8>
+                                    <v-card></v-card>
+                                  </v-flex>
+                                <v-flex my-1>
+                                  <v-btn
+                                  flat
+                                  color="cyan lighten-2" class="font-weight-thin">
+                                  Hide Comments
+                                  </v-btn>
+                                </v-flex>
+                              </v-layout>
+                              <v-layout column>
+                              <v-flex
+                                      v-for="text in post.comments"
+                                      :key="text.text">
+                                      
+                                      <v-flex mt-3>
+                                        <v-layout row>
+                                          <v-avatar
+                                              :size="50"
+                                              color="grey lighten-4">
+                                            <img 
+                                              v-if="hasProfilePic" 
+                                              :src="imageUrl" alt="avatar">
+                                            <img v-else :src="imageUrl">
+                                          </v-avatar>
+                                      
+                                      <v-flex ml-5 mt-3>
+                                        <span>{{text.comment}}</span>
+                                    
+                                    </v-flex>
+                                    </v-layout>
+                                    </v-flex>
+                                    <v-flex mt-1>
+                                    <span>{{text.username}}</span>
+                              </v-flex>
+                              </v-flex>
+                              </v-layout>
+                            </v-card>
+                            </v-flex>
+
                         </v-layout>
                     </v-card>
                 </v-flex>
@@ -194,7 +206,8 @@ export default{
     data () {
       return {
         rating: 0,
-        canUserVote : true
+        canUserVote : true,
+        imageUrl: require('@/assets/RocketLogo.png')
 
       }
     },
@@ -260,7 +273,7 @@ export default{
              let profile = this.profile
              
             if(this.profile[0].imageUrl != null){
-        
+              this.imageUrl = this.profile[0].imageUrl
            return true
          }else{
             
