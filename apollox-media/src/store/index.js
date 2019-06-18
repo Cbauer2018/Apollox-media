@@ -268,7 +268,7 @@ export const store = new Vuex.Store({
             }
             
           
-
+            var newReviewSlice = obj.newReview.slice(0,200)
               Posts.push({
                 key: child.key,
                 newReview: obj.newReview,
@@ -287,7 +287,8 @@ export const store = new Vuex.Store({
                imageUrl: imageUrl,
                rating:rating,
                         voters:voters,
-                        voterIds : obj.voters
+                        voterIds : obj.voters,
+                        newReviewSlice: newReviewSlice
                          })
              
 
@@ -375,7 +376,7 @@ export const store = new Vuex.Store({
             }
             
           
-
+            var newReviewSlice = obj.newReview.slice(0,200)
               Posts.push({
                 key: child.key,
                 newReview: obj.newReview,
@@ -394,7 +395,8 @@ export const store = new Vuex.Store({
                imageUrl: imageUrl,
                rating:rating,
                  voters:voters,
-                        voterIds : obj.voters
+                        voterIds : obj.voters,
+                        newReviewSlice :newReviewSlice
                          })
              
 
@@ -445,7 +447,7 @@ export const store = new Vuex.Store({
                 }
                 
               
-                
+                var newReviewSlice = obj.newReview.slice(0,200)
                   Posts.push({
                     key: child.key,
                     newReview: obj.newReview,
@@ -464,7 +466,8 @@ export const store = new Vuex.Store({
                    imageUrl: imageUrl,
                    rating:rating,
                      voters:voters,
-                            voterIds : obj.voters
+                            voterIds : obj.voters,
+                            newReviewSlice: newReviewSlice
                              })
                  
                              

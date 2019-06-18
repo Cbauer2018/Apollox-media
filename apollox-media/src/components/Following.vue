@@ -199,7 +199,7 @@ methods: {
         console.log('length',this.$store.getters.loadedFollowingPosts.length )
         console.log('post Count length', this.postCount)
       
-        if(this.$store.getters.loadedFollowingPosts.length != this.postCount){
+        if(this.$store.getters.loadedFollowingPosts.length != this.postCount ){
           setTimeout(() => {
            
         $state.loaded()
