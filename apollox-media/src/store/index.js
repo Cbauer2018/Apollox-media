@@ -72,7 +72,7 @@ export const store = new Vuex.Store({
     actions: {
         
       loadPost({commit}, payload){
-        firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).once('value').then((data)=>{
+        firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).on('value', function(data){
           const obj = data.val()
           const post = []
           var voters = 0
@@ -88,6 +88,12 @@ export const store = new Vuex.Store({
                 rating = totalRating/voters
           }
           console.log("voters",obj.voters)
+          var comments = []
+         for(let key in obj.comments)
+          {
+           comments.push(obj.comments[key]) 
+          }
+          comments.reverse()
           post.push({
             newReview: obj.newReview,
                         notIncludedList: obj.notIncludedList,
@@ -105,7 +111,7 @@ export const store = new Vuex.Store({
                         rating:rating,
                         voters:voters,
                         voterIds : obj.voters,
-                        comments: obj.comments,
+                        comments: comments,
           })
 
           commit('setLoadedPost', post)
@@ -249,12 +255,25 @@ export const store = new Vuex.Store({
         
         firebase.database().ref().child("Posts").orderByChild("timestamp").limitToFirst(payload.index).once("value", function (snapshot) {
           const Posts = []
-          var imageUrl = null
+          
           snapshot.forEach(function(child) {
-            
+           var imageUrl =[]
               console.log(child.val()) 
               const obj = child.val()
+              function getImage(){
+                return firebase.database().ref('Users').child(obj.uid).child('imageUrl').once('value')
+              }
+              if(firebase.database().ref('Users').child(obj.uid).child('imageUrl') != null){
+             getImage().then(function (snapshot) 
+            { imageUrl.push( snapshot.val()) })
+          
+                    
+                 
+             
+              }
+            
               var voters = 0
+            
                   var totalRating = 0
                   var rating = 0
                  if(obj.voters != null){
@@ -284,7 +303,7 @@ export const store = new Vuex.Store({
                yourReview: obj.yourReview,
                timestamp: obj.timestamp,
                date: obj.date,
-               imageUrl: imageUrl,
+               imageUrl: imageUrl[0],
                rating:rating,
                         voters:voters,
                         voterIds : obj.voters,
@@ -682,7 +701,7 @@ export const store = new Vuex.Store({
         var keyword = payload.keyword
         var Usernames = []
         var Posts = []
-        firebase.database().ref('Users').once('value').then((data)=>{
+        firebase.database().ref('Users').orderByChild('username').equalTo(payload.keyword).once('value').then((data)=>{
           const obj = data.val()
           for(let key in obj){
             var imageUrl = null
@@ -701,45 +720,48 @@ export const store = new Vuex.Store({
                   })
             }
 
-            const profilePosts = obj[key].Posts
-            if(obj[key].Posts != null){
-                  for(let key in profilePosts){
-                    var title = profilePosts[key].title.toLowerCase()
-                   
-                    if(title.includes(keyword.toLowerCase())){
-                      var newReviewSlice = profilePosts[key].newReview.slice(0,200)
-                        Posts.push({
-                          key: key,
-                          newReview: profilePosts[key].newReview,
-                          notIncludedList: profilePosts[key].notIncludedList,
-                          personName:profilePosts[key].personName,
-                          newReviewSlice:newReviewSlice,
-                          promoted: profilePosts[key].promoted,
-                          reviewLink: profilePosts[key].reviewLink,
-                          rightList: profilePosts[key].rightList,
-                          title: profilePosts[key].title,
-                          uid: profilePosts[key].uid,
-                          username: profilePosts[key].username,
-                          wrongList:profilePosts[key].wrongList,
-                          yourReview: profilePosts[key].yourReview,
-                          timeStamp: profilePosts[key].timeStamp,
-                          imageUrl: imageUrl,
-                          date: profilePosts[key].date
-                        })
-                    }
-                  }
-            }
-
+            
 
           }
-          Posts.sort()
-          Posts.reverse()
+        
           Usernames.sort()
           Usernames.reverse()
-          commit('setSearchedPosts', Posts)
+          
           commit('setSearchedUsernames', Usernames)
         })
 
+        firebase.database().ref('Posts').orderByChild('timestamp').once('value').then((data)=>{
+          const profilePosts = data.val()
+          for(let key in profilePosts){
+            var title = profilePosts[key].title.toLowerCase()
+                   var imageUrl = null
+                        if(title.includes(keyword.toLowerCase())){
+                          var newReviewSlice = profilePosts[key].newReview.slice(0,200)
+                            Posts.push({
+                              key: key,
+                              newReview: profilePosts[key].newReview,
+                              notIncludedList: profilePosts[key].notIncludedList,
+                              personName:profilePosts[key].personName,
+                              newReviewSlice:newReviewSlice,
+                              promoted: profilePosts[key].promoted,
+                              reviewLink: profilePosts[key].reviewLink,
+                              rightList: profilePosts[key].rightList,
+                              title: profilePosts[key].title,
+                              uid: profilePosts[key].uid,
+                              username: profilePosts[key].username,
+                              wrongList:profilePosts[key].wrongList,
+                              yourReview: profilePosts[key].yourReview,
+                              timeStamp: profilePosts[key].timeStamp,
+                              imageUrl: imageUrl,
+                              date: profilePosts[key].date
+                            })
+                        }
+          }
+          Posts.sort()
+          Posts.reverse()
+          commit('setSearchedPosts', Posts.splice(0, 5))
+        })
+        
       },
 
 

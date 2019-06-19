@@ -125,7 +125,7 @@
                                 <V-text-field
                                 maxlength = "300"
                                 v-model="comment"
-                               
+                               v-on:keyup.enter="postComment(post)"
                                 placeholder="Comment..."></V-text-field>
                                 </v-flex>
                                 <v-flex xs2>
