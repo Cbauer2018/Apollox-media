@@ -16,8 +16,8 @@ var infiniteloading =  require('vue-infinite-loading');
 var infiniteScroll = require('vue-infinite-scroll')
 Vue.use(infiniteloading)
 Vue.use(infiniteScroll)
-
-
+var Prevue = require('link-prevue')
+Vue.use(Prevue)
 
 new Vue({
   router,
