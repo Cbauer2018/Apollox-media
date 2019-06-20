@@ -14,7 +14,7 @@
                                     <img v-else :src="imageUrl">
                             </v-avatar>
                             <v-flex my-2>
-                                <span>{{profile.username}}</span>
+                                <span  @click="goToProfile(profile.id)" class="myClickableThingy">{{profile.username}}</span>
                             </v-flex>
                             <v-flex my-3 v-for="post in post" :key="post">
                               <h2 class="font-weight-thin">{{post.date}}</h2>
@@ -143,14 +143,14 @@
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
-                              <v-flex xs8 md4>
+                              <v-flex v-show="userIsAuthenticated" xs8 md4>
                                 <V-text-field
                                 maxlength = "300"
                                 v-model="comment"
                                v-on:keyup.enter="postComment(post)"
                                 placeholder="Comment..."></V-text-field>
                                 </v-flex>
-                                <v-flex xs2>
+                                <v-flex v-show="userIsAuthenticated" xs2>
                                   <v-btn
                                   flat
                                   fab
@@ -196,7 +196,7 @@
                                             <img 
                                               v-if="commentHasProfilePic(text)" 
                                               :src="text.imageUrl" alt="avatar">
-                                            <img v-else :src="imageUrl">
+                                            <img v-else :src="require('@/assets/RocketLogo.png')">
                                           </v-avatar>
                                       
                                       <v-flex ml-5 mt-3>
@@ -251,12 +251,16 @@ components:{
         profile(){
             return this.$store.getters.loadedProfile;
       },
+       userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
 
         post(){
             return this.$store.getters.loadedPost;
         },
         canVote(){
           var canVote = true
+          if(this.$store.getters.user !== null && this.$store.getters.user !== undefined){
           if(this.$store.getters.userId !== this.$route.params.uid){
             for(let i in this.post[0].voterIds){
               
@@ -266,6 +270,9 @@ components:{
             }
           }else{
             canVote = false
+          }
+          }else{
+            canVote =false
           }
           console.log("can Vote", canVote)
          this.canUserVote =  canVote
@@ -319,7 +326,7 @@ components:{
              
            return true
          }else{
-            
+           
            return false
          }
        },
@@ -332,7 +339,14 @@ components:{
          }
 
        },
-      
+      goToProfile(profileUid){
+      console.log(profileUid)
+          this.$store.dispatch('loadProfile', {uid: profileUid})
+          this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
+          this.$router.push('/Profile/'+ profileUid)
+          console.log("Router", this.$route.params.uid)
+
+    },
        
 
            
