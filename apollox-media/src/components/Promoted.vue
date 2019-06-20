@@ -25,7 +25,7 @@
                             <img v-else :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
-                        <h4 class = "font-weight-thin" @click="goToProfile(post.uid)">
+                        <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
                           {{post.username}}
                            </h4>
                           </v-flex>
@@ -33,7 +33,7 @@
                         </v-flex>
                         <v-layout column>
                           <v-flex my-2 ml-5>
-                          <h1 @click="viewPost(post)" class = "font-weight-thin">{{post.title}}</h1>
+                          <h1 @click="viewPost(post)" class = "font-weight-thin myClickableThingy">{{post.title}}</h1>
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
@@ -107,7 +107,8 @@
                       </v-flex>
 
                             <v-layout row wrap>
-                              <v-flex sm10 md4 my-3>
+                              <v-flex sm10 my-3>
+                                <v-layout row>
                                 <v-rating
                                 
                                 hover
@@ -116,28 +117,11 @@
                                 background-color="cyan lighten-1"
                                 readonly
                                 half-increments></v-rating>
-                              </v-flex>
-                              <v-flex md2 my-4>
+                                <v-flex ml-2 my-3>
                                   {{post.voters}}
                               </v-flex>
-                              <v-flex xs8 md4>
-                                <V-text-field
-                                maxlength = "300"
-                                v-model="comment"
-                               
-                                placeholder="Comment..."></V-text-field>
-                                </v-flex>
-                                <v-flex xs2>
-                                  <v-btn
-                                  flat
-                                  fab
-                                  color="cyan lighten-1"
-                                  @click="postComment(post)">
-                                    <v-icon>forward</v-icon>
-                                  </v-btn>
-                                </v-flex>
-
-
+                              </v-layout>
+                              </v-flex>
                                
                             </v-layout>
                             </v-flex>

@@ -14,7 +14,7 @@
                                     <img v-else :src="imageUrl">
                             </v-avatar>
                             <v-flex my-2>
-                                <span>{{profile.username}}</span>
+                                <span class="myClickableThingy">{{profile.username}}</span>
                             </v-flex>
                             <v-flex my-3 v-for="post in post" :key="post">
                               <h2 class="font-weight-thin">{{post.date}}</h2>
