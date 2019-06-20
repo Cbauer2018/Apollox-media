@@ -5,7 +5,7 @@
               <v-flex>
                 <v-card></v-card>
               </v-flex>
-                    <v-flex xs10 sm12>
+                    <v-flex xs12>
                       <v-card
                           v-for="post in recentPosts" 
                           :key="post">
