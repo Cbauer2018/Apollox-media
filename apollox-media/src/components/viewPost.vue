@@ -29,7 +29,29 @@
                     <v-card v-for="post in post" :key="post" flat>
                         <h3 class="display-2 font-weight-thin">{{post.title}}</h3>
                         <v-flex my-4>
-                        <h2 class="font-weight-thin"><p class = "tab">{{post.newReview}}</p></h2>
+                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" >{{post.newReview}}</p></h2>
+
+                        <v-card  v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
+                          <v-layout row wrap >
+                             <link-prevue :url="post.yourReview" >
+                            <template slot-scope="props">
+                            <div class="card" style="width: 20rem;">
+                            <img class="card-img-top" style="width: 15rem; height: 15rem;" :src="props.img" :alt="props.title">
+                            <div class="card-block" >
+                          <h4 class="card-title" >{{props.title}}</h4>
+                            
+                                 </div>
+                              </div>
+                              </template>
+                             </link-prevue>
+
+                             <v-card-actions class="justify-center">
+                         <h1 class="font-weight-thin" ><a href="" @click="goToReview(post.yourReview)" >{{post.yourReview}}</a></h1>
+                             </v-card-actions>
+                          
+                            </v-layout>
+                           </v-card>
+                       
                         </v-flex>
                         <v-list>
           <v-list-group
@@ -125,7 +147,7 @@
                                 <V-text-field
                                 maxlength = "300"
                                 v-model="comment"
-                               
+                               v-on:keyup.enter="postComment(post)"
                                 placeholder="Comment..."></V-text-field>
                                 </v-flex>
                                 <v-flex xs2>
@@ -172,8 +194,8 @@
                                               :size="50"
                                               color="grey lighten-4">
                                             <img 
-                                              v-if="hasProfilePic" 
-                                              :src="imageUrl" alt="avatar">
+                                              v-if="commentHasProfilePic(text)" 
+                                              :src="text.imageUrl" alt="avatar">
                                             <img v-else :src="imageUrl">
                                           </v-avatar>
                                       
@@ -202,15 +224,23 @@
 
 
 <script>
+import LinkPrevue from 'link-prevue'
 export default{
+components:{
+    LinkPrevue
+  },
+ 
     data () {
       return {
         rating: 0,
         canUserVote : true,
-        imageUrl: require('@/assets/RocketLogo.png')
+        imageUrl: require('@/assets/RocketLogo.png'),
+        commentImage:require('@/assets/RocketLogo.png'),
+    
 
       }
     },
+    
 
     beforeCreate() {
         this.$store.dispatch('loadProfile', {uid: this.$route.params.uid})
@@ -240,7 +270,21 @@ export default{
           console.log("can Vote", canVote)
          this.canUserVote =  canVote
          return canVote
-        }
+        },
+        hasProfilePic(){
+             let profile = this.profile
+             
+            if(this.profile[0].imageUrl != null){
+              this.imageUrl = this.profile[0].imageUrl
+           return true
+         }else{
+            this.imageUrl = require('@/assets/RocketLogo.png')
+           return false
+         }
+       },
+        
+
+       
          
 
       
@@ -255,7 +299,7 @@ export default{
     
       this.$store.dispatch('postComment', {uid: profileUid, postKey: this.$route.params.post, comment: this.comment})
         this.comment = ''
-        this.$store.dispatch('loadPost', {postKey: this.$route.params.post, uid: this.$route.params.uid})
+      
       }
       
     },
@@ -268,18 +312,30 @@ export default{
               this.$store.dispatch('loadPost', {postKey: this.$route.params.post, uid: this.$route.params.uid})
               this.canUserVote = false
         },
-
-           hasProfilePic(){
-             let profile = this.profile
+         commentHasProfilePic(comment){
              
-            if(this.profile[0].imageUrl != null){
-              this.imageUrl = this.profile[0].imageUrl
+             
+            if(comment.imageUrl != null){
+             
            return true
          }else{
             
            return false
          }
        },
+       goToReview(link){
+
+         if(link.includes('https://')){
+          window.open(link)
+         }else{
+            window.open('https://'+link)
+         }
+
+       },
+      
+       
+
+           
        }
 }
 </script>

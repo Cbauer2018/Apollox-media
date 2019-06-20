@@ -34,7 +34,13 @@
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                            <span v-show="post.newReviewSlice == 'null'">{{post.yourReview}}</span>                            
+                          <v-layout row v-show="post.newReviewSlice == 'null'" >
+                    
+                             <v-card-actions class="justify-center">
+                         <p class="font-weight-thin myClickableThingy" @click="goToReview(post.yourReview)" >{{post.yourReview}}</p>
+                             </v-card-actions>
+                          
+                            </v-layout>                          
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
@@ -148,10 +154,13 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
+import LinkPrevue from 'link-prevue';
 export default {
   components:{
     InfiniteLoading,
+    LinkPrevue
   },
+  
   data () {
       return {
         imageUrl:require('@/assets/RocketLogo.png'),
@@ -209,10 +218,20 @@ methods: {
           return true
          }else{
 
-         
+         this.imageUrl = require('@/assets/RocketLogo.png')
           return false
          }
-       }
+       },
+       goToReview(link){
+
+         if(link.includes('https://')){
+          window.open(link)
+         }else{
+            window.open('https://'+link)
+         }
+
+       },
+       
 
    
 },
