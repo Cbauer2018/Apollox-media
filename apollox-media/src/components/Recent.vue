@@ -186,19 +186,18 @@ mounted(){
 
   
     goToProfile(profileUid){
-      console.log(profileUid)
+      
           this.$store.dispatch('loadProfile', {uid: profileUid})
           this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
           this.$router.push('/Profile/'+ profileUid)
-          console.log("Router", this.$route.params.uid)
+         
 
     },
     
     infiniteHandler($state){
         
         this.$store.dispatch('loadRecentPosts', {index: this.recentPosts.length + 2})
-        console.log('length',this.$store.getters.loadedRecentPosts.length )
-        console.log('post Count length', this.postCount)
+   
         if(this.$store.getters.loadedRecentPosts.length != this.postCount){
           setTimeout(() => {
         

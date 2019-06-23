@@ -140,7 +140,7 @@ methods: {
           
             }else{
                 let profile = this.profile
-                console.log("username", profile[0].username)
+                
               if(this.username != profile[0].username){
                   if(this.$store.getters.isUsernameValid){
                       this.$store.dispatch('changeProfile', {username: this.username, bio: this.bio, fileName: this.image}).then(data =>{
@@ -179,7 +179,7 @@ methods: {
         const fileReader = new FileReader()
         fileReader.addEventListener('load', () => {
           this.imageUrl = fileReader.result
-          console.log(this.imageUrl)
+          
         })
         fileReader.readAsDataURL(files[0])
         this.image = files[0]

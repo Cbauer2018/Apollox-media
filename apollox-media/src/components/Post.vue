@@ -366,7 +366,7 @@ export default {
         }
          var i = 0  
          while( i < this.rightList.length){
-          console.log(this.rightList[i])
+         
           if(this.rightList[i].text == ""){
           alert('Correct Bullet Point is required.');
         }
@@ -374,7 +374,8 @@ export default {
         }
           var j = 0
         while( j < this.wrongList.length){
-          console.log(this.wrongList[j])
+        
+
           if(this.wrongList[j].text == ""){
           alert('Incorrect Bullet Point is required.');
         }
@@ -386,18 +387,16 @@ export default {
       e.preventDefault();
     },
       submitPost(){
-        console.log("wrongList",this.wrongList)
-        console.log("rightList", this.rightList)
-        console.log("title=", this.title)
+       
         if(this.newForm){
-          console.log(true)
+         
           this.yourReview= 'null'
           if(this.reviewLink == null){
             this.reviewLink = 'null'
           }
         this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview,yourReview:this.yourReview, newForm: this.newForm, wrongList: this.wrongList, rightList:this.rightList, notIncludedList:this.notIncludedList})
         }else{
-          console.log(false)
+          
           this.newReview='null'
            if(this.reviewLink == null){
             this.reviewLink = 'null'

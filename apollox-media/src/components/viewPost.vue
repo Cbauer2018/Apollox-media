@@ -315,7 +315,7 @@ components:{
       
     },
         ratePost(){
-          console.log(this.rating)
+         
          var uid = this.$store.getters.userId
             var profileUid = this.$route.params.uid
              
@@ -344,7 +344,7 @@ components:{
 
        },
       goToProfile(profileUid){
-      console.log(profileUid)
+      
           this.$store.dispatch('loadProfile', {uid: profileUid})
           this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
           this.$router.push('/Profile/'+ profileUid)
@@ -352,7 +352,7 @@ components:{
 
     },
     hideComments(){
-      console.log(this.HideComments)
+     
       if(this.HideComments == false){
         this.HideComments = true
       }else{

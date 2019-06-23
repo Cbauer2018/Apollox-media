@@ -25,7 +25,7 @@ export const store = new Vuex.Store({
       setValidUsername(state, payload){
         
           state.validUsername = payload
-          console.log("done")
+         
           
 
       },
@@ -74,7 +74,15 @@ export const store = new Vuex.Store({
       }
     },
     actions: {
-        
+        ContactForm({commit}, payload){
+            const topic = payload.topic
+            const text = payload.text
+            const email = firebase.auth().currentUser.email.toString()
+
+            const Form ={topic: topic, text: text, email:email}
+
+            firebase.database().ref().child("Contact Forms").push(Form)
+        },
       loadPost({commit}, payload){
         firebase.database().ref().child('Users').child(payload.uid).child("Posts").child(payload.postKey).on('value', function(data){
           const obj = data.val()
@@ -91,7 +99,8 @@ export const store = new Vuex.Store({
                 totalRating = obj.totalRating
                 rating = totalRating/voters
           }
-          console.log("voters",obj.voters)
+         
+
           var comments = []
          for(let key in obj.comments)
           {
@@ -127,7 +136,7 @@ export const store = new Vuex.Store({
       },
 
       followProfile({commit}, payload){
-        console.log("profile UID", payload.profileUid)
+        
           firebase.database().ref().child('Users').child(payload.profileUid).child("followers").child(firebase.auth().currentUser.uid.toString()).set(firebase.auth().currentUser.uid.toString())
           firebase.database().ref().child('Users').child(firebase.auth().currentUser.uid.toString()).child("following").child(payload.profileUid).set(payload.profileUid)
          },
@@ -152,7 +161,7 @@ export const store = new Vuex.Store({
               
                 
                 snapshot.forEach(function(child) {
-                  console.log('ley',child.key)
+                  firebase.database().ref().child('Posts').child(child.key).child('username').set(payload.username)
                   firebase.database().ref().child('Posts').child(child.key).child('imageUrl').set(url)
                 })
               })
@@ -168,6 +177,15 @@ export const store = new Vuex.Store({
 
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
         .child('username').set(payload.username)
+        firebase.database().ref().child('Posts').orderByChild('uid').equalTo(firebase.auth().currentUser.uid.toString()).once("value", function (snapshot) {
+              
+                
+          snapshot.forEach(function(child) {
+           
+            firebase.database().ref().child('Posts').child(child.key).child('username').set(payload.username)
+         
+          })
+        })
 
         firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).once('value').then((data)=>{
           const obj = data.val()
@@ -176,7 +194,7 @@ export const store = new Vuex.Store({
        
             if(profilePosts != null){
                 for (let key in profilePosts){
-                  console.log("key", key)
+               
                   firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString())
                   .child('Posts').child(key).child('username').set(payload.username)
                 }
@@ -250,7 +268,7 @@ export const store = new Vuex.Store({
 
         profileRating = totalRatings/ totalVotes
         
-          console.log("data",obj)
+        
           const profile = []
           profile.push({
             dayCreated: obj.dayCreated,
@@ -280,7 +298,7 @@ export const store = new Vuex.Store({
           
           snapshot.forEach(function(child) {
           
-              console.log(child.val()) 
+             
               const obj = child.val()
             var imageUrl = null
              if(obj.imageUrl != null){
@@ -398,7 +416,7 @@ export const store = new Vuex.Store({
           
           snapshot.forEach(function(child) {
             
-              console.log("Pormtoed",child.val()) 
+             
               const obj = child.val()
               var voters = 0
                   var totalRating = 0
@@ -526,7 +544,7 @@ export const store = new Vuex.Store({
                        
                           
               });
-              console.log(Posts.slice(0, payload.index))
+              
               commit('setLoadedFollowingPosts', Posts.slice(0, payload.index))
     
               
@@ -625,7 +643,7 @@ export const store = new Vuex.Store({
               
             }).then((snap) => {
               const key = snap.key 
-              console.log("key", key)
+              
               firebase.database().ref('Posts').child(key).set(newPost).catch(
                 error => {
                   commit('setLoading', false)
@@ -738,7 +756,7 @@ export const store = new Vuex.Store({
             var imageUrl = null
                   if(obj[key].imageUrl != null){
                         imageUrl = obj[key].imageUrl
-                        console.log(imageUrl)
+                     
                   }else{
                     imageUrl = null
                   }
@@ -767,25 +785,51 @@ export const store = new Vuex.Store({
             var title = profilePosts[key].title.toLowerCase()
                    var imageUrl = null
                         if(title.includes(keyword.toLowerCase())){
-                          var newReviewSlice = profilePosts[key].newReview.slice(0,200)
-                            Posts.push({
-                              key: key,
-                              newReview: profilePosts[key].newReview,
-                              notIncludedList: profilePosts[key].notIncludedList,
-                              personName:profilePosts[key].personName,
-                              newReviewSlice:newReviewSlice,
-                              promoted: profilePosts[key].promoted,
-                              reviewLink: profilePosts[key].reviewLink,
-                              rightList: profilePosts[key].rightList,
-                              title: profilePosts[key].title,
-                              uid: profilePosts[key].uid,
-                              username: profilePosts[key].username,
-                              wrongList:profilePosts[key].wrongList,
-                              yourReview: profilePosts[key].yourReview,
-                              timeStamp: profilePosts[key].timeStamp,
-                              imageUrl: imageUrl,
-                              date: profilePosts[key].date
-                            })
+                         
+            var imageUrl = null
+             if(profilePosts[key].imageUrl != null){
+                  imageUrl = profilePosts[key].imageUrl
+             }
+         
+            
+              var voters = 0
+            
+                  var totalRating = 0
+                  var rating = 0
+                 if(profilePosts[key].voters != null){
+             
+                  for(let i in profilePosts[key].voters){
+                    voters +=1
+                   
+                  }
+                  totalRating = profilePosts[key].totalRating
+                  rating = totalRating/voters
+            }
+            
+          
+            var newReviewSlice = profilePosts[key].newReview.slice(0,200)
+              Posts.push({
+                key: key,
+                newReview: profilePosts[key].newReview,
+               notIncludedList: profilePosts[key].notIncludedList,
+               personName: profilePosts[key].personName,
+                promoted: profilePosts[key].promoted,
+                reviewLink: profilePosts[key].reviewLink,
+               rightList:profilePosts[key].rightList,
+               title: profilePosts[key].title,
+               uid: profilePosts[key].uid,
+               username: profilePosts[key].username,
+                wrongList: profilePosts[key].wrongList,
+               yourReview: profilePosts[key].yourReview,
+               timestamp: profilePosts[key].timestamp,
+               date: profilePosts[key].date,
+               imageUrl: imageUrl,
+               rating:rating,
+                        voters:voters,
+                        voterIds : profilePosts[key].voters,
+                        newReviewSlice: newReviewSlice
+                         })
+             
                         }
           }
           Posts.sort()
@@ -859,7 +903,7 @@ export const store = new Vuex.Store({
       },
 
       loadedRecentPosts(state){
-          console.log(state.loadedRecentPosts)
+         
           return state.loadedRecentPosts
       },
       loadedFollowingPosts(state){
@@ -867,12 +911,12 @@ export const store = new Vuex.Store({
         return state.loadedFollowingPosts
     },
       loadedProfilePosts(state){
-        console.log(state.loadedProfilePosts)
+        
         return state.loadedProfilePosts
     },
 
       isUsernameValid(state){
-                console.log("loading",state.loading)
+               
                 return state.validUsername
               
               
@@ -887,7 +931,7 @@ export const store = new Vuex.Store({
       },
 
       loadedPromotedPosts(state){
-        console.log(state.loadedPromotedPosts)
+       
         return state.loadedPromotedPosts
     },
       loadedProfile (state) {
@@ -895,7 +939,7 @@ export const store = new Vuex.Store({
       },
       user (state) {
         return state.user
-        console.log(state)
+        
       },
       loading (state) {
         return state.loading

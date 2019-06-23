@@ -312,7 +312,7 @@
   </template>
 
 <script>
-import Popup from './profilePopup'
+
 import InfiniteLoading from 'vue-infinite-loading';
 export default{
   components: {InfiniteLoading },
@@ -419,10 +419,10 @@ beforeCreate() {
           setTimeout(() => {
         $state.loaded()
        
-        console.log(this.loadProfilePosts.length + "vs" + this.postCount)
+      
       }, 1000);
         }else{
-            console.log(this.loadProfilePosts.length + "vs" + this.postCount)
+     
           $state.complete()
         }
         this.postCount = this.loadProfilePosts.length
@@ -463,7 +463,7 @@ beforeCreate() {
       
     },
      userHasProfilePic(imageUrl){
-            console.log(imageUrl)
+           
          if(imageUrl != null){
         
            return true

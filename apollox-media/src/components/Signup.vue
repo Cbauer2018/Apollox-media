@@ -123,15 +123,15 @@
           alert("Username must contain only numbers and letters");
           
             }else{
-              console.log("loading", this.$store.state.loading)
+              
               
                  
                   if(this.$store.getters.isUsernameValid){
-                console.log("test2",this.$store.getters.isUsernameValid)
+              
             this.$store.dispatch('signUserUp', {email: this.email, username: this.username, password: this.password})
              }else{
                alert("This username is already taken")
-            console.log("Valid?",this.$store.getters.isUsernameValid)
+           
           
           
           }

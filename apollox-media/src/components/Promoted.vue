@@ -171,19 +171,18 @@ methods: {
         this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
     },
     goToProfile(profileUid){
-      console.log(profileUid)
+    
           this.$store.dispatch('loadProfile', {uid: profileUid})
           this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
           this.$router.push('/Profile/'+ profileUid)
-          console.log("Router", this.$route.params.uid)
+          
 
     },
     
     infiniteHandler($state){
         
         this.$store.dispatch('loadPromotedPosts', {index: this.promotedPosts.length + 2})
-        console.log('length',this.$store.getters.loadedPromotedPosts.length )
-        console.log('post Count length', this.postCount)
+        
         if(this.$store.getters.loadedPromotedPosts.length  != this.postCount){
           setTimeout(() => {
            
