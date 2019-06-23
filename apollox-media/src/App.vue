@@ -8,7 +8,7 @@
       </v-container>
 
  <v-toolbar 
- class = "primary">
+  >
    
    <v-toolbar-items class="hidden-xs-only">
      <v-btn v-if="item.title != 'Profile' " color="cyan" flat v-for="item in menuItems"
@@ -56,8 +56,31 @@
   <router-view></router-view>
 </transition>
   </main>
+  <v-footer
+    dark
+    height="25"
+  >
+  <v-layout justify-center>
+    <v-card
+      flat
+      tile
+      
+      class="black white--text "
+    >
+    
+        &copy;2019 — <strong>ApolloX Media </strong>
+        -
+         <span @click="PrivacyPolicy" class="myClickableThingy">Privacy Policy</span>
+         -
+       <span @click="Terms" class="myClickableThingy">Terms Of Use</span>
+       
+ 
+    </v-card>
+    </v-layout>
+  </v-footer>
 </template>
   </div>
+
 </template>
 
 <script>
@@ -98,6 +121,7 @@ export default {
           {icon:'assessment', title:'Recent', Link:'/Recent'},
           {icon:'account_box', title:'Profile', Link:'/Profile/'+this.profileId.id},
           {icon:'add_box', title:'Post', Link:'/Post'},
+          {icon:'class', title:'Contact Us', Link:'/Contact'}
          
         ]
         }
@@ -114,7 +138,7 @@ export default {
         this.$store.dispatch('logout')
       },
       goToStore(){
-          window.location.href = "https://youtu.be/oHg5SJYRHA0"
+          window.open("https://youtu.be/oHg5SJYRHA0")
       },
       searchWord(){
         this.$store.dispatch('searchWord', {keyword: this.searching})
@@ -128,6 +152,13 @@ export default {
       beforeEnter() {
         window.scrollTo(0,0);
       },
+      PrivacyPolicy(){
+        window.open("https://app.termly.io/document/privacy-policy/acab2786-f537-4216-bf94-e1d215ff4c16")
+      },
+       Terms(){
+        window.open("https://app.termly.io/document/terms-of-use-for-website/296b1ad3-677c-4c63-8456-9c029b274b0c")
+      }
+     
       
     },
     watch:{
@@ -136,3 +167,12 @@ export default {
 }
 
 </script>
+
+<style>
+footer {
+ position: fixed;
+ bottom: 0;
+ width: 100%;
+ height: 10;
+}
+</style>

@@ -8,10 +8,10 @@
                             <v-avatar
                                 :size="75"
                                 color="grey lighten-4">
-                              <img 
+                              <img @click="goToProfile(profile.id)" class="myClickableThingy"
                                     v-if="hasProfilePic" 
                                     :src="imageUrl" alt="avatar">
-                                    <img v-else :src="imageUrl">
+                                    <img @click="goToProfile(profile.id)" class="myClickableThingy" v-else :src="imageUrl">
                             </v-avatar>
                             <v-flex my-2>
                                 <span  @click="goToProfile(profile.id)" class="myClickableThingy">{{profile.username}}</span>
@@ -178,13 +178,18 @@
                                 <v-flex my-1>
                                   <v-btn
                                   flat
-                                  color="cyan lighten-2" class="font-weight-thin">
+                                  color="cyan lighten-2" class="font-weight-thin" v-if="HideComments == false" @click="hideComments">
                                   Hide Comments
+                                  </v-btn>
+                                     <v-btn
+                                  flat
+                                  color="cyan lighten-2" class="font-weight-thin" v-else @click="hideComments">
+                                  Show Comments
                                   </v-btn>
                                 </v-flex>
                               </v-layout>
                               <v-layout column>
-                              <v-flex
+                              <v-flex v-show="!HideComments"
                                       v-for="text in post.comments"
                                       :key="text.text">
                                       
@@ -193,10 +198,10 @@
                                           <v-avatar
                                               :size="50"
                                               color="grey lighten-4">
-                                            <img 
+                                            <img class="myClickableThingy" @click="goToProfile(text.uid)"
                                               v-if="commentHasProfilePic(text)" 
                                               :src="text.imageUrl" alt="avatar">
-                                            <img v-else :src="require('@/assets/RocketLogo.png')">
+                                            <img v-else :src="require('@/assets/RocketLogo.png')" class="myClickableThingy" @click="goToProfile(text.uid)">
                                           </v-avatar>
                                       
                                       <v-flex ml-5 mt-3>
@@ -206,7 +211,7 @@
                                     </v-layout>
                                     </v-flex>
                                     <v-flex mt-1>
-                                    <span>{{text.username}}</span>
+                                    <span class="myClickableThingy" @click="goToProfile(text.uid)">{{text.username}}</span>
                               </v-flex>
                               </v-flex>
                               </v-layout>
@@ -236,6 +241,7 @@ components:{
         canUserVote : true,
         imageUrl: require('@/assets/RocketLogo.png'),
         commentImage:require('@/assets/RocketLogo.png'),
+        HideComments: false
     
 
       }
@@ -274,7 +280,7 @@ components:{
           }else{
             canVote =false
           }
-          console.log("can Vote", canVote)
+          
          this.canUserVote =  canVote
          return canVote
         },
@@ -299,11 +305,9 @@ components:{
      methods:{
             postComment(post){
       var profileUid = this.$route.params.uid
-     console.log("uid", profileUid)
-     console.log("postKey", this.$route.params.post)
-     console.log("comment", this.comment)
-      if(this.comment != '' && this.comment != null){
     
+      if(this.comment != '' && this.comment != null){
+  
       this.$store.dispatch('postComment', {uid: profileUid, postKey: this.$route.params.post, comment: this.comment})
         this.comment = ''
       
@@ -344,9 +348,17 @@ components:{
           this.$store.dispatch('loadProfile', {uid: profileUid})
           this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
           this.$router.push('/Profile/'+ profileUid)
-          console.log("Router", this.$route.params.uid)
+         
 
     },
+    hideComments(){
+      console.log(this.HideComments)
+      if(this.HideComments == false){
+        this.HideComments = true
+      }else{
+         this.HideComments = false
+      }
+    }
        
 
            

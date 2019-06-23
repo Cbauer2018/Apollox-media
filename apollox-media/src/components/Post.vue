@@ -75,7 +75,7 @@
                     <v-flex xs12>
                     <v-text-field
                       name="Link"
-                      label="Link to Article/Video You Are Reviewing "
+                      label="Link to the Article/Video You Are Fact Checking (Optional) "
                       id="reviewLink"
                        v-model="reviewLink"
                       type="Link"
@@ -133,7 +133,7 @@
         id="newReview"
         v-model="newReview"
         counter
-        maxlength="4500"
+       
         full-width
         single-line
         outline
@@ -261,9 +261,10 @@
             </v-card-text>
           </v-card>
            <v-layout justify-center> 
-    <v-btn color="cyan lighten-3"
+    <v-btn color="blue "
+    outline
     type="submit" 
-    >Post</v-btn> 
+    >Post Review</v-btn> 
     </v-layout>
     </v-flex>
    
@@ -301,7 +302,7 @@ export default {
     methods:{
       checkForm: function (e) {
        if(this.newForm){
-      if (this.title && this.personName && this.reviewLink && this.rightList && this.wrongList && this.notIncludedList && this.newReview ) {
+      if (this.title && this.personName  && this.rightList && this.wrongList && this.notIncludedList && this.newReview ) {
         this.submitPost()
         return true;
       }
@@ -312,15 +313,13 @@ export default {
       if (!this.personName) {
         alert('Name of Person you are fact checking is required.');
       }
-        if(!this.reviewLink){
-          alert('Link to Article/Video you are reviewing is required.');
-        }
+        
         if(!this.newReview){
           alert('New Review Field is required');
         }
           var i = 0  
          while( i < this.rightList.length){
-          console.log(this.rightList[i])
+        
           if(this.rightList[i].text == ""){
           alert('Correct Bullet Point is required.');
         }
@@ -328,19 +327,27 @@ export default {
         }
           var j = 0
         while( j < this.wrongList.length){
-          console.log(this.wrongList[j])
+          
           if(this.wrongList[j].text == ""){
           alert('Incorrect Bullet Point is required.');
         }
           j++;
         }
         
+        var z = 0
+        while( z < this.notIncludedList.length){
+        
+          if(this.notIncludedList[z].text == ""){
+          alert('Not Included Bullet Point is required.');
+        }
+          z++;
+        }
       
         
       
         }else{
           
-        if (this.title && this.personName && this.reviewLink && this.rightList && this.wrongList && this.notIncludedList && this.yourReview) {
+        if (this.title && this.personName  && this.rightList && this.wrongList && this.notIncludedList && this.yourReview) {
           this.submitPost();
         return true;
 
@@ -353,9 +360,7 @@ export default {
       if (!this.personName) {
         alert('Name of Person you are fact checking is required.');
       }
-        if(!this.reviewLink){
-          alert('Link to Article/Video you are reviewing is required.');
-        }
+      
         if(!this.yourReview){
           alert('Your Review Link is required');
         }
@@ -387,10 +392,16 @@ export default {
         if(this.newForm){
           console.log(true)
           this.yourReview= 'null'
+          if(this.reviewLink == null){
+            this.reviewLink = 'null'
+          }
         this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview,yourReview:this.yourReview, newForm: this.newForm, wrongList: this.wrongList, rightList:this.rightList, notIncludedList:this.notIncludedList})
         }else{
           console.log(false)
           this.newReview='null'
+           if(this.reviewLink == null){
+            this.reviewLink = 'null'
+          }
             this.$store.dispatch('submitPost', {title: this.title, personName: this.personName, reviewLink: this.reviewLink, newReview: this.newReview, yourReview: this.yourReview, newForm: this.newForm, wrongList: this.wrongList, rightList:this.rightList, notIncludedList:this.notIncludedList})
         }
 
@@ -401,10 +412,11 @@ export default {
       changeForm (form){
         if(form == true){
           this.newForm = true
-          console.log(true)
+          
+          
         }else{
           this.newForm= false
-          console.log(false)
+         
         }
        
         return this.newForm

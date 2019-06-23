@@ -302,13 +302,12 @@
                       </v-card>
                       
                     </v-flex>
-                    <v-flex xs2>
-                        <v-card></v-card>
-                      </v-flex>
+                  
           </v-layout>
         </container>
-        </v-flex>
         <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
+        </v-flex>
+        
     </container>
   </template>
 

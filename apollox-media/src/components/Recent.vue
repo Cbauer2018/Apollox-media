@@ -5,7 +5,8 @@
               <v-flex>
                 <v-card></v-card>
               </v-flex>
-                    <v-flex xs12>
+              
+                    <v-flex xs12 >
                       <v-card
                           v-for="post in recentPosts" 
                           :key="post">
@@ -18,8 +19,8 @@
                             :size="75"
                             color="grey lighten-4">
                             
-                            <img v-if="hasProfilePic(post)" :src="imageUrl" alt="avatar">
-                            <img v-else :src="imageUrl" alt="avatar" >
+                            <img v-if="hasProfilePic(post)" @click="goToProfile(post.uid)"  class = "myClickableThingy" :src="imageUrl" alt="avatar">
+                            <img v-else @click="goToProfile(post.uid)" class = "myClickableThingy"  :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
                         <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
@@ -140,12 +141,12 @@
                         </v-layout>
                         </v-card>
                         </v-flex>
+                         
                       </v-card>
-                      
+                     
                     </v-flex>
-                    <v-flex xs2>
-                        <v-card></v-card>
-                      </v-flex>
+                     
+                  
           </v-layout>
                    
  <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
@@ -164,23 +165,26 @@ export default {
   data () {
       return {
         imageUrl:require('@/assets/RocketLogo.png'),
-        postCount: 1
+        postCount: 1,
+         adsenseContent: ''
+      
       }
     },
     beforeCreate() {
       this.$store.dispatch('loadRecentPosts',{index:2})
     },
+    
 methods: {
-
+mounted(){
+      this.adsenseContent = document.getElementById('divadsensedisplaynone').innerHTML
+    },
   viewPost(post) {
         var profileUid = post.uid
         this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
         this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
     },
 
-  testingRecents(){
-    console.log(this.$store.getters.loadedRecentPosts)
-  },
+  
     goToProfile(profileUid){
       console.log(profileUid)
           this.$store.dispatch('loadProfile', {uid: profileUid})
@@ -197,7 +201,7 @@ methods: {
         console.log('post Count length', this.postCount)
         if(this.$store.getters.loadedRecentPosts.length != this.postCount){
           setTimeout(() => {
-           
+        
         $state.loaded()
         
         

@@ -22,13 +22,13 @@
                 :tile="tile"
                 :size="140"
                 color="grey lighten-4">
-                <img 
+                <img class = "myClickableThingy"  @click="goToProfile(username.uid)"
                 v-if="hasProfilePic(username.imageUrl)" 
                 :src="username.imageUrl" alt="avatar">
                 <img v-else src="@/assets/RocketLogo.png">
               </v-avatar>
               <v-layout align-center>
-                  <h2  class = "display-1 font-weight-thin">
+                  <h2  class = "display-1 font-weight-thin myClickableThingy"  @click="goToProfile(username.uid)">
                     {{  username.username }} </h2>
 
                     </v-layout>
@@ -56,10 +56,11 @@
              <v-layout justify-center><h1>Posts:</h1></v-layout>
               
           <v-layout row wrap>
-              <v-flex xs2>
+              <v-flex>
                 <v-card></v-card>
               </v-flex>
-                    <v-flex xs8>
+              
+                    <v-flex xs12 >
                       <v-card
                           v-for="post in searchedPosts" 
                           :key="post">
@@ -71,14 +72,14 @@
                         <v-avatar
                             :size="75"
                             color="grey lighten-4">
-                            <img 
-                v-if="hasProfilePic(post.imageUrl)" 
-                :src="post.imageUrl" alt="avatar">
-                <img v-else src="@/assets/RocketLogo.png">
+                            
+                            <img v-if="postHasProfilePic(post)" @click="goToProfile(post.uid)"  class = "myClickableThingy" :src="imageUrl" alt="avatar">
+                            <img v-else @click="goToProfile(post.uid)" class = "myClickableThingy"  :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
-                        <h4 class = "font-weight-thin">
-                          {{post.username}} </h4>
+                        <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
+                          {{post.username}}
+                           </h4>
                           </v-flex>
                             </v-layout>
                         </v-flex>
@@ -88,13 +89,18 @@
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                            <span  v-show="post.newReviewSlice == 'null'" >{{post.yourReview}}</span>                            
+                          <v-layout row v-show="post.newReviewSlice == 'null'" >
+                    
+                             <v-card-actions class="justify-center">
+                         <p class="font-weight-thin myClickableThingy" @click="goToReview(post.yourReview)" >{{post.yourReview}}</p>
+                             </v-card-actions>
+                          
+                            </v-layout>                          
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
           <v-list-group
-            no-action
-          >
+            no-action>
             <template v-slot:activator>
               <v-list-tile color="green">
                 <v-list-tile-content>
@@ -107,14 +113,14 @@
             v-for="text in post.rightList"
               :key="text.text">
               <v-list-tile-content >
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
 
 
            <v-list-group
-            
+            no-action
           >
             <template active v-slot:activator>
               <v-list-tile  color="red">
@@ -130,15 +136,15 @@
               <v-list-tile-content
               
                   >
-                <v-list-tile-title>{{text.text}} </v-list-tile-title>
+                <v-list-tile-title>* {{text.text}} </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
 
   <v-list-group
-            no-action
+           no-action
           >
-            <template v-slot:activator>
+            <template active v-slot:activator>
               <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
@@ -150,50 +156,38 @@
             v-for="text in post.notIncludedList"
               :key="text.text">
               <v-list-tile-content>
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
           
-        </v-list>
+              </v-list>
                       </v-flex>
 
                             <v-layout row wrap>
-                              <v-flex sm12 md6 my-3>
-                                <v-rating v-show="!userIdMatch"
-                                hover
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                half-increments></v-rating>
-                                <v-rating v-show="userIdMatch"
-                                v-model="rating"
-                                hover
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                readonly
-                                half-increments></v-rating>
+                              <v-flex sm10 md6 my-3>
+                                <v-layout row>
+                                <v-rating 
+                                  hover
+                                  :value="post.rating"
+                                  color = "cyan lighten-1"
+                                  background-color="cyan lighten-1"
+                                  readonly
+                                  half-increments></v-rating>
+                              
+                              <v-flex my-3 ml-2>
+                                  {{post.voters}}
                               </v-flex>
-                              <v-flex xs8 md4>
-                                <V-text-field
-                                maxlength = "300"
-                                placeholder="Comment..."></V-text-field>
-                                </v-flex>
-                                <v-flex xs2>
-                                  <v-btn
-                                  flat
-                                  fab
-                                  color="cyan lighten-1">
-                                    <v-icon>forward</v-icon>
-                                  </v-btn>
-                                </v-flex>
+                              </v-layout>
+                              </v-flex>
+                 
                             </v-layout>
                             </v-flex>
                             </v-flex>
                           </v-layout>
                           
                           <v-card flat>
-                          <v-flex my-2
-                          >
+                          <v-flex my-2 mr-2>
                             <h2 class="font-weight-thin">{{post.date}}</h2>
                           </v-flex>
                           </v-card>
@@ -201,14 +195,13 @@
                         </v-layout>
                         </v-card>
                         </v-flex>
+                         
                       </v-card>
-                      
+                     
                     </v-flex>
-                    <v-flex xs2>
-                        <v-card></v-card>
-                      </v-flex>
+                     
+                  
           </v-layout>
-        
   
       
   
@@ -221,18 +214,45 @@
 export default {
   data () {
       return {
-        
+        imageUrl:require('@/assets/RocketLogo.png'),
+        profileImageUrl:require('@/assets/RocketLogo.png')
       }
     },
 methods: {
-     hasProfilePic(imageUrl){
-            console.log(imageUrl)
-         if(imageUrl != null){
-        
-           return true
+    goToProfile(profileUid){
+      console.log(profileUid)
+          this.$store.dispatch('loadProfile', {uid: profileUid})
+          this.$store.dispatch('loadProfilePosts', {uid: profileUid, index: 2})
+          this.$router.push('/Profile/'+ profileUid)
+          console.log("Router", this.$route.params.uid)
+
+    },
+      postHasProfilePic(post){
+       
+       let thisPost = post
+     
+      
+         if(thisPost.imageUrl != null){
+          this.imageUrl = post.imageUrl
+          return true
          }else{
-           
-           return false
+
+         this.imageUrl = require('@/assets/RocketLogo.png')
+          return false
+         }
+       },
+       hasProfilePic(imageUrl){
+       
+      
+     
+      
+         if(imageUrl != null){
+          this.profileImageUrl = imageUrl
+          return true
+         }else{
+
+         this.profileImageUrl= require('@/assets/RocketLogo.png')
+          return false
          }
        },
    viewPost(post) {

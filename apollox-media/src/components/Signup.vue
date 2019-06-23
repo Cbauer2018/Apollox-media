@@ -61,7 +61,9 @@
                       type="password"
                       :rules="[comparePasswords]"></v-text-field>
                   </v-flex>
+                  
                 </v-layout>
+                <span>By clicking Sign Up, you agree to our <a href="https://app.termly.io/document/privacy-policy/acab2786-f537-4216-bf94-e1d215ff4c16">Privacy Policy</a> and <a href="https://app.termly.io/document/terms-of-use-for-website/296b1ad3-677c-4c63-8456-9c029b274b0c">Terms of Use</a></span>
                 <v-layout justify-end xs12>
                     <v-btn  outline color="cyan lighten-1" type="submit" :disabled="loading" :loading="loading">
                       Sign up

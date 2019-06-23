@@ -21,8 +21,8 @@
                             :size="75"
                             color="grey lighten-4">
                             
-                            <img v-if="hasProfilePic(post)" :src="imageUrl" alt="avatar">
-                            <img v-else :src="imageUrl" alt="avatar" >
+                            <img v-if="hasProfilePic(post)" :src="imageUrl" alt="avatar" class = " myClickableThingy" @click="goToProfile(post.uid)">
+                            <img v-else :src="imageUrl" alt="avatar"  class = "myClickableThingy" @click="goToProfile(post.uid)">
                         </v-avatar>
                         <v-flex my-3>
                         <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
@@ -165,7 +165,11 @@ export default {
       this.$store.dispatch('loadPromotedPosts',{index:2})
     },
 methods: {
-  
+   viewPost(post) {
+        var profileUid = post.uid
+        this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
+        this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
+    },
     goToProfile(profileUid){
       console.log(profileUid)
           this.$store.dispatch('loadProfile', {uid: profileUid})

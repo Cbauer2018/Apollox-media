@@ -4,7 +4,7 @@ import Promoted from './components/Promoted.vue'
 import Following from './components/Following.vue'
 import Post from './components/Post.vue'
 import Recent from './components/Recent.vue'
-import Store from './components/Store.vue'
+import Contact from './components/Contact.vue'
 import Profile from './components/Profile.vue'
 import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
@@ -44,11 +44,7 @@ export default new Router({
       name: 'Recent',
       component: Recent
     },
-    {
-      path: '/Store',
-      name: 'Store',
-      component: Store
-    },
+   
     {
       path: '/Profile/:uid',
       name: 'Profile',
@@ -74,7 +70,12 @@ export default new Router({
       path: '/viewPost/:uid/:post',
       name: 'viewPost',
       component: viewPost
-    }
+    },
+    {
+      path: '/Contact',
+      name: 'Contact',
+      component: Contact
+    },
   ],
   
 })

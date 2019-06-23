@@ -1,9 +1,35 @@
 <template>
     <v-container>
-   
-
-
-   
+   <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
+        <v-card>
+          <v-card-text>
+            <v-container>
+              <v-layout justify-center>
+                  <h2 class="display-1 font-weight-thin">
+                     Login or Signup to View Profile
+                  </h2>
+              </v-layout>
+              <v-flex>
+            <v-layout mt-5 justify-center>
+              <v-btn 
+                  router
+                  :to="'/Login'"
+                  outline large round color="cyan lighten-2">
+                  Login
+              </v-btn>
+              <v-btn
+                  router
+                  :to="'/Signup'" 
+                  outline large round color="cyan lighten-2">
+                  SignUp
+              </v-btn>
+            </v-layout>
+              </v-flex>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+     <v-flex v-if="userIsAuthenticated">
         <v-layout row wrap>
               <v-flex xs2>
                 <v-card></v-card>
@@ -21,8 +47,8 @@
                             :size="75"
                             color="grey lighten-4">
                             
-                            <img v-if="hasProfilePic(post)" :src="imageUrl" alt="avatar">
-                            <img v-else :src="imageUrl" alt="avatar" >
+                            <img v-if="hasProfilePic(post)" :src="imageUrl" alt="avatar" class = "myClickableThingy" @click="goToProfile(post.uid)">
+                            <img v-else :src="imageUrl" alt="avatar"  class = "myClickableThingy" @click="goToProfile(post.uid)">
                         </v-avatar>
                         <v-flex my-3>
                         <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
@@ -143,12 +169,11 @@
                       </v-card>
                       
                     </v-flex>
-                    <v-flex xs2>
-                        <v-card></v-card>
-                      </v-flex>
+                   
           </v-layout>
                    
  <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
+     </v-flex>
     </v-container>
 </template>
 
@@ -168,7 +193,11 @@ export default {
       this.$store.dispatch('loadFollowingPosts',{index:4})
     },
 methods: {
-  
+  viewPost(post) {
+        var profileUid = post.uid
+        this.$store.dispatch('loadPost', {uid: profileUid, postKey: post.key})
+        this.$router.push("/viewPost/" + profileUid+ '/' + post.key)
+    },
     goToProfile(profileUid){
       console.log(profileUid)
           this.$store.dispatch('loadProfile', {uid: profileUid})
@@ -222,6 +251,9 @@ computed: {
      
         return this.$store.getters.loadedFollowingPosts;
       
+      },
+       userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       },
       
       
