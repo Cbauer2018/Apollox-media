@@ -11,6 +11,8 @@ import Login from './components/Login.vue'
 import ProfileEdit from './components/ProfileEdit.vue'
 import viewPost from './components/viewPost.vue'
 import Search from './components/Search.vue'
+import viewFollowing from './components/profileFollowing.vue'
+import viewFollowers from './components/profileFollowers.vue'
 
 
 Vue.use(Router)
@@ -75,6 +77,16 @@ export default new Router({
       path: '/Contact',
       name: 'Contact',
       component: Contact
+    },
+    {
+      path: '/viewFollowing/:uid',
+      name: 'viewFollowing',
+      component: viewFollowing
+    },
+    {
+      path: '/viewFollowers/:uid',
+      name: 'viewFollowers',
+      component: viewFollowers
     },
   ],
   

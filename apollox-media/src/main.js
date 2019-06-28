@@ -6,7 +6,8 @@ import router from './router'
 import { store } from './store'
 import Vuetify from 'vuetify/lib';
 import AlertCmp from './Shared/Alert'
-
+import responsive from 'vue-responsive'
+Vue.use(responsive)
 Vue.use(Vuetify)
 Vue.config.productionTip = false
 Vue.component('app-alert', AlertCmp)
@@ -18,6 +19,8 @@ Vue.use(infiniteloading)
 Vue.use(infiniteScroll)
 var Prevue = require('link-prevue')
 Vue.use(Prevue)
+
+
 
 new Vue({
   router,

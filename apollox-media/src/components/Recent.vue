@@ -1,10 +1,17 @@
 <template>
     <v-container>
-  
+  <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+             <v-layout justify-center my-3 >
+              <v-card flat>
+           <v-card-text>
+    
+        <span style="font-size:30px"><u>Recent</u></span>
+          </v-card-text>
+        </v-card>
+          </v-layout>
+           </div>
         <v-layout row wrap>
-              <v-flex>
-                <v-card></v-card>
-              </v-flex>
+             
               
                     <v-flex xs12 >
                       <v-card
@@ -19,7 +26,7 @@
                             :size="75"
                             color="grey lighten-4">
                             
-                            <img v-if="hasProfilePic(post)" @click="goToProfile(post.uid)"  class = "myClickableThingy" :src="imageUrl" alt="avatar">
+                            <img v-if="post.imageUrl != null" @click="goToProfile(post.uid)"  class = "myClickableThingy" :src="post.imageUrl" alt="avatar">
                             <img v-else @click="goToProfile(post.uid)" class = "myClickableThingy"  :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
@@ -29,19 +36,20 @@
                           </v-flex>
                             </v-layout>
                         </v-flex>
+
                         <v-layout column>
                           <v-flex my-2 ml-5>
                           <h1 @click="viewPost(post)" class = "font-weight-thin myClickableThingy">{{post.title}}</h1>
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                          <v-layout row v-show="post.newReviewSlice == 'null'" >
-                    
-                             <v-card-actions class="justify-center">
-                         <p class="font-weight-thin myClickableThingy" @click="goToReview(post.yourReview)" >{{post.yourReview}}</p>
-                             </v-card-actions>
                           
-                            </v-layout>                          
+                    
+                            
+                         <span   v-show="post.newReviewSlice == 'null'" class=" font-weight-thin myClickableThingy htmltext " @click="goToReview(post.yourReview)" >{{post.yourReview}}</span>
+                             
+                          
+                                                     
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
@@ -57,7 +65,8 @@
 
             <v-list-tile 
             v-for="text in post.rightList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content >
                 <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
@@ -78,7 +87,8 @@
 
             <v-list-tile
             v-for="text in post.wrongList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content
               
                   >
@@ -93,14 +103,20 @@
             <template active v-slot:activator>
               <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
+                    <div v-responsive.lg.xl >
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
+                  </div>
+                  <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+                     <v-list-tile-title>Facts Missing</v-list-tile-title>
+                  </div>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
             <v-list-tile
             v-for="text in post.notIncludedList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content>
                 <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
@@ -131,12 +147,13 @@
                             </v-flex>
                             </v-flex>
                           </v-layout>
-                          
+                          <div v-responsive.lg.xl >
                           <v-card flat>
                           <v-flex my-2 mr-2>
                             <h2 class="font-weight-thin">{{post.date}}</h2>
                           </v-flex>
                           </v-card>
+                          </div>
                           
                         </v-layout>
                         </v-card>
@@ -156,10 +173,12 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
 import LinkPrevue from 'link-prevue';
+import vueResponsive from 'vue-responsive'
 export default {
   components:{
     InfiniteLoading,
-    LinkPrevue
+    LinkPrevue,
+    vueResponsive
   },
   
   data () {
@@ -256,5 +275,13 @@ computed: {
 <style>
 .myClickableThingy {
     cursor: pointer;
+}
+.htmltext { 
+  
+  display: block;
+  width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

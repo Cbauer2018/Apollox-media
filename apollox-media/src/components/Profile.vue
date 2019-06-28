@@ -1,6 +1,7 @@
   <template>
     <container>
-      <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
+     <div v-responsive.lg.xl >
+   <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
         <v-card>
           <v-card-text>
             <v-container>
@@ -29,6 +30,49 @@
           </v-card-text>
         </v-card>
       </v-flex>
+      </div>
+
+<div v-responsive ="['hidden-all','xs','sm', 'md']" >
+   <v-flex  v-if="!userIsAuthenticated">
+        <v-card>
+          <v-card-text>
+            <v-container>
+              <v-layout justify-center>
+                  <h2 class="display-1 font-weight-thin">
+                     Login or Signup to View Profile
+                  </h2>
+              </v-layout>
+              <v-flex>
+            <v-layout mt-5 justify-center>
+              <v-btn 
+                  router
+                  :to="'/Login'"
+                  outline large round color="cyan lighten-2">
+                  Login
+              </v-btn>
+              <v-btn
+                  router
+                  :to="'/Signup'" 
+                  outline large round color="cyan lighten-2">
+                  SignUp
+              </v-btn>
+            </v-layout>
+              </v-flex>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      </div>
+
+
+
+
+
+
+
+
+
+
         <v-flex v-if="userIsAuthenticated">
       <v-layout my-5 row wrap>
         <v-flex xs1>
@@ -93,10 +137,10 @@
           <v-card flat>
             <v-layout column wrap>
               <v-flex ml-3>
-                  <h2 class = "font-weight-thin">Followers {{followers}}</h2>
+                  <h2 class = "font-weight-thin myClickableThingy" @click="toFollowers">Followers {{followers}}</h2>
               </v-flex>
               <v-flex ml-3 my-2>
-                  <h2 class = "font-weight-thin">Following {{following}}</h2>
+                  <h2 class = "font-weight-thin myClickableThingy" @click="toFollowing">Following {{following}}</h2>
               </v-flex>
                   <v-layout >
                     <v-flex ml-2>
@@ -125,6 +169,7 @@
         <v-layout
             v-show="userIdMatch">
         <v-flex ml-5>
+          <v-layout column>
             <v-btn 
                   router
                   :to="'/Profiles/Edit'"
@@ -134,6 +179,8 @@
                 settings
               </v-icon>
             </v-btn>
+            <span > Edit Profile</span>
+            </v-layout>
             </v-flex>
           </v-layout>
           </v-card>
@@ -146,33 +193,13 @@
       
 
       
-        <container>
-          <v-layout row>
-          <v-flex xs2>
-            <v-card></v-card>
-          </v-flex>
-          <v-flex xs8>
-          <v-card class = "pa-2">
-              <v-layout row>
-                    <v-flex my-2 xs11>
-                        <div class= "title font-weight-thin">Posts</div>
-                    </v-flex>
-                    <v-flex my-2 xs1>
-                        <div class= "title font-weight-thin">Date</div>
-                    </v-flex>
-              </v-layout>
-          </v-card>
-          </v-flex>
-          <v-flex xs2>
-            <v-card></v-card>
-          </v-flex>
-          </v-layout>
-
+        
         <v-layout row wrap>
-              <v-flex xs2>
+              <v-flex>
                 <v-card></v-card>
               </v-flex>
-                    <v-flex xs8>
+              
+                    <v-flex xs12 >
                       <v-card
                           v-for="post in loadProfilePosts" 
                           :key="post">
@@ -184,21 +211,25 @@
                         <v-avatar
                             :size="75"
                             color="grey lighten-4">
-                            <img :src="imageUrl" alt="avatar">
+                            
+                            <img v-if="post.imageUrl != null" @click="goToProfile(post.uid)"  class = "myClickableThingy" :src="post.imageUrl" alt="avatar">
+                            <img v-else @click="goToProfile(post.uid)" class = "myClickableThingy"  :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
-                        <h4 class = "font-weight-thin text-truncate">
-                          {{post.username}} </h4>
+                        <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
+                          {{post.username}}
+                           </h4>
                           </v-flex>
                             </v-layout>
                         </v-flex>
                         <v-layout column>
                           <v-flex my-2 ml-5>
-                          <h1 @click="viewPost(post)" class = "myClickableThingy font-weight-thin">{{post.title}}</h1>
+                          <h1 @click="viewPost(post)" class = "font-weight-thin myClickableThingy">{{post.title}}</h1>
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                            <span v-show="post.newReviewSlice == 'null'">{{post.yourReview}}</span>                            
+                         <span   v-show="post.newReviewSlice == 'null'" class=" font-weight-thin myClickableThingy htmltext " @click="goToReview(post.yourReview)" >{{post.yourReview}}</span>
+                                                     
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
@@ -214,7 +245,8 @@
 
             <v-list-tile 
             v-for="text in post.rightList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content >
                 <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
@@ -235,7 +267,8 @@
 
             <v-list-tile
             v-for="text in post.wrongList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content
               
                   >
@@ -245,39 +278,44 @@
           </v-list-group>
 
   <v-list-group
-           
+           no-action
           >
             <template active v-slot:activator>
               <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
+                    <div v-responsive.lg.xl >
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
+                  </div>
+                  <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+                     <v-list-tile-title>Facts Missing</v-list-tile-title>
+                  </div>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
             <v-list-tile
             v-for="text in post.notIncludedList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content>
                 <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
           
-        </v-list>
+              </v-list>
                       </v-flex>
 
                             <v-layout row wrap>
                               <v-flex sm10 md6 my-3>
                                 <v-layout row>
-                                <v-rating
-                                
-                                hover
-                                :value="post.rating"
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                readonly
-                                half-increments></v-rating>
+                                <v-rating 
+                                  hover
+                                  :value="post.rating"
+                                  color = "cyan lighten-1"
+                                  background-color="cyan lighten-1"
+                                  readonly
+                                  half-increments></v-rating>
                               
                               <v-flex my-3 ml-2>
                                   {{post.voters}}
@@ -289,22 +327,25 @@
                             </v-flex>
                             </v-flex>
                           </v-layout>
-                          
+                          <div v-responsive.lg.xl >
                           <v-card flat>
                           <v-flex my-2 mr-2>
                             <h2 class="font-weight-thin">{{post.date}}</h2>
                           </v-flex>
                           </v-card>
+                          </div>
                           
                         </v-layout>
                         </v-card>
                         </v-flex>
+                         
                       </v-card>
-                      
+                     
                     </v-flex>
+                     
                   
           </v-layout>
-        </container>
+        
         <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
         </v-flex>
         
@@ -472,6 +513,18 @@ beforeCreate() {
            return false
          }
        },
+
+       toFollowing(){
+        var profileUid = this.$route.params.uid
+        this.$store.dispatch('viewFollowing', {uid: profileUid})
+        this.$router.push("/viewFollowing/" + profileUid)
+
+       },
+       toFollowers(){
+          var profileUid = this.$route.params.uid
+        this.$store.dispatch('viewFollowers', {uid: profileUid})
+        this.$router.push("/viewFollowers/" + profileUid)
+       }
        
 
     },

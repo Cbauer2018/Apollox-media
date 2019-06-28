@@ -1,5 +1,6 @@
 <template>
     <container>
+      <div  v-responsive ="['hidden-all','lg', 'xl']">
         <v-layout row wrap>
             <v-flex xs4 md2>
                 <v-card flat>
@@ -31,7 +32,7 @@
                         <v-flex my-4>
                         <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" >{{post.newReview}}</p></h2>
 
-                        <v-card  v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
+                        <v-card flat  v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
                           <v-layout row wrap >
                              <link-prevue :url="post.yourReview" >
                             <template slot-scope="props">
@@ -44,14 +45,24 @@
                               </div>
                               </template>
                              </link-prevue>
-
                              <v-card-actions class="justify-center">
                          <h1 class="font-weight-thin" ><a href="" @click="goToReview(post.yourReview)" >{{post.yourReview}}</a></h1>
                              </v-card-actions>
                           
                             </v-layout>
                            </v-card>
-                       
+
+
+                           <v-card flat v-if="post.reviewLink != 'null'" justify-center class="myClickableThingy" @click="goToReview(post.reviewLink)" >
+                          <v-layout row wrap >
+                            <span>Link to article/video reviewing :</span>
+                            
+                             
+                         <span class="font-weight-thin" ><a href="" @click="goToReview(post.reviewLink)" >{{post.reviewLink}}</a></span>
+                             
+                          </v-layout>
+                           </v-card>
+
                         </v-flex>
                         <v-list>
           <v-list-group
@@ -67,7 +78,8 @@
 
             <v-list-tile 
             v-for="text in post.rightList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content >
                 <span>* {{text.text}}</span>
               </v-list-tile-content>
@@ -88,7 +100,8 @@
 
             <v-list-tile
             v-for="text in post.wrongList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content>
                 <span>* {{text.text}} </span>
               </v-list-tile-content>
@@ -101,14 +114,20 @@
             <template v-slot:activator>
               <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
+                    <div v-responsive.lg.xl >
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
+                  </div>
+                  <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+                     <v-list-tile-title>Facts Missing</v-list-tile-title>
+                  </div>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
             <v-list-tile
             v-for="text in post.notIncludedList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content>
                 <span>* {{text.text}}</span>
               </v-list-tile-content>
@@ -118,8 +137,263 @@
         </v-list>
 
     <v-layout column>
+      
         <v-layout row wrap>
                               <v-flex sm10 md6 my-3>
+                                <span v-if="!userIsAuthenticated">Sign in to Rate this Post!</span>
+                                 <span v-if="canUserVote && canVote">Rate this Post!</span>
+                                    <v-layout>
+                                       
+                                        <v-rating
+                                        v-show="canUserVote && canVote "
+                                            @input="ratePost"
+                                            v-model="rating"
+                                            hover
+                                            color = "cyan lighten-1"
+                                            background-color="cyan lighten-1"
+                                            half-increments></v-rating>
+                                        <v-rating 
+                                         v-show="!canUserVote"
+                                          
+                                            :value="post.rating"
+                                            hover
+                                            readonly
+                                            color = "cyan lighten-1"
+                                            background-color="cyan lighten-1"
+                                            half-increments></v-rating>
+                                        <v-flex my-3 ml-1  >
+                                            {{post.voters}}
+                                           
+                                        </v-flex>
+                                       
+                                    </v-layout>
+                                </v-flex>
+                              <v-flex v-show="userIsAuthenticated" xs8 md4>
+                                <V-text-field
+                                maxlength = "300"
+                                v-model="comment"
+                               v-on:keyup.enter="postComment(post)"
+                                placeholder="Comment..."></V-text-field>
+                                </v-flex>
+                                <v-flex v-show="userIsAuthenticated" xs2>
+                                  <v-btn
+                                  flat
+                                  fab
+                                  color="cyan lighten-1"
+                                  @click="postComment(post)">
+                                    <v-icon>forward</v-icon>
+                                  </v-btn>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row>
+                            <v-flex xs2>
+                                
+                            </v-flex>
+                          
+                            
+                            </v-layout>
+
+                          <v-flex>
+                            <v-card flat>
+                              <v-layout row>
+                                  <h3 class="display-1 font-weight-thin">Comments</h3>
+                                  <v-flex xs8>
+                                    <v-card></v-card>
+                                  </v-flex>
+                                <v-flex my-1>
+                                  <v-btn
+                                  flat
+                                  color="cyan lighten-2" class="font-weight-thin" v-if="HideComments == false" @click="hideComments">
+                                  Hide Comments
+                                  </v-btn>
+                                     <v-btn
+                                  flat
+                                  color="cyan lighten-2" class="font-weight-thin" v-else @click="hideComments">
+                                  Show Comments
+                                  </v-btn>
+                                </v-flex>
+                              </v-layout>
+                              <v-layout column style="bottom:10px;">
+                              <v-flex v-show="!HideComments"
+                                      v-for="text in post.comments"
+                                      :key="text.text">
+                                      
+                                      <v-flex mt-3>
+                                        <v-layout row>
+                                          <v-avatar
+                                              :size="50"
+                                              color="grey lighten-4">
+                                            <img class="myClickableThingy" @click="goToProfile(text.uid)"
+                                              v-if="commentHasProfilePic(text)" 
+                                              :src="text.imageUrl" alt="avatar">
+                                            <img v-else :src="require('@/assets/RocketLogo.png')" class="myClickableThingy" @click="goToProfile(text.uid)">
+                                          </v-avatar>
+                                      
+                                      <v-flex ml-5 mt-3>
+                                        <span>{{text.comment}}</span>
+                                    
+                                    </v-flex>
+                                    </v-layout>
+                                    </v-flex>
+                                    <v-flex  mb-3>
+                                    <span class="myClickableThingy" @click="goToProfile(text.uid)">{{text.username}}</span>
+                              </v-flex>
+                              </v-flex>
+                              </v-layout>
+                            </v-card>
+                            </v-flex>
+
+                        </v-layout>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+            </v-flex>
+        </v-layout>
+      </div>
+
+
+
+
+
+
+ <div   v-responsive ="['hidden-all','xs','sm', 'md']">
+        <v-layout column wrap>
+            <v-flex xs4 md2>
+                <v-card flat>
+                    <v-flex v-for="profile in profile" :key="profile" ma-4>
+                        <v-layout row>
+                            <v-avatar
+                                :size="75"
+                                color="grey lighten-4">
+                              <img @click="goToProfile(profile.id)" class="myClickableThingy"
+                                    v-if="hasProfilePic" 
+                                    :src="imageUrl" alt="avatar">
+                                    <img @click="goToProfile(profile.id)" class="myClickableThingy" v-else :src="imageUrl">
+                            </v-avatar>
+                            <v-flex my-2>
+                                <span  @click="goToProfile(profile.id)" class="myClickableThingy">{{profile.username}}</span>
+                            </v-flex>
+                            <v-flex my-3 v-for="post in post" :key="post">
+                              <h2 class="font-weight-thin">{{post.date}}</h2>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                </v-card>
+            </v-flex>
+            <v-flex xs6 md8>
+            <v-layout column>
+                <v-flex my-4>
+                    <v-card v-for="post in post" :key="post" flat>
+                        <h3 class="display-2 font-weight-thin">{{post.title}}</h3>
+                        <v-flex my-4>
+                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" >{{post.newReview}}</p></h2>
+
+                        <v-card flat v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
+                          <v-layout row wrap >
+                             <link-prevue :url="post.yourReview" >
+                            <template slot-scope="props">
+                            <div class="card" style="width: 20rem;">
+                            <img class="card-img-top" style="width: 15rem; height: 15rem;" :src="props.img" :alt="props.title">
+                            <div class="card-block" >
+                          <h4 class="card-title" >{{props.title}}</h4>
+                            
+                                 </div>
+                              </div>
+                              </template>
+                             </link-prevue>
+                             <v-card-actions class="justify-center">
+                         <h1 class="font-weight-thin posthtmltext" ><a href="" @click="goToReview(post.yourReview)" >{{post.yourReview}}</a></h1>
+                             </v-card-actions>
+                          
+                            </v-layout>
+                           </v-card>
+
+
+                           <v-card  flat  v-if="post.reviewLink != 'null'" justify-center class="myClickableThingy" @click="goToReview(post.reviewLink)" >
+                          <v-layout row wrap >
+                            <span>Link to article/video reviewing :</span>
+                            
+                             
+                         <span class="font-weight-thin posthtmltext" ><a href="" @click="goToReview(post.reviewLink)" >{{post.reviewLink}}</a></span>
+                             
+                          </v-layout>
+                           </v-card>
+
+                        </v-flex>
+                        <v-list>
+          <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile color="green">
+                <v-list-tile-content>
+                  <v-list-tile-title>What is Correct</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile 
+            v-for="text in post.rightList"
+            v-if="text.text != '' "
+              :key="text.text">
+              <v-list-tile-action-text>
+                <span >* <strong>{{text.text}}</strong></span>
+              </v-list-tile-action-text>
+            </v-list-tile>
+          </v-list-group>
+
+
+           <v-list-group
+            no-action
+          >
+            <template active v-slot:activator>
+              <v-list-tile  color="red">
+                <v-list-tile-content>
+                  <v-list-tile-title>What is Incorrect</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            v-for="text in post.wrongList"
+              :key="text.text"
+              v-if="text.text != '' ">
+              <v-list-tile-action-text>
+                <span >*  <strong>{{text.text}}</strong> </span>
+              </v-list-tile-action-text>
+            </v-list-tile>
+          </v-list-group>
+
+  <v-list-group
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-tile color="yellow darken-3">
+                <v-list-tile-content>
+                   
+                     <v-list-tile-title>Facts Missing</v-list-tile-title>
+                 
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <v-list-tile
+            v-for="text in post.notIncludedList"
+              :key="text.text" v-if="text.text != '' ">
+              
+              <v-list-tile-action-text>
+                <span >* <strong>{{text.text}}</strong></span>
+           </v-list-tile-action-text>
+            </v-list-tile>
+          </v-list-group>
+          
+        </v-list>
+
+    <v-layout column>
+        <v-layout row wrap>
+                              <v-flex sm10 md6 my-3>
+                                 <span v-if="!userIsAuthenticated">Sign in to Rate this Post!</span>
+                                 <span v-if="canUserVote && canVote">Rate this Post!</span>
                                     <v-layout>
                                         <v-rating
                                         v-show="canUserVote && canVote "
@@ -141,6 +415,7 @@
                                         <v-flex my-3 ml-1  >
                                             {{post.voters}}
                                         </v-flex>
+                                    
                                     </v-layout>
                                 </v-flex>
                               <v-flex v-show="userIsAuthenticated" xs8 md4>
@@ -193,7 +468,7 @@
                                       v-for="text in post.comments"
                                       :key="text.text">
                                       
-                                      <v-flex mt-3>
+                                      <v-flex mt-3 >
                                         <v-layout row>
                                           <v-avatar
                                               :size="50"
@@ -204,15 +479,16 @@
                                             <img v-else :src="require('@/assets/RocketLogo.png')" class="myClickableThingy" @click="goToProfile(text.uid)">
                                           </v-avatar>
                                       
-                                      <v-flex ml-5 mt-3>
+                                      <v-flex ml-5 mt-3 >
                                         <span>{{text.comment}}</span>
                                     
                                     </v-flex>
                                     </v-layout>
                                     </v-flex>
-                                    <v-flex mt-1>
+                                    <v-flex mb-3>
                                     <span class="myClickableThingy" @click="goToProfile(text.uid)">{{text.username}}</span>
                               </v-flex>
+                              <v-divider></v-divider>
                               </v-flex>
                               </v-layout>
                             </v-card>
@@ -224,6 +500,23 @@
             </v-layout>
             </v-flex>
         </v-layout>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </container>
 </template>
 
@@ -368,4 +661,12 @@ components:{
 
 <style>
   .tab { text-indent: 40px; }
+  .posthtmltext { 
+  
+  display: block;
+  width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>

@@ -2,13 +2,22 @@
     <v-container>
    
 
+ <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+             <v-layout justify-center my-3 >
+           
+              <v-card flat >
+           <v-card-text >
 
+        <span style="font-size:30px"><u>Promoted</u></span>
+          </v-card-text>
+        </v-card>
+          </v-layout>
+           </div>
    
-        <v-layout row wrap>
-              <v-flex xs2>
-                <v-card></v-card>
-              </v-flex>
-                    <v-flex xs8>
+         <v-layout row wrap>
+          
+              
+                    <v-flex xs12 >
                       <v-card
                           v-for="post in promotedPosts" 
                           :key="post">
@@ -21,8 +30,8 @@
                             :size="75"
                             color="grey lighten-4">
                             
-                            <img v-if="hasProfilePic(post)" :src="imageUrl" alt="avatar" class = " myClickableThingy" @click="goToProfile(post.uid)">
-                            <img v-else :src="imageUrl" alt="avatar"  class = "myClickableThingy" @click="goToProfile(post.uid)">
+                            <img v-if="post.imageUrl != null" @click="goToProfile(post.uid)"  class = "myClickableThingy" :src="post.imageUrl" alt="avatar">
+                            <img v-else @click="goToProfile(post.uid)" class = "myClickableThingy"  :src="imageUrl" alt="avatar" >
                         </v-avatar>
                         <v-flex my-3>
                         <h4 class = "font-weight-thin myClickableThingy" @click="goToProfile(post.uid)">
@@ -37,7 +46,8 @@
                             <span v-show="post.newReviewSlice != 'null'">
                                 {{post.newReviewSlice}}
                             </span>
-                            <span v-show="post.newReviewSlice == 'null'">{{post.yourReview}}</span>                            
+                          <span   v-show="post.newReviewSlice == 'null'" class=" font-weight-thin myClickableThingy htmltext " @click="goToReview(post.yourReview)" >{{post.yourReview}}</span>
+                                                    
                             <v-flex>
                              <v-flex xs12>
                            <v-list>
@@ -53,9 +63,10 @@
 
             <v-list-tile 
             v-for="text in post.rightList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content >
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -74,75 +85,83 @@
 
             <v-list-tile
             v-for="text in post.wrongList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content
               
                   >
-                <v-list-tile-title>{{text.text}} </v-list-tile-title>
+                <v-list-tile-title>* {{text.text}} </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
 
   <v-list-group
-           
+           no-action
           >
             <template active v-slot:activator>
               <v-list-tile color="yellow darken-3">
                 <v-list-tile-content>
+                 <div v-responsive.lg.xl >
                   <v-list-tile-title>Important Facts that were not included</v-list-tile-title>
+                  </div>
+                  <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+                     <v-list-tile-title>Facts Missing</v-list-tile-title>
+                  </div>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
 
             <v-list-tile
             v-for="text in post.notIncludedList"
-              :key="text.text">
+              :key="text.text"
+              v-if="text.text != '' ">
               <v-list-tile-content>
-                <v-list-tile-title>{{text.text}}</v-list-tile-title>
+                <v-list-tile-title>* {{text.text}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
           
-        </v-list>
+              </v-list>
                       </v-flex>
 
                             <v-layout row wrap>
-                              <v-flex sm10 my-3>
+                              <v-flex sm10 md6 my-3>
                                 <v-layout row>
-                                <v-rating
-                                
-                                hover
-                                :value="post.rating"
-                                color = "cyan lighten-1"
-                                background-color="cyan lighten-1"
-                                readonly
-                                half-increments></v-rating>
-                                <v-flex ml-2 my-3>
+                                <v-rating 
+                                  hover
+                                  :value="post.rating"
+                                  color = "cyan lighten-1"
+                                  background-color="cyan lighten-1"
+                                  readonly
+                                  half-increments></v-rating>
+                              
+                              <v-flex my-3 ml-2>
                                   {{post.voters}}
                               </v-flex>
                               </v-layout>
                               </v-flex>
-                               
+                 
                             </v-layout>
                             </v-flex>
                             </v-flex>
                           </v-layout>
-                          
+                          <div v-responsive.lg.xl >
                           <v-card flat>
                           <v-flex my-2 mr-2>
                             <h2 class="font-weight-thin">{{post.date}}</h2>
                           </v-flex>
                           </v-card>
+                          </div>
                           
                         </v-layout>
                         </v-card>
                         </v-flex>
+                         
                       </v-card>
-                      
+                     
                     </v-flex>
-                    <v-flex xs2>
-                        <v-card></v-card>
-                      </v-flex>
+                     
+                  
           </v-layout>
                    
  <infinite-loading ref="InfiniteLoading" @infinite="infiniteHandler"></infinite-loading>
@@ -162,8 +181,13 @@ export default {
       }
     },
     beforeCreate() {
-      this.$store.dispatch('loadPromotedPosts',{index:2})
-    },
+     
+          
+     this.$store.dispatch('loadPromotedPosts', {index:2})
+
+    
+  },
+  
 methods: {
    viewPost(post) {
         var profileUid = post.uid
@@ -196,20 +220,7 @@ methods: {
         }
         this.postCount = this.$store.getters.loadedPromotedPosts.length 
     },
-     hasProfilePic(post){
-       
-       let thisPost = post
-     
-      
-         if(thisPost.imageUrl != null){
-          this.imageUrl = post.imageUrl
-          return true
-         }else{
-
-         
-          return false
-         }
-       }
+    
 
    
 },

@@ -1,7 +1,7 @@
 <template>
 <v-container>
-  <v-layout justify-center>
-  <v-flex xs5  my-3 v-if="!userIsAuthenticated">
+ <div v-responsive.lg.xl >
+   <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
         <v-card>
           <v-card-text>
             <v-container>
@@ -29,10 +29,40 @@
             </v-container>
           </v-card-text>
         </v-card>
-        
-  </v-flex>
-  </v-layout>
+      </v-flex>
+      </div>
 
+<div v-responsive ="['hidden-all','xs','sm', 'md']" >
+   <v-flex  v-if="!userIsAuthenticated">
+        <v-card>
+          <v-card-text>
+            <v-container>
+              <v-layout justify-center>
+                  <h2 class="display-1 font-weight-thin">
+                     Login or Signup to Post
+                  </h2>
+              </v-layout>
+              <v-flex>
+            <v-layout mt-5 justify-center>
+              <v-btn 
+                  router
+                  :to="'/Login'"
+                  outline large round color="cyan lighten-2">
+                  Login
+              </v-btn>
+              <v-btn
+                  router
+                  :to="'/Signup'" 
+                  outline large round color="cyan lighten-2">
+                  SignUp
+              </v-btn>
+            </v-layout>
+              </v-flex>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      </div>
 
   <v-flex v-if="userIsAuthenticated">
     <form @submit.prevent="checkForm">
@@ -88,14 +118,30 @@
           </v-card>
     </v-flex>
     <v-layout justify-center>
+       <div v-responsive.lg.xl >
       <v-btn outline
       @click="changeForm(false)">
         Post Link of Your Review
       </v-btn>
+      <span> OR </span>
       <v-btn outline
       @click="changeForm(true)">
         Create New Review
       </v-btn>
+       </div>
+
+
+         <div v-responsive ="['hidden-all','xs','sm', 'md']" >
+      <v-btn outline small
+      @click="changeForm(false)">
+        Post Link of Your Review
+      </v-btn>
+      <span> OR </span>
+      <v-btn outline small
+      @click="changeForm(true)">
+        Create New Review
+      </v-btn>
+       </div>
     </v-layout>
 
 
@@ -155,14 +201,18 @@
                 <v-flex xs12 sm3>
             <v-btn @click="addWrongBullet" flat color="red">
               <v-icon>add_box</v-icon>
+               <div v-responsive.lg.xl >
               Add Bullet point
+               </div>
             </v-btn>
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs12 sm3>
             <v-btn @click="removeWrongBullet" flat color="red">
               <v-icon>remove</v-icon>
+               <div v-responsive.lg.xl >
               Remove Bullet Point
+               </div>
             </v-btn>
           </v-flex>   
           </v-layout>
@@ -194,14 +244,18 @@
                 <v-flex xs12 sm3>
             <v-btn @click="addRightBullet" flat color="green">
               <v-icon>add_box</v-icon>
+              <div v-responsive.lg.xl >
               Add Bullet point
+              </div>
             </v-btn>
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs12 sm3>
             <v-btn @click="removeRightBullet" flat color="green">
               <v-icon>remove</v-icon>
+               <div v-responsive.lg.xl >
               Remove Bullet Point
+               </div>
             </v-btn>
           </v-flex>   
           </v-layout>
@@ -233,14 +287,18 @@
                 <v-flex xs12 sm3>
             <v-btn @click="addNotIncludedBullet" flat color="yellow darken-3">
               <v-icon>add_box</v-icon>
+               <div v-responsive.lg.xl >
               Add Bullet point
+               </div>
             </v-btn>
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs12 sm3>
             <v-btn @click="removeNotIncludedBullet" flat color="yellow darken-3">
               <v-icon>remove</v-icon>
+               <div v-responsive.lg.xl >
               Remove Bullet Point
+               </div>
             </v-btn>
           </v-flex>   
           </v-layout>

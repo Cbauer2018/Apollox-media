@@ -15,6 +15,8 @@ export const store = new Vuex.Store({
       loadedPost:[],
       searchedUsernames:[],
       searchedPosts:[],
+      profileFollowing:[],
+      profileFollowers:[],
       recentPostCount: 0,
       validUsername: false,
       user: null,
@@ -71,7 +73,14 @@ export const store = new Vuex.Store({
       },
       setLoadedPost (state, payload) {
         state.loadedPost = payload
-      }
+      },
+
+      setLoadedProfileFollowing(state, payload){
+            state.profileFollowing = payload
+      },
+      setLoadedProfileFollowers(state, payload){
+        state.profileFollowers = payload
+      },
     },
     actions: {
         ContactForm({commit}, payload){
@@ -291,9 +300,58 @@ export const store = new Vuex.Store({
         })
       },
 
+      viewFollowing({commit}, payload){
+        firebase.database().ref('Users').child(payload.uid)
+        .once('value', function(data)  {
+          const obj = data.val()
+          const Profiles = []
+          for(let key in obj.following){
+           
+            firebase.database().ref('Users').child(key)
+            .once('value', function(data)  {
+             const profile = data.val()
+                  Profiles.push({
+                        imageUrl :profile.imageUrl,
+                        username: profile.username,
+                        uid: key
+                  })
+                  
+            })
+          }
+          
+          commit('setLoadedProfileFollowing', Profiles)
+        })
+      },
+
+      viewFollowers({commit}, payload){
+        firebase.database().ref('Users').child(payload.uid)
+        .once('value', function(data)  {
+          const obj = data.val()
+          const Profiles = []
+          for(let key in obj.followers){
+           
+            firebase.database().ref('Users').child(key)
+            .once('value', function(data)  {
+             const profile = data.val()
+                  Profiles.push({
+                        imageUrl :profile.imageUrl,
+                        username: profile.username,
+                        uid: key
+                  })
+                  
+            })
+          }
+          
+          commit('setLoadedProfileFollowers', Profiles)
+        })
+
+      },
+
+
+
       loadRecentPosts({commit},payload){
         
-        firebase.database().ref().child("Posts").orderByChild("timestamp").limitToFirst(payload.index).once("value", function (snapshot) {
+        firebase.database().ref('Posts').orderByChild('timestamp').limitToFirst(payload.index).once("value", function (snapshot) {
           const Posts = []
           
           snapshot.forEach(function(child) {
@@ -410,14 +468,17 @@ export const store = new Vuex.Store({
 
       
       loadPromotedPosts({commit}, payload){
-        firebase.database().ref().child("Posts").orderByChild("promoted").equalTo(true).limitToLast(payload.index).once("value", function (snapshot) {
+        
+        
+        firebase.database().ref().child('Posts').orderByChild('promoted').equalTo("TRUE").limitToLast(payload.index).once("value", function (snapshot) {
           var Posts = []
           var imageUrl = null
-          
+       
           snapshot.forEach(function(child) {
             
-             
+             console.log(child)
               const obj = child.val()
+            
               var voters = 0
                   var totalRating = 0
                   var rating = 0
@@ -457,6 +518,7 @@ export const store = new Vuex.Store({
                         voterIds : obj.voters,
                         newReviewSlice :newReviewSlice
                          })
+                 
              
 
           });
@@ -552,12 +614,6 @@ export const store = new Vuex.Store({
             
             
            }
-           
-           
-         
-            
-          
-          
           
           })
         },
@@ -625,7 +681,7 @@ export const store = new Vuex.Store({
             reviewLink: payload.reviewLink, 
             newReview: payload.newReview,
             yourReview: payload.yourReview,
-            promoted: false,
+            promoted: "FALSE",
             timestamp:-new Date().getTime(),
             date:dateString,
             wrongList: payload.wrongList,
@@ -952,6 +1008,13 @@ export const store = new Vuex.Store({
       },
       loadedProfileId (state) {
         return state.loadedProfile[0].id
+      },
+      loadedProfileFollowing(state){
+          return state.profileFollowing 
+      },
+      loadedProfileFollowers(state){
+        return state.profileFollowers
       }
+
     }
   })
