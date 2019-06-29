@@ -28,9 +28,9 @@
             <v-layout column>
                 <v-flex my-4>
                     <v-card v-for="post in post" :key="post" flat>
-                        <h3 class="display-2 font-weight-thin">{{post.title}}</h3>
+                        <h3 class="display-2 font-weight-thin"><b>{{post.title}}</b></h3>
                         <v-flex my-4>
-                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" >{{post.newReview}}</p></h2>
+                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" ><kbd class="font-weight-thin">{{post.newReview}}</kbd></p></h2>
 
                         <v-card flat  v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
                           <v-layout row wrap >
@@ -257,7 +257,7 @@
 
 
  <div   v-responsive ="['hidden-all','xs','sm', 'md']">
-        <v-layout column wrap>
+        <v-layout column >
             <v-flex xs4 md2>
                 <v-card flat>
                     <v-flex v-for="profile in profile" :key="profile" ma-4>
@@ -283,10 +283,10 @@
             <v-flex xs6 md8>
             <v-layout column>
                 <v-flex my-4>
-                    <v-card v-for="post in post" :key="post" flat>
-                        <h3 class="display-2 font-weight-thin">{{post.title}}</h3>
-                        <v-flex my-4>
-                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" >{{post.newReview}}</p></h2>
+                    <v-card v-for="post in post" :key="post" flat >
+                        <h3 class="display-2 font-weight-thin"><b>{{post.title}}</b></h3>
+                        <v-flex my-4 >
+                        <kbd class="font-weight-thin"  v-if="post.newReview != 'null'">{{post.newReview}}</kbd>
 
                         <v-card flat v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
                           <v-layout row wrap >
@@ -669,4 +669,17 @@ components:{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+kbd {
+    background-color: white;
+    border-radius: 3px;
+   color: #333;
+    
+    
+    display: inline-block;
+    font-size: .85em;
+    font-weight: 700;
+   
+    padding: 2px 4px;
+    
+   }
 </style>

@@ -13,6 +13,7 @@ import viewPost from './components/viewPost.vue'
 import Search from './components/Search.vue'
 import viewFollowing from './components/profileFollowing.vue'
 import viewFollowers from './components/profileFollowers.vue'
+import resetpassword from './components/resetpassword.vue'
 
 
 Vue.use(Router)
@@ -88,6 +89,11 @@ export default new Router({
       name: 'viewFollowers',
       component: viewFollowers
     },
+    {
+      path: '/resetpassword',
+      name:'resetpassword',
+      component: resetpassword
+    }
   ],
   
 })

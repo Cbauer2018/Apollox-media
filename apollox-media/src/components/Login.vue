@@ -34,9 +34,12 @@
                       v-model="password"
                       type="password"
                       required></v-text-field>
-                  </v-flex>
+                       <span class="myClickableThingy"
+                        @click="resetPassword"><u>Forgot Password?</u></span>
+                  </v-flex>  
                 </v-layout>
                 <v-layout xs12 justify-end row>
+                 
                     <v-btn outline color="cyan lighten-1" type="submit" :disabled="loading" :loading="loading">
                        Login
                        <span slot="loader" class="custom-loader">
@@ -88,7 +91,12 @@
       },
       onDismissed () {
         this.$store.dispatch('clearError')
+      },
+      resetPassword(){
+        this.$router.push('/resetpassword')
       }
+
+     
     }
   }
 </script>

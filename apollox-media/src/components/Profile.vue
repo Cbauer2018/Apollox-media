@@ -124,11 +124,7 @@
                 :key="profile">
                   <h2 class = "display-1 font-weight-thin">
                     {{  profile.username }} </h2>
-          <v-flex my-2>
-              <span>
-                {{ profile.bio }}
-              </span>
-          </v-flex>
+         <p  class="font-weight-thin"><kbd>{{profile.bio}}</kbd></p>
           </v-flex>
           </v-card>
         </v-flex>
