@@ -16,7 +16,7 @@
         >
         Welcome to ApolloX Media!
         </v-card-title>
-<img src="@/assets/astronautlogo.jpg" height="100">
+<img src="@/assets/astronautlogo.jpg" alt="ApolloX Media Astronaut" height="100">
 <v-card-text > <h2>ApolloX Media is a news platform that is aimed at providing people with an unbiased news community they can trust. The platform promotes highlighting biases and facting checking of various modes of media such as: Articles, Videos, Speeches, Debates and many more!</h2></v-card-text>
 
         <v-divider></v-divider>
@@ -59,13 +59,13 @@
     <div v-responsive.lg.xl >
   <v-container bg fill-height grid-list-md text-xs-left>
            <img src="@/assets/astronautlogo.jpg" height="250">
-          <img src="@/assets/apolloLetters.jpg" height="250">
+          <img src="@/assets/apolloLetters.jpg" alt="ApolloX Media"  height="250">
       </v-container>
     </div>
     <v-layout justify-center>
 
 <div v-responsive ="['hidden-all','xs','sm', 'md']" >
-   <img src="@/assets/astronautlogo.jpg" height="250">
+   <img src="@/assets/astronautlogo.jpg" alt="ApolloX Media Astronaut"  height="250">
 </div>
 </v-layout>
 
@@ -100,7 +100,7 @@
      </v-btn>
      <v-divider></v-divider>
      </v-flex>
-
+  
      <v-flex v-else-if="item.title == 'Profile'" 
       :key="item.title">
        <v-btn 

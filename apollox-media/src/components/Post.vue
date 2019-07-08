@@ -1,5 +1,6 @@
 <template>
 <v-container>
+   
  <div v-responsive.lg.xl >
    <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
         <v-card>

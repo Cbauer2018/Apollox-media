@@ -1,5 +1,7 @@
 <template>
     <v-container>
+       <title>Apollox Media Following</title>
+       <meta name="Description" content="ApolloX Media is a news platform that is aimed at providing people with an unbiased news community they can trust. The platform promotes highlighting biases and facting checking of various modes of media such as: Articles, Videos, Speeches, Debates and many more!">
       <div v-responsive.lg.xl >
    <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
         <v-card>
@@ -264,7 +266,7 @@ methods: {
     },
     
     infiniteHandler($state){
-       
+       if(this.loading == false){
         this.$store.dispatch('loadFollowingPosts', {index: this.followingPosts.length + 4})
         
        
@@ -281,6 +283,14 @@ methods: {
           $state.complete()
         }
         this.postCount = this.$store.getters.loadedFollowingPosts.length 
+        }else{
+            setTimeout(() => {
+          
+        $state.loaded()
+        
+        
+      }, 1000);
+        }
     },
      
    
@@ -295,6 +305,9 @@ computed: {
        userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       },
+      loading () {
+        return this.$store.getters.loading
+      }
       
       
     

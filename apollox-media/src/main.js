@@ -5,7 +5,7 @@ import firebase from 'firebase'
 import router from './router'
 import { store } from './store'
 import Vuetify from 'vuetify/lib';
-import AlertCmp from './Shared/Alert'
+import AlertCmp from './Shared/Alert.vue'
 import responsive from 'vue-responsive'
 Vue.use(responsive)
 Vue.use(Vuetify)

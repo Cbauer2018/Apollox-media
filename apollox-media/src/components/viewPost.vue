@@ -28,9 +28,10 @@
             <v-layout column>
                 <v-flex my-4>
                     <v-card v-for="post in post" :key="post" flat>
+                      <title>{{post.title}}</title>
                         <h3 class="display-2 font-weight-thin"><b>{{post.title}}</b></h3>
                         <v-flex my-4>
-                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" ><kbd class="font-weight-thin">{{post.newReview}}</kbd></p></h2>
+                        <h2 class="font-weight-thin" v-if="post.newReview != 'null'" ><p class = "tab" ><kbd class="font-weight-thin">{{post.newReview}} <meta name="Description" :content="post.newReview"></kbd></p></h2>
 
                         <v-card flat  v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
                           <v-layout row wrap >
@@ -39,7 +40,8 @@
                             <div class="card" style="width: 20rem;">
                             <img class="card-img-top" style="width: 15rem; height: 15rem;" :src="props.img" :alt="props.title">
                             <div class="card-block" >
-                          <h4 class="card-title" >{{props.title}}</h4>
+                              
+                          <h4 class="card-title" >{{props.title}} <meta name="Description" :content="props.title"></h4>
                             
                                  </div>
                               </div>
@@ -285,9 +287,10 @@
                 <v-flex my-4>
                     <v-card v-for="post in post" :key="post" flat >
                         <h3 class="display-2 font-weight-thin"><b>{{post.title}}</b></h3>
+                        
                         <v-flex my-4 >
-                        <kbd class="font-weight-thin"  v-if="post.newReview != 'null'">{{post.newReview}}</kbd>
-
+                        <kbd class="font-weight-thin"  v-if="post.newReview != 'null'">{{post.newReview}}  <meta name="Description" :content="post.newReview"></kbd>
+                         
                         <v-card flat v-else justify-center class="myClickableThingy" @click="goToReview(post.yourReview)" >
                           <v-layout row wrap >
                              <link-prevue :url="post.yourReview" >
@@ -295,7 +298,7 @@
                             <div class="card" style="width: 20rem;">
                             <img class="card-img-top" style="width: 15rem; height: 15rem;" :src="props.img" :alt="props.title">
                             <div class="card-block" >
-                          <h4 class="card-title" >{{props.title}}</h4>
+                          <h4 class="card-title" >{{props.title}} <meta name="Description" :content="props.title"></h4>
                             
                                  </div>
                               </div>

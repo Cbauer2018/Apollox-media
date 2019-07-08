@@ -1,5 +1,7 @@
   <template>
     <container>
+       <title>Apollox Media Profile</title>
+       <meta name="Description" content="ApolloX Media is a news platform that is aimed at providing people with an unbiased news community they can trust. The platform promotes highlighting biases and facting checking of various modes of media such as: Articles, Videos, Speeches, Debates and many more!">
      <div v-responsive.lg.xl >
    <v-flex xs4 offset-sm4 my-5 v-if="!userIsAuthenticated">
         <v-card>
@@ -125,6 +127,8 @@
                   <h2 class = "display-1 font-weight-thin">
                     {{  profile.username }} </h2>
          <p  class="font-weight-thin"><kbd>{{profile.bio}}</kbd></p>
+         <title>Apollox Media {{profile.username}}</title>
+   <meta name="Description" :content="profile.bio">
           </v-flex>
           </v-card>
         </v-flex>
@@ -438,7 +442,10 @@ beforeCreate() {
                 }
               }
               return isFollowing
-        }
+        },
+        loading () {
+        return this.$store.getters.loading
+      }
     
       
       
@@ -449,6 +456,7 @@ beforeCreate() {
     methods:{
     
       infiniteHandler($state){
+        if(this.loading == false){
         var profileUid = this.$route.params.uid
        
         this.$store.dispatch('loadProfilePosts', {uid: profileUid ,index: this.loadProfilePosts.length + 2})
@@ -463,6 +471,14 @@ beforeCreate() {
           $state.complete()
         }
         this.postCount = this.loadProfilePosts.length
+          }else{
+            setTimeout(() => {
+          
+        $state.loaded()
+        
+        
+      }, 1000);
+        }
     },
      
       followProfile(){

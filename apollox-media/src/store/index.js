@@ -350,7 +350,7 @@ export const store = new Vuex.Store({
 
 
       loadRecentPosts({commit},payload){
-        
+        commit('setLoading', true)
         firebase.database().ref('Posts').orderByChild('timestamp').limitToFirst(payload.index).once("value", function (snapshot) {
           const Posts = []
           
@@ -405,7 +405,7 @@ export const store = new Vuex.Store({
 
           });
          
-           
+          commit('setLoading', false)
             commit('setLoadedRecentPosts', Posts)
           
          
@@ -414,6 +414,7 @@ export const store = new Vuex.Store({
 
 
       loadProfilePosts({commit}, payload){
+        commit('setLoading', true)
         firebase.database().ref('Users').child(payload.uid).child('Posts').orderByChild('timestamp').limitToFirst(payload.index).on("value", function (snapshot) {
           const Posts = []
           var imageUrl = null
@@ -460,7 +461,7 @@ export const store = new Vuex.Store({
                   })
             
             
-            
+                  commit('setLoading', false)
               commit('setLoadedProfilePosts', Posts)
         })
 
@@ -469,7 +470,7 @@ export const store = new Vuex.Store({
       
       loadPromotedPosts({commit}, payload){
         
-        
+        commit('setLoading', true)
         firebase.database().ref().child('Posts').orderByChild('promoted').equalTo("TRUE").limitToLast(payload.index).once("value", function (snapshot) {
           var Posts = []
           var imageUrl = null
@@ -528,12 +529,13 @@ export const store = new Vuex.Store({
           });
           
           commit('setLoadedPromotedPosts', Posts)
+          commit('setLoading', false)
         })
 
     },
 
         loadFollowingPosts({commit}, payload){
-
+          commit('setLoading', true)
           firebase.database().ref('Users').child(firebase.auth().currentUser.uid.toString()).child('following')
           .once('value').then((data) => {
             var Posts = []
@@ -606,7 +608,7 @@ export const store = new Vuex.Store({
                        
                           
               });
-              
+              commit('setLoading', false)
               commit('setLoadedFollowingPosts', Posts.slice(0, payload.index))
     
               

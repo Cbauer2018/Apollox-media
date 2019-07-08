@@ -1,5 +1,7 @@
 <template>
     <v-container>
+       <title>Apollox Media Recent</title>
+       <meta name="Description" content="ApolloX Media is a news platform that is aimed at providing people with an unbiased news community they can trust. The platform promotes highlighting biases and facting checking of various modes of media such as: Articles, Videos, Speeches, Debates and many more!">
   <div v-responsive ="['hidden-all','xs','sm', 'md']" >
              <v-layout justify-center my-3 >
               <v-card flat>
@@ -214,7 +216,7 @@ mounted(){
     },
     
     infiniteHandler($state){
-        
+         if(this.loading == false){
         this.$store.dispatch('loadRecentPosts', {index: this.recentPosts.length + 2})
    
         if(this.$store.getters.loadedRecentPosts.length != this.postCount){
@@ -229,6 +231,14 @@ mounted(){
           $state.complete()
         }
         this.postCount = this.$store.getters.loadedRecentPosts.length 
+        }else{
+            setTimeout(() => {
+          
+        $state.loaded()
+        
+        
+      }, 1000);
+        }
     },
      hasProfilePic(post){
        
@@ -264,6 +274,9 @@ computed: {
         return this.$store.getters.loadedRecentPosts;
       
       },
+      loading () {
+        return this.$store.getters.loading
+      }
       
       
     
